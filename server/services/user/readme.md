@@ -30,7 +30,7 @@ Query:
     "gender": "string",
     "dob": "Date",
     "image": "string",
-    "role": "string". // (superadmin | admin | user | counselor)
+    "role": "string", // (superadmin | admin | user | counselor)
     "helpfull": "number",
   }
 ]
@@ -48,7 +48,7 @@ Query:
   "gender": "string",
   "dob": "Date",
   "image": "string",
-  "role": "string". // (superadmin | admin | user | counselor)
+  "role": "string", // (superadmin | admin | user | counselor)
   "helpfull": "number",
 }
 ```
@@ -110,7 +110,7 @@ Body:
   "gender": "string",
   "dob": "Date",
   "image": "string",
-  "role": "string". // (superadmin | admin | user | counselor)
+  "role": "string", // (superadmin | admin | user | counselor)
   "helpfull": "number",
 }
 ```
