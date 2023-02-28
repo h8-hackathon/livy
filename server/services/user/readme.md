@@ -177,7 +177,7 @@ Or
 
 ### Global Error:
 
-400 Forbidden:
+400 Bad request:
 ```json
 {
   "message": "string"
@@ -191,7 +191,14 @@ Or
 }
 ```
 
-404 Notfound:
+403 Forbidden:
+```json
+{
+  "message": "string"
+}
+```
+
+404 Not found:
 ```json
 {
   "message": "string"
