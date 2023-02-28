@@ -2,13 +2,6 @@
 
 Disini schedule service menghandle schedule antara user dan counselor.
 
-- status: string
-- CounselorId: integer
-- UserId: integer
-- time: time
-- note: text
-- rating: integer
-
 ### Endpoint
 - `GET /schedules/:userId`
 - `GET /schedules/:counselorId`
