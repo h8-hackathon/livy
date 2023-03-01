@@ -3,15 +3,17 @@ Disini forum service menghandle user ForumPost dan ForumComment.
 
 
 ### Endpoint
-- `GET /posts`
-- `POST /posts`
-- `GET /posts/:postId`
-- `PUT /posts/:postId`
-- `DELETE /posts/:postId`
-- `GET /posts/:postId/comments`
-- `POST /posts/:postId/comments`
-- `PUT /posts/:postId/comments/:commentId`
-- `DELETE /posts/:postId/comments/:commentId`
+- `GET /posts` /done
+- `POST /posts` /done
+- `GET /posts/:postId` /done
+- `PUT /posts/:postId` /done
+- `DELETE /posts/:postId` /done
+
+- `GET /posts/:postId/comments` /progress
+- `POST /posts/:postId/comments` /progress
+- `PUT /posts/:postId/comments/:commentId` /progress
+- `DELETE /posts/:postId/comments/:commentId` /progress
+
 - `PUT /posts/:postId/helpfull`
 - `DELETE /posts/:postId/helpfull`
 - `PUT /posts/:postId/comments/:commentId/helpfull`
@@ -40,10 +42,9 @@ query:
     "title": "string",
     "images": ["string"],
     "caption": "text",
-    "userId": "integer",
-    "helpfull": ["integer"],
+    "UserId": "integer",
+    "helpful": ["integer"],
     "createdAt": "time",
-    "updatedAt": "time"
   }
 ]
 ```
@@ -58,8 +59,8 @@ body:
   "title": "string",
   "images": ["string"],
   "caption": "text",
-  "userId": "integer",
-  "helpfull": ["integer"]
+  "UserId": "integer",
+  "helpful": ["integer"]
 }
 ```
 
@@ -78,7 +79,7 @@ body:
 params:
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
@@ -91,9 +92,8 @@ params:
   "images": ["string"],
   "caption": "text",
   "userId": "integer",
-  "helpfull": ["integer"],
+  "helpful": ["integer"],
   "createdAt": "time",
-  "updatedAt": "time"
 }
 ```
 
@@ -104,7 +104,7 @@ params:
 params:
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
@@ -114,8 +114,8 @@ body:
   "title": "string",
   "images": ["string"],
   "caption": "text",
-  "userId": "integer",
-  "helpfull": ["integer"]
+  "UserId": "integer",
+  "helpful": ["integer"],
 }
 ```
 
@@ -134,7 +134,7 @@ body:
 params:
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
@@ -145,10 +145,6 @@ params:
   "message": "successfully deleted"
 }
 ```
-
-- text: string
-- userId: integer
-- helpfull: [inetger]
 
 ### `GET /posts/:postId/comments`
 - mendapatkan list comments dari posts diurutkan berdasarkan helpfull terbanyak
@@ -171,7 +167,6 @@ params:
     "userId": "integer",
     "helpfull": ["integer"],
     "createdAt": "time",
-    "updatedAt": "time"
   }
 ]
 ```
@@ -183,7 +178,7 @@ params:
 params:
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
@@ -191,7 +186,7 @@ body:
 ```json
 {
   "text": "string",
-  "userId": "integer",
+  "UserId": "integer",
   "helpfull": ["integer"]
 }
 ```
