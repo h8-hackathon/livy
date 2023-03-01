@@ -15,10 +15,13 @@
 Query:
 ```json
 {
-  "page": number,
+  "type": string,
   "limit": number,
   "search": string
-}
+} 
+//! Note: 
+//  example-url -> http://service-user/users?type=<role>&search=<name>&limit=<number>
+//  Bila ingin mendapatkan data counselor typenya di definisiin counselor dan berlaku untuk semua role
 ```
 
 #### Response:
@@ -105,6 +108,7 @@ jadi parameter `:id` harus sesuai dengan id dari access_token atau kalau rolenya
 Body: 
 ```json
 {
+  "id":"integer",
   "name": "string",
   "email": "string",
   "gender": "string",
