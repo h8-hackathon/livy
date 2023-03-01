@@ -135,11 +135,15 @@ const migrateTodos = async () => {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['UserId', 'todos'],
+        required: ['UserId', 'todos', 'updatedAt'],
         properties: {
           UserId: {
             bsonType: 'number',
             description: 'UserId must be an number and is required',
+          },
+          updatedAt: {
+            bsonType: 'date',
+            description: 'updatedAt is required',
           },
           todos: {
             bsonType: 'array',
