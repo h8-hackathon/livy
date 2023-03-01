@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Report.init({
     postId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: { msg: 'postId is required' },
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     commentId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: { msg: 'commentId is required' },
