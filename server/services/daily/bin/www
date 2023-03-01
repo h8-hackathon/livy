@@ -1,6 +1,10 @@
+if (process.env.NODE_ENV != 'production') {
+  require('dotenv').config()
+}
+
 const app = require('../app')
 const { connect } = require('../mongo/config/db')
-const port = 3000
+const port = process.env.PORT || 3000
 
 connect().then(() => {
   app.listen(port, () => {

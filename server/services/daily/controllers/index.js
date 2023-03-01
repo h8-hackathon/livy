@@ -3,9 +3,9 @@ const Todo = require('../mongo/models/Todo')
 class Controller {
   static async createTodo(req, res,) {
     try {
-      const { todos } = req.body
+      const { todos, userId } = req.body
 
-      await Todo.insertOne({ todos, UserId: 1 })
+      await Todo.insertOne({ todos, UserId: userId })
 
       res.status(200).json({ message: "successfully created" })
     } catch (error) {
@@ -16,9 +16,9 @@ class Controller {
   static async findById(req, res,) {
     try {
       const { userId } = req.params
-
-      const todo = await Todo.findOne({
-        _id: new ObjectId(userId)
+      
+      const todo = await Todo.findOne({}, {
+        UserId: userId
       })
 
       res.status(200).json(todo)
@@ -32,7 +32,7 @@ class Controller {
       const { userId } = req.params
       const { todos } = req.body
 
-      await Todo.updateOne({ _id: new ObjectId(userId) }, { $set: { todos } })
+      await Todo.updateOne({ UserId: +userId }, { $set: { todos } })
 
       res.status(200).json({ message: "successfully updated" })
     } catch (error) {
@@ -43,7 +43,7 @@ class Controller {
     try {
       const { userId } = req.params
 
-      await Todo.deleteOne({ UserId: userId })
+      await Todo.deleteOne({ UserId: +userId })
 
       res.status(200).json({ message: "successfully deleted" })
     } catch (error) {
