@@ -15,17 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Report)
       User.hasMany(models.Schedule)
       User.hasMany(models.AdminPost)
-
-      User.belongsToMany(models.User, {
-        through: models.Schedule,
-        as: 'User',
-        foreignKey: 'UserId',
-      })
-      User.belongsToMany(models.User, {
-        through: models.Schedule,
-        as: 'Counselor',
-        foreignKey: 'CounselorId',
-      })
     }
   }
   User.init({
