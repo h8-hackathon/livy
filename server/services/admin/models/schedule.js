@@ -11,7 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Schedule.belongsTo(models.User)
+      Schedule.belongsTo(models.User, {
+        foreignKey: 'UserId',
+        unique: false,
+        as: 'User'
+      })
+      Schedule.belongsTo(models.User, {
+        foreignKey: 'CounselorId',
+        unique: false,
+        as: 'Counselor'
+      })
     }
   }
   Schedule.init({
