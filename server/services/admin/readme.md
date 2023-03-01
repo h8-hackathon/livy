@@ -1,35 +1,43 @@
 ## Admin Service
 
 ### Enpoints
+
 posts
+
 - `GET /posts`
 - `GET /posts/:id`
 - `POST /posts`
 - `PUT /posts/:id`
 - `DELETE /posts/:id`
-counselors
+  counselors
 - `GET /counselors`
 - `PATCH /counselors/:id`
 - `DELETE /counselors/:id`
-reports
+  reports
 - `GET /reports`
 - `POST /reports`
-- `DELETE /reports`
-
+- `DELETE /reports:id`
 
 ### `GET /posts`
+
 - mendapat list postingan, dan tidak perlu authorization
+
 #### Request
+
 query:
+
 ```json
 {
-  "type": "article | podcast | video", // kalo type tidak diatur akan return all
+  "type": "article | podcast | video" // kalo type tidak diatur akan return all
 }
 ```
+
 Dan untuk sorting, diurutkan berdasarkan `createdAt` yg terbaru
 
 #### Response
+
 200 Ok
+
 ```json
 [
   {
@@ -43,10 +51,13 @@ Dan untuk sorting, diurutkan berdasarkan `createdAt` yg terbaru
 ```
 
 ### `POST /posts`
+
 - membuat postingan baru oleh Admin
 
 ### Request
-body: 
+
+body:
+
 ```json
 {
   "title": "string",
@@ -58,20 +69,23 @@ body:
 ```
 
 ### Response
+
 201 Ok:
+
 ```json
 {
-  "message": "successfully created"
+  "message": "Success created ${newPost.title}"
 }
 ```
 
-
-
 ### `GET /posts/:id`
+
 - mendapatkan detail postingan
 
 ### Request
+
 params:
+
 ```json
 {
   "id": "integer"
@@ -79,7 +93,9 @@ params:
 ```
 
 ### Response
+
 200 Ok:
+
 ```json
 {
   "title": "string",
@@ -91,16 +107,21 @@ params:
 ```
 
 ### `PUT /posts/:id`
+
 - mengubah postingan
 
 ### Request
+
 params:
+
 ```json
 {
   "id": "integer"
 }
 ```
+
 body:
+
 ```json
 {
   "title": "string",
@@ -112,18 +133,23 @@ body:
 ```
 
 ### Response
+
 200 Ok:
+
 ```json
 {
-  "message": "successfully updated"
+  "message": "Success updated ${findPost.title}"
 }
 ```
 
 ### `DELETE /posts/:id`
+
 - menghapus postingan
 
 ### Request
+
 params:
+
 ```json
 {
   "id": "integer"
@@ -131,18 +157,23 @@ params:
 ```
 
 ### Response
+
 200 Ok:
+
 ```json
 {
-  "message": "successfully deleted"
+  "message": "Success deleted ${findPost.title}"
 }
 ```
 
 ### `GET /counselors`
+
 - mendapatkan list counselor
 
 ### Request
+
 query:
+
 ```json
 {
   "page": "integer",
@@ -152,7 +183,9 @@ query:
 ```
 
 ### Response
+
 200 OK
+
 ```json
 [
   {
@@ -162,16 +195,19 @@ query:
     "dob": "Date",
     "image": "string",
     "role": "string", // (superadmin | admin | user | counselor)
-    "helpfull": "number",
+    "helpfull": "number"
   }
 ]
 ```
 
 ### `PATCH /counselors/:id`
+
 - mengubah counselor status
 
 ### Request
+
 params:
+
 ```json
 {
   "id": "integer"
@@ -179,6 +215,7 @@ params:
 ```
 
 body:
+
 ```json
 {
   "status": "string" // (accepted | pending)
@@ -186,18 +223,23 @@ body:
 ```
 
 ### Response
+
 200 Ok:
+
 ```json
 {
-  "message": "successfully updated"
+  "message": "Success update status counselor"
 }
 ```
 
 ### `DELETE /counselors/:id`
+
 - menghapus counselor
 
 ### Request
+
 params:
+
 ```json
 {
   "id": "integer"
@@ -205,18 +247,23 @@ params:
 ```
 
 ### Response
+
 200 Ok:
+
 ```json
 {
-  "message": "successfully deleted"
+  "message": "Success deleted counselor"
 }
 ```
 
 ### `GET /reports`
+
 - mendapatkan list report
 
 ### Request
+
 query:
+
 ```json
 {
   "page": "integer",
@@ -226,7 +273,9 @@ query:
 ```
 
 ### Response
+
 200 OK
+
 ```json
 [
   {
@@ -239,10 +288,13 @@ query:
 ```
 
 ### `POST /reports`
+
 - membuat report baru
 
 ### Request
+
 body:
+
 ```json
 {
   "ReporterId": "integer",
@@ -253,18 +305,23 @@ body:
 ```
 
 ### Response
+
 201 Ok:
+
 ```json
 {
-  "message": "successfully created"
+  "message": "Success report"
 }
 ```
 
 ### `DELETE /reports`
+
 - menghapus report
 
 ### Request
+
 body:
+
 ```json
 {
   "ReporterId": "integer",
@@ -275,11 +332,11 @@ body:
 ```
 
 ### Response
+
 200 Ok:
+
 ```json
 {
-  "message": "successfully deleted"
+  "message": "Success deleted"
 }
 ```
-
-
