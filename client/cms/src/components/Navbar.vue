@@ -1,5 +1,9 @@
 <script>
-export default {}
+export default {
+  methods: {
+    toContentSection() {}
+  }
+}
 </script>
 
 <template>
@@ -11,11 +15,7 @@ export default {}
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a
-              class="nav-link active"
-              aria-current="page"
-              href=""
-              @click.prevent="toDashboardSection"
+            <a class="nav-link active" aria-current="page" href="" @click.prevent="$router.push(``)"
               >Content</a
             >
           </li>
@@ -33,8 +33,12 @@ export default {}
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="" @click.prevent="toHistorySection"
-              >Add Admin</a
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href=""
+              @click.prevent="$router.push(`/admin-list`)"
+              >Admin List</a
             >
           </li>
         </ul>
