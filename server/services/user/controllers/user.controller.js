@@ -114,4 +114,28 @@ module.exports = class UserController {
             next(error)
         }
     }
+
+   static async verify(req, res, next) {
+    const {access_token} = req.body
+    
+    try {
+        const response = await User.findOne({
+            where: {id:1},
+            attributes: [
+                'id',
+                "name",
+                "email",
+                "gender",
+                'dob',
+                'image',
+                'role',
+                'helpful'
+            ]
+        })
+
+        res.status(200).json(response)
+    } catch (error) {
+        next(error)
+    }
+   } 
 }
