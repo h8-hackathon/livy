@@ -40,6 +40,7 @@ export default {
                 <th scope="col">Title</th>
                 <th scope="col">Type</th>
                 <th scope="col">Link URL</th>
+                <th scope="col">Action</th>
                 <th scope="col" width="50px"></th>
               </tr>
             </thead>
@@ -47,12 +48,18 @@ export default {
             <tbody>
               <tr>
                 <td>1</td>
-                <td>Mental Health Remaja</td>
+                <td>Mental Health Podcast</td>
                 <td>Podcast</td>
                 <td>www.youtube.com</td>
                 <td>
-                  <button type="button" class="btn btn-warning text-light mb-1">Edit</button>
-                  <button type="button" class="btn btn-danger">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-warning text-light"
+                    @click.prevent="$router.push(`/content-add`)"
+                  >
+                    Edit
+                  </button>
+                  <button type="button" class="btn btn-danger m-2">Delete</button>
                 </td>
               </tr>
             </tbody>

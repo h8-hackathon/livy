@@ -19,11 +19,15 @@ export default {
       <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
       >
-        <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">List of Forum Report</h1>
+        <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Forum Report Page</h1>
         <div>
-          <!-- <button type="button" class="btn btn-success" @click.prevent="$router.push(`/content-add`)">
-          + Add New Content
-        </button> -->
+          <button
+            type="button"
+            class="btn btn-success"
+            @click.prevent="$router.push(`/report-add`)"
+          >
+            + Add New Report
+          </button>
         </div>
       </div>
       <div class="row">

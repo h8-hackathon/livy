@@ -1,7 +1,23 @@
 <script>
+import Swal from 'sweetalert2'
+
 export default {
   methods: {
-    toContentSection() {}
+    logoutHandler() {
+      console.log('Test handle log out')
+
+      localStorage.removeItem('access_token')
+
+      router.push('/')
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Successfully log out',
+        showConfirmButton: false,
+        timer: 1800
+      })
+    }
   }
 }
 </script>

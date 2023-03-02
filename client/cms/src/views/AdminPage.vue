@@ -37,6 +37,7 @@ export default {
                 <th scope="col">Email</th>
                 <th scope="col">Gender</th>
                 <th scope="col">Date of Birth</th>
+                <th scope="col">Action</th>
                 <th scope="col" width="50px"></th>
               </tr>
             </thead>
@@ -49,7 +50,14 @@ export default {
                 <td>M</td>
                 <td>01/01/2000</td>
                 <td>
-                  <button type="button" class="btn btn-danger">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-warning text-light"
+                    @click.prevent="$router.push(`/admin-add`)"
+                  >
+                    Edit
+                  </button>
+                  <button type="button" class="btn btn-danger m-2">Delete</button>
                 </td>
               </tr>
             </tbody>
