@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
 const { User } = require('../models')
+const jwt = require('jsonwebtoken')
 module.exports = class UserController {
 
     static async getUsers(req, res, next) {
@@ -114,4 +115,30 @@ module.exports = class UserController {
             next(error)
         }
     }
+
+   static async verify(req, res, next) {
+    const {access_token} = req.body
+    
+    try {
+        if(!access_token)throw{ name: 'InvalidCredential' }
+        const payload = jwt.verify(access_token, process.env.JWT_SECRET || 'mamamuda')
+        const response = await User.findOne({
+            where: {id:payload.id},
+            attributes: [
+                'id',
+                "name",
+                "email",
+                "gender",
+                'dob',
+                'image',
+                'role',
+                'helpful'
+            ]
+        })
+
+        res.status(200).json(response)
+    } catch (error) {
+        next(error)
+    }
+   } 
 }
