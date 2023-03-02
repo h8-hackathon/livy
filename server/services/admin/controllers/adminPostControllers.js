@@ -3,9 +3,19 @@ const { AdminPost, User } = require('../models/index');
 class adminPostControllers {
   static async readPosts(req, res) {
     try {
-      const posts = await AdminPost.findAll();
+      const { type } = req.query;
 
-      res.status(200).json(posts);
+      if (!req.query.type) {
+        const posts = await AdminPost.findAll();
+        res.status(200).json(posts);
+      } else {
+        const posts = await AdminPost.findAll({
+          where: {
+            type,
+          },
+        });
+        res.status(200).json(posts);
+      }
     } catch (error) {
       console.log(error);
     }
