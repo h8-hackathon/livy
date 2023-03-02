@@ -1,38 +1,45 @@
 ## Forum Service
+
 Disini forum service menghandle user ForumPost dan ForumComment.
 
-
 ### Endpoint
-- `GET /posts`
-- `POST /posts`
-- `GET /posts/:postId`
-- `PUT /posts/:postId`
-- `DELETE /posts/:postId`
-- `GET /posts/:postId/comments`
-- `POST /posts/:postId/comments`
-- `PUT /posts/:postId/comments/:commentId`
-- `DELETE /posts/:postId/comments/:commentId`
+
+- `GET /posts` /done
+- `POST /posts` /done
+- `GET /posts/:postId` /done
+- `PUT /posts/:postId` /done
+- `DELETE /posts/:postId` /done
+
+- `GET /posts/:postId/comments` /done
+- `POST /posts/:postId/comments` /done
+- `PUT /posts/:postId/comments/:commentId` /done
+- `DELETE /posts/:postId/comments/:commentId` /done
+
 - `PUT /posts/:postId/helpfull`
 - `DELETE /posts/:postId/helpfull`
 - `PUT /posts/:postId/comments/:commentId/helpfull`
 - `DELETE /posts/:postId/comments/:commentId/helpfull`
 
-
 ### `GET /posts`
+
 - mendapatkan list posts
 
 #### Request
+
 query:
+
 ```json
 {
   "page": "integer",
-  "sortBy" : "string",
+  "sortBy": "string",
   "limit": "integer"
 }
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 [
   {
@@ -40,31 +47,35 @@ query:
     "title": "string",
     "images": ["string"],
     "caption": "text",
-    "userId": "integer",
-    "helpfull": ["integer"],
-    "createdAt": "time",
-    "updatedAt": "time"
+    "UserId": "integer",
+    "helpful": ["integer"],
+    "createdAt": "time"
   }
 ]
 ```
 
 ### `POST /posts`
+
 - membuat posts baru
 
 #### Request
+
 body:
+
 ```json
 {
   "title": "string",
   "images": ["string"],
   "caption": "text",
-  "userId": "integer",
-  "helpfull": ["integer"]
+  "UserId": "integer",
+  "helpful": ["integer"]
 }
 ```
 
 #### Response
+
 201 Created:
+
 ```json
 {
   "message": "successfully created"
@@ -72,18 +83,23 @@ body:
 ```
 
 ### `GET /posts/:postId`
+
 - mendapatkan detail posts
 
 #### Request
+
 params:
+
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "id": "integer",
@@ -91,36 +107,41 @@ params:
   "images": ["string"],
   "caption": "text",
   "userId": "integer",
-  "helpfull": ["integer"],
-  "createdAt": "time",
-  "updatedAt": "time"
+  "helpful": ["integer"],
+  "createdAt": "time"
 }
 ```
 
 ### `PUT /posts/:postId`
+
 - update posts
 
 #### Request
+
 params:
+
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
 body:
+
 ```json
 {
   "title": "string",
   "images": ["string"],
   "caption": "text",
-  "userId": "integer",
-  "helpfull": ["integer"]
+  "UserId": "integer",
+  "helpful": ["integer"]
 }
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "message": "successfully updated"
@@ -128,76 +149,89 @@ body:
 ```
 
 ### `DELETE /posts/:postId`
+
 - delete posts
 
 #### Request
+
 params:
+
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "message": "successfully deleted"
 }
 ```
 
-- text: string
-- userId: integer
-- helpfull: [inetger]
-
 ### `GET /posts/:postId/comments`
+
 - mendapatkan list comments dari posts diurutkan berdasarkan helpfull terbanyak
 
 #### Request
+
 params:
+
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 [
   {
-    "id": "integer",
+    "_id": "string",
+    "forumPostId": "string",
     "text": "string",
-    "userId": "integer",
-    "helpfull": ["integer"],
-    "createdAt": "time",
-    "updatedAt": "time"
+    "UserId": "integer",
+    "helpful": ["integer"],
+    "createdAt": "time"
   }
 ]
 ```
 
 ### `POST /posts/:postId/comments`
+
 - membuat comments baru
 
 #### Request
+
 params:
+
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
 body:
+
 ```json
 {
+  "forumPostId": "string",
+  "UserId": "integer",
   "text": "string",
-  "userId": "integer",
-  "helpfull": ["integer"]
+  "helpful": ["integer"]
 }
 ```
 
 #### Response
+
 201 Created:
+
 ```json
 {
   "message": "successfully created"
@@ -205,26 +239,32 @@ body:
 ```
 
 ### `PUT /posts/:postId/comments/:commentId`
+
 - update comments
 
 #### Request
+
 params:
+
 ```json
 {
-  "postId": "integer",
-  "commentId": "integer"
+  "postId": "string",
+  "commentId": "string"
 }
 ```
 
 body:
+
 ```json
 {
-  "text": "string",
+  "text": "string"
 }
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "message": "successfully updated"
@@ -232,19 +272,24 @@ body:
 ```
 
 ### `DELETE /posts/:postId/comments/:commentId`
+
 - delete comments
 
 #### Request
+
 params:
+
 ```json
 {
-  "postId": "integer",
-  "commentId": "integer"
+   "postId": "string",
+  "commentId": "string"
 }
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "message": "successfully deleted"
@@ -252,10 +297,13 @@ params:
 ```
 
 ### `PUT /posts/:postId/helpfull`
+
 - menambahkan user id ke helpfull
 
 #### Request
+
 params:
+
 ```json
 {
   "postId": "integer"
@@ -263,6 +311,7 @@ params:
 ```
 
 body:
+
 ```json
 {
   "userId": "integer"
@@ -270,7 +319,9 @@ body:
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "message": "successfully updated"
@@ -278,10 +329,13 @@ body:
 ```
 
 ### `DELETE /posts/:postId/helpfull`
+
 - menghapus user id dari helpfull
 
 #### Request
+
 params:
+
 ```json
 {
   "postId": "integer"
@@ -289,6 +343,7 @@ params:
 ```
 
 body:
+
 ```json
 {
   "userId": "integer"
@@ -296,7 +351,9 @@ body:
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "message": "successfully updated"
@@ -304,10 +361,13 @@ body:
 ```
 
 ### `PUT /posts/:postId/comments/:commentId/helpfull`
+
 - menambahkan user id ke helpfull
 
 #### Request
+
 params:
+
 ```json
 {
   "postId": "integer",
@@ -316,6 +376,7 @@ params:
 ```
 
 body:
+
 ```json
 {
   "userId": "integer"
@@ -323,7 +384,9 @@ body:
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "message": "successfully updated"
@@ -331,10 +394,13 @@ body:
 ```
 
 ### `DELETE /posts/:postId/comments/:commentId/helpfull`
+
 - menghapus user id dari helpfull
 
 #### Request
+
 params:
+
 ```json
 {
   "postId": "integer",
@@ -343,6 +409,7 @@ params:
 ```
 
 body:
+
 ```json
 {
   "userId": "integer"
@@ -350,18 +417,11 @@ body:
 ```
 
 #### Response
+
 200 Ok:
+
 ```json
 {
   "message": "successfully updated"
 }
 ```
-
-
-
-
-
-
-
-
-
