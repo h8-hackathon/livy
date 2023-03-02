@@ -7,7 +7,7 @@ import AddAdmin from '../views/Add-Admin.vue'
 import ContentPage from '../views/ContentPage.vue'
 import AddContent from '../views/Add-Content.vue'
 import ForumReportPage from '../views/ForumReport.vue'
-import CounselorPage from '../views/Counselor-Submission.vue'
+import CounselorPage from '../views/CounselorSubmission.vue'
 import UpdateCounselor from '../views/Update-Status-Counselor.vue'
 
 const router = createRouter({

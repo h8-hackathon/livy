@@ -1,4 +1,12 @@
-<script></script>
+<script>
+import Navbar from '../components/Navbar.vue'
+
+export default {
+  components: {
+    Navbar
+  }
+}
+</script>
 
 <template>
   <section class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="company-section" style="margin: auto">
