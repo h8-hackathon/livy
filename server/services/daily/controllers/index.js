@@ -1,4 +1,4 @@
-const { convertArrayToArrayTodos } = require('../../helpers')
+const { convertArrayToArrayTodos } = require('../helpers')
 const askChatGpt = require('../chatgqt')
 const Todo = require('../mongo/models/Todo')
 
@@ -18,8 +18,6 @@ class Controller {
   static async findById(req, res,) {
     try {
       const { userId } = req.params
-
-
 
       let todo = await Todo.findOne({
         UserId: +userId
