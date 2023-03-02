@@ -1,6 +1,8 @@
 const { connect, disconnect, ForumPost, ForumComment } = require("../mongo");
 const { ObjectId } = require("mongodb");
 const connectDB = connect();
+const { User } = require("../models");
+const { sequelize } = require("../models/");
 class forumPostController {
   static async getAllPost(req, res) {
     try {
@@ -113,13 +115,34 @@ class forumPostController {
       console.log(error);
     }
   }
-  static async updateComment(req, res) {
+  
+  static async createHelpfulPost(req, res) {
     try {
-      let { postId, commentId } = req.params;
-      let { text } = req.body;
-      let result = await ForumComment.updateOne(
-        { _id: new ObjectId(commentId) },
-        { $set: { text } }
+      let { postId } = req.params;
+      // console.log(postId);
+      let { UserId } = req.body;
+      // console.log(UserId);
+      let postById = await ForumPost.findOne({ _id: new ObjectId(postId) });
+      let helpfulDataBefore = postById.helpful;
+      let helpfulAdded = helpfulDataBefore;
+      const userPostgres = await User.findOne({ where: { id: UserId } });
+      let helpfulAddedtoPostgres = userPostgres.helpful;
+      if (!helpfulAdded.includes(UserId)) {
+        helpfulAdded.push(UserId);
+        helpfulAddedtoPostgres++;
+        // console.log(helpfulAddedtoPostgres);
+        await User.update(
+          { helpful: helpfulAddedtoPostgres },
+          {
+            where: {
+              id: UserId,
+            },
+          }
+        );
+      }
+      let result = await ForumPost.updateOne(
+        { _id: new ObjectId(postId) },
+        { $set: { helpful: helpfulAdded } }
       );
       if (result) {
         res.status(200).json({
@@ -132,15 +155,40 @@ class forumPostController {
       console.log(error);
     }
   }
-  static async deleteComment(req, res) {
+  static async deleteHelpfulPost(req, res) {
     try {
-      let { postId, commentId } = req.params;
-      let result = await ForumComment.deleteOne({
-        _id: new ObjectId(commentId),
-      });
-      if (result.deletedCount === 1) {
+      let { postId } = req.params;
+      // console.log(postId);
+      let { UserId } = req.body;
+      // console.log(UserId);
+      let postById = await ForumPost.findOne({ _id: new ObjectId(postId) });
+      let helpfulDataBefore = postById.helpful;
+      let helpfulAdded = helpfulDataBefore;
+      const userPostgres = await User.findOne({ where: { id: UserId } });
+      let helpfulAddedtoPostgres = userPostgres.helpful;
+      if (helpfulAdded.includes(UserId)) {
+        var temp = helpfulAdded.filter(function (value, index, arr) {
+          return value != UserId
+        });
+        helpfulAdded = temp
+        helpfulAddedtoPostgres--
+        // console.log(helpfulAddedtoPostgres);
+        await User.update(
+          { helpful: helpfulAddedtoPostgres },
+          {
+            where: {
+              id: UserId,
+            },
+          }
+        );
+      }
+      let result = await ForumPost.updateOne(
+        { _id: new ObjectId(postId) },
+        { $set: { helpful: helpfulAdded } }
+      );
+      if (result) {
         res.status(200).json({
-          message: "successfully deleted",
+          message: "successfully updated",
         });
       } else {
         res.status(404).json({ message: "No documents matched the query" });
@@ -149,6 +197,7 @@ class forumPostController {
       console.log(error);
     }
   }
+
 }
 
 module.exports = forumPostController;
