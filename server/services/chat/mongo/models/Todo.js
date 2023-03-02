@@ -2,16 +2,16 @@ const { getDb } = require('../config/db')
 
 /**
  * @typedef {Object} Todo
- * @property {string} text
- * @property {Sender?} sender
- * @property {Date} time
+ * @property {string} activity
+ * @property {boolean} completed
  * 
- */
+*/
 
 
 /**
  * @typedef {Object} TodoSchema
  * @property {number} UserId
+ * @property {Date} updatedAt
  * @property {Array<Todo>} todos
  *
  */
