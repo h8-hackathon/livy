@@ -22,7 +22,7 @@ class adminCounselorControllers {
       await CounselorSubmission.update({ status }, { where: { id } });
 
       res.status(200).json({
-        message: 'Success update status counselor',
+        message: 'Success updated status counselor',
       });
     } catch (error) {
       console.log(error);

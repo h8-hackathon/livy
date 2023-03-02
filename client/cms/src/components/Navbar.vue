@@ -25,7 +25,11 @@ export default {
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="" @click.prevent="toJobSection"
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href=""
+              @click.prevent="$router.push(`/counselor`)"
               >Counselor</a
             >
           </li>

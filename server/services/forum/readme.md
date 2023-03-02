@@ -12,13 +12,15 @@ Disini forum service menghandle user ForumPost dan ForumComment.
 
 - `GET /posts/:postId/comments` /done
 - `POST /posts/:postId/comments` /done
-- `PUT /posts/:postId/comments/:commentId` /done
-- `DELETE /posts/:postId/comments/:commentId` /done
 
-- `PUT /posts/:postId/helpfull`
-- `DELETE /posts/:postId/helpfull`
-- `PUT /posts/:postId/comments/:commentId/helpfull`
-- `DELETE /posts/:postId/comments/:commentId/helpfull`
+- `PUT //comments/:commentId` /done
+- `DELETE /comments/:commentId` /done
+
+- `PUT /posts/:postId/helpful` /done
+- `DELETE /posts/:postId/helpful` /done
+
+- `PUT /comments/:commentId/helpful`
+- `DELETE /comments/:commentId/helpful`
 
 ### `GET /posts`
 
@@ -238,7 +240,7 @@ body:
 }
 ```
 
-### `PUT /posts/:postId/comments/:commentId`
+### `PUT /comments/:commentId`
 
 - update comments
 
@@ -271,7 +273,7 @@ body:
 }
 ```
 
-### `DELETE /posts/:postId/comments/:commentId`
+### `DELETE /comments/:commentId`
 
 - delete comments
 
@@ -296,9 +298,9 @@ params:
 }
 ```
 
-### `PUT /posts/:postId/helpfull`
+### `PUT /posts/:postId/helpful`
 
-- menambahkan user id ke helpfull
+- menambahkan user id ke helpful
 
 #### Request
 
@@ -306,7 +308,7 @@ params:
 
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
@@ -314,7 +316,7 @@ body:
 
 ```json
 {
-  "userId": "integer"
+  "UserId": "integer"
 }
 ```
 
@@ -328,9 +330,9 @@ body:
 }
 ```
 
-### `DELETE /posts/:postId/helpfull`
+### `DELETE /posts/:postId/helpful`
 
-- menghapus user id dari helpfull
+- menghapus user id dari helpful
 
 #### Request
 
@@ -338,7 +340,7 @@ params:
 
 ```json
 {
-  "postId": "integer"
+  "postId": "string"
 }
 ```
 
@@ -346,7 +348,7 @@ body:
 
 ```json
 {
-  "userId": "integer"
+  "UserId": "integer"
 }
 ```
 
@@ -360,9 +362,9 @@ body:
 }
 ```
 
-### `PUT /posts/:postId/comments/:commentId/helpfull`
+### `PUT /comments/:commentId/helpful`
 
-- menambahkan user id ke helpfull
+- menambahkan user id ke helpful
 
 #### Request
 
@@ -370,8 +372,7 @@ params:
 
 ```json
 {
-  "postId": "integer",
-  "commentId": "integer"
+  "commentId": "string"
 }
 ```
 
@@ -379,7 +380,7 @@ body:
 
 ```json
 {
-  "userId": "integer"
+  "UserId": "integer"
 }
 ```
 
@@ -393,9 +394,9 @@ body:
 }
 ```
 
-### `DELETE /posts/:postId/comments/:commentId/helpfull`
+### `DELETE /comments/:commentId/helpful`
 
-- menghapus user id dari helpfull
+- menghapus user id dari helpful
 
 #### Request
 
@@ -403,8 +404,7 @@ params:
 
 ```json
 {
-  "postId": "integer",
-  "commentId": "integer"
+  "commentId": "string"
 }
 ```
 
@@ -412,7 +412,7 @@ body:
 
 ```json
 {
-  "userId": "integer"
+  "UserId": "integer"
 }
 ```
 
