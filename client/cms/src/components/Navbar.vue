@@ -15,7 +15,11 @@ export default {
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="" @click.prevent="$router.push(``)"
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href=""
+              @click.prevent="$router.push(`/content`)"
               >Content</a
             >
           </li>
@@ -27,7 +31,11 @@ export default {
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="" @click.prevent="toCompanySection"
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href=""
+              @click.prevent="$router.push(`/forum`)"
               >Forum</a
             >
           </li>
@@ -44,7 +52,7 @@ export default {
         </ul>
       </div>
       <div class="px-4">
-        <h5>Hi, <span>User!</span></h5>
+        <h5>Hi, <span>Admin!</span></h5>
       </div>
       <div id="logout">
         <button type="button" class="btn btn-danger" @click="logoutHandler">Log Out</button>
