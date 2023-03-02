@@ -10,8 +10,12 @@ router.delete('/:postId', forumPostController.deletePostById)
 
 router.get('/:postId/comments', forumPostController.getCommentByPostId)
 router.post('/:postId/comments', forumPostController.createComment)
-router.put('/:postId/comments/:commentId', forumPostController.updateComment)
-router.delete('/:postId/comments/:commentId', forumPostController.deleteComment)
+
+router.put('/:postId/helpful', forumPostController.createHelpfulPost)
+router.delete('/:postId/helpful', forumPostController.deleteHelpfulPost)
+
+
+
 
 
 module.exports = router
