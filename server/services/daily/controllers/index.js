@@ -1,3 +1,5 @@
+const { convertArrayToArrayTodos } = require('../../helpers')
+const askChatGpt = require('../chatgqt')
 const Todo = require('../mongo/models/Todo')
 
 class Controller {
@@ -16,10 +18,25 @@ class Controller {
   static async findById(req, res,) {
     try {
       const { userId } = req.params
-      
-      const todo = await Todo.findOne({}, {
-        UserId: userId
+
+
+
+      let todo = await Todo.findOne({
+        UserId: +userId
       })
+
+      if (!todo || new Date().getDay() !== todo.updatedAt.getDay()) {
+        const response = await askChatGpt()
+        const newTodo = convertArrayToArrayTodos(JSON.parse(response.choices[0].text))
+
+        const result = await Todo.findOneAndUpdate(
+          { UserId: +userId },
+          { $set: { todos: newTodo, updatedAt: new Date() } },
+          { upsert: true, returnDocument: 'after' }
+        )
+
+        todo = result.value
+      }
 
       res.status(200).json(todo)
     } catch (error) {

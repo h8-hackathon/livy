@@ -4,7 +4,7 @@ if (process.env.NODE_ENV != 'production') {
 
 const app = require('../app')
 const { connect } = require('../mongo/config/db')
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4007
 
 connect().then(() => {
   app.listen(port, () => {
