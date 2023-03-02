@@ -84,8 +84,8 @@ class forumPostController {
   static async getCommentByPostId(req, res) {
     try {
       let { postId } = req.params;
-      console.log(postId);
-      let comments = await ForumComment.find({ _id: new ObjectId(postId) });
+      let comments = await ForumComment.find({ forumPostId: postId }).toArray();
+      console.log(comments);
       if (comments) {
         res.status(200).json(comments);
       } else {
@@ -98,17 +98,53 @@ class forumPostController {
   static async createComment(req, res) {
     try {
       let { postId } = req.params;
-      console.log(postId);
       let { text, UserId, helpful } = req.body;
-      console.log(text, UserId, helpful);
       await ForumComment.insertOne({
+        forumPostId: postId,
         text,
         UserId,
         helpful,
+        createdAt: new Date(),
       });
       res.status(201).json({
         message: "successfully created",
       });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  static async updateComment(req, res) {
+    try {
+      let { postId, commentId } = req.params;
+      let { text } = req.body;
+      let result = await ForumComment.updateOne(
+        { _id: new ObjectId(commentId) },
+        { $set: { text } }
+      );
+      if (result) {
+        res.status(200).json({
+          message: "successfully updated",
+        });
+      } else {
+        res.status(404).json({ message: "No documents matched the query" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  static async deleteComment(req, res) {
+    try {
+      let { postId, commentId } = req.params;
+      let result = await ForumComment.deleteOne({
+        _id: new ObjectId(commentId),
+      });
+      if (result.deletedCount === 1) {
+        res.status(200).json({
+          message: "successfully deleted",
+        });
+      } else {
+        res.status(404).json({ message: "No documents matched the query" });
+      }
     } catch (error) {
       console.log(error);
     }

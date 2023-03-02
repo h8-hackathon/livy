@@ -8,9 +8,10 @@ router.get('/:postId', forumPostController.getPostById)
 router.put('/:postId', forumPostController.updatePostById)
 router.delete('/:postId', forumPostController.deletePostById)
 
-router.post('/:postId/comments`', forumPostController.createComment)
-router.get('/:postId/comments`', forumPostController.getCommentByPostId)
-// router.put('/:postId/comments`', forumPostController.deletePostById)
-// router.put('/:postId/comments`', forumPostController.deletePostById)
+router.get('/:postId/comments', forumPostController.getCommentByPostId)
+router.post('/:postId/comments', forumPostController.createComment)
+router.put('/:postId/comments/:commentId', forumPostController.updateComment)
+router.delete('/:postId/comments/:commentId', forumPostController.deleteComment)
+
 
 module.exports = router
