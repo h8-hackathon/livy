@@ -1,7 +1,7 @@
 const { connect, disconnect, ForumPost, ForumComment } = require("../mongo");
 const { ObjectId } = require("mongodb");
 const connectDB = connect();
-const { User } = require("../models");
+const { User, Report } = require("../models");
 const { sequelize } = require("../models/");
 class forumPostController {
   static async getAllPost(req, res) {
@@ -18,28 +18,28 @@ class forumPostController {
       if (page < 1) {
         page = 1;
       }
-      if (sortBy !== '_id' || sortBy !== 'title' ||sortBy !== 'createdAt' ) {
-        sortBy = '_id';
+      if (sortBy !== "_id" || sortBy !== "title" || sortBy !== "createdAt") {
+        sortBy = "_id";
       }
-      if ( Number(limit) > allPost.length ) {
+      if (Number(limit) > allPost.length) {
         limit = allPost.length;
       }
       console.log(limit, "<<<<<<<<< limit");
-      
+
       let sortOption = `{ ${sortBy} : 1}`;
       let limitOption = Number(limit);
       console.log(limitOption, "<<<<<<<<< limit option");
-      let skipOption = (Number(limit)*(page-1))
-      let nextPage = true
-      let prevPage =false
-      page == totalPage ? nextPage=false : nextPage=true
-      page <= totalPage && page > 1 ? prevPage=true : prevPage=false
+      let skipOption = Number(limit) * (page - 1);
+      let nextPage = true;
+      let prevPage = false;
+      page == totalPage ? (nextPage = false) : (nextPage = true);
+      page <= totalPage && page > 1 ? (prevPage = true) : (prevPage = false);
 
       let dataPage = {
         totalPage,
         currentPage: Number(page),
         nextPage,
-        prevPage
+        prevPage,
       };
       let result = await ForumPost.find()
         .sort(sortOption)
@@ -230,6 +230,28 @@ class forumPostController {
         });
       } else {
         res.status(404).json({ message: "No documents matched the query" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  static async createReportPost(req, res) {
+    try {
+      let { postId } = req.params;
+      let { UserId, note } = req.body;
+      let user = await User.findByPk(UserId);
+
+      if (!user) {
+        res.status(404).json({ message: "No user matched the query" });
+      } else {
+        let result = await Report.create({ note, postId, ReporterId: UserId });
+        if (result) {
+          res.status(201).json({
+            message: "successfully reported",
+          });
+        } else {
+          res.status(404).json({ message: "No documents matched the query" });
+        }
       }
     } catch (error) {
       console.log(error);

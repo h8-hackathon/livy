@@ -1,7 +1,7 @@
 const { connect, disconnect, ForumPost, ForumComment } = require("../mongo");
 const { ObjectId } = require("mongodb");
 const connectDB = connect();
-const { User } = require("../models");
+const { User,Report } = require("../models");
 const { sequelize } = require("../models");
 class forumCommentController {
   static async updateComment(req, res) {
@@ -117,6 +117,28 @@ class forumCommentController {
         });
       } else {
         res.status(404).json({ message: "No documents matched the query" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  static async createReportComment(req, res) {
+    try {
+      let { commentId } = req.params;
+      let { UserId, note } = req.body;
+      let user = await User.findByPk(UserId);
+
+      if (!user) {
+        res.status(404).json({ message: "No user matched the query" });
+      } else {
+        let result = await Report.create({ note, commentId, ReporterId: UserId });
+        if (result) {
+          res.status(201).json({
+            message: "successfully reported",
+          });
+        } else {
+          res.status(404).json({ message: "No documents matched the query" });
+        }
       }
     } catch (error) {
       console.log(error);

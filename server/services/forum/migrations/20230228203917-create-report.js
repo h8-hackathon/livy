@@ -11,11 +11,11 @@ module.exports = {
       },
       postId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        // allowNull: false
       },
       commentId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        // allowNull: false
       },
       ReporterId: {
         type: Sequelize.INTEGER,
