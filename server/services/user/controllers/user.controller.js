@@ -145,7 +145,7 @@ module.exports = class UserController {
                 id: user.id,
             }, process.env.JWT_SECRET || 'mamamuda')
             if(user.role === 'counselor'){
-                await CounselorSubmission.create({status:'default'/* SET AS DEFAULT BECAUSE STATUS VALIDATION @ilias*/,submission:'',UserId:user.id})
+                await CounselorSubmission.create({status:'pending'/* SET AS DEFAULT BECAUSE STATUS VALIDATION @ilias*/,submission:'',UserId:user.id})
             }
 
             res.status(status).json({ access_token, user: {
