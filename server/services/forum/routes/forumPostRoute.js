@@ -14,6 +14,8 @@ router.post('/:postId/comments', forumPostController.createComment)
 router.put('/:postId/helpful', forumPostController.createHelpfulPost)
 router.delete('/:postId/helpful', forumPostController.deleteHelpfulPost)
 
+router.post('/:postId/report', forumPostController.createReportPost)
+
 
 
 

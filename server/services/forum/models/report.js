@@ -18,19 +18,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       postId: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notNull: { msg: 'postId is required' },
-          notEmpty: { msg: 'postId is required' },
-        },
+        allowNull: true,
+     
       },
       commentId: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notNull: { msg: 'commentId is required' },
-          notEmpty: { msg: 'commentId is required' },
-        },
+        allowNull: true,
+      
       },
       ReporterId: {
         type: DataTypes.INTEGER,
