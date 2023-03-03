@@ -25,7 +25,7 @@ module.exports = function errorHandler(err, req, res, next) {
         break
       case "InvalidCredentials":
         status = 400
-        message = "Invalid email or password"
+        message = "InvalidCredentials"
         break
       case "Unauthenticated":
       case "JsonWebTokenError":
