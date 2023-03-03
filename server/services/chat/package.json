@@ -4,7 +4,8 @@
   "description": "Disini chat service menghandle chat dari user ke counselor dan user ke livy.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bin/www"
   },
   "keywords": [],
   "author": "",
