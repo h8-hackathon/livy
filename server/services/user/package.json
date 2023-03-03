@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "start": "node bin/www"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +16,11 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
     "pg": "^8.9.0",
     "sequelize": "^6.29.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
   }
 }
