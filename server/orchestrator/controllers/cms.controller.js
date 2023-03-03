@@ -11,8 +11,8 @@ class CMSController {
         return res.status(200).json(JSON.parse(cached));
       }
       const { data: posts } = await adminAPI.get("/posts");
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i];
+      for (let i = 0; i < posts.length; i++) {
+        const element = posts[i];
         let { data: perUser } = await userAPI.get("/users/" + element.UserId);
         if (perUser) {
           console.log(perUser);
@@ -23,7 +23,29 @@ class CMSController {
       }
       await redis.set(POSTS, JSON.stringify(posts));
       //   await redis.del(POSTS)
-      res.status(200).json(data);
+      res.status(200).json(posts);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async createPost(req, res, next) {
+    try {
+      const { title, url, caption, type, UserId } = req.body;
+ 
+      await adminAPI({
+        method: "post",
+        url: "/posts/",
+        data: {
+          title,
+          url,
+          caption,
+          type,
+          UserId,
+        },
+      });
+      await redis.del(POSTS);
+      res.status(200).json({ message: "data successfully added" });
     } catch (error) {
       next(error);
     }
