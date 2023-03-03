@@ -41,13 +41,6 @@ export default {
                     </div> -->
                   </form>
 
-                  <div
-                    id="google-button"
-                    style="padding: 20px; display: flex; justify-content: center"
-                  >
-                    <GoogleLogin :callback="googleLoginHandler" />
-                  </div>
-
                   <div class="col-12" style="padding: 20px; display: flex; justify-content: center">
                     <!-- REGISTER -->
                     <!-- <p class="medium mb-0">
