@@ -15,7 +15,6 @@ class CMSController {
         const element = posts[i];
         let { data: perUser } = await userAPI.get("/users/" + element.UserId);
         if (perUser) {
-          console.log(perUser);
           element.name = perUser.name;
           element.email = perUser.email;
         }
@@ -86,6 +85,20 @@ class CMSController {
       });
       await redis.del(POSTS);
       res.status(200).json({ message: "data successfully updated" });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async deletePost(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { data: post } = await adminAPI.get("/posts/" + id);
+      if (!post) {
+        throw { name: "NotFound" };
+      }
+      await adminAPI.delete("/posts/" + id);
+      await redis.del(POSTS);
+      res.status(200).json({ message: "data successfully deleted" });
     } catch (error) {
       next(error);
     }
