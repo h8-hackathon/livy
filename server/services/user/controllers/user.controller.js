@@ -231,4 +231,12 @@ module.exports = class UserController {
             next(error)
         }
     }
+    static async postUsersAdmin(req, res, next){
+        try {
+            const response = await User.create({...req.body, role:'admin', helpful:0})
+            res.status(201).json(response)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
