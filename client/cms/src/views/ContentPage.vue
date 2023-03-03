@@ -19,10 +19,14 @@ export default {
       <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
       >
-        <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">List of Admin</h1>
+        <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">List of Content</h1>
         <div>
-          <button type="button" class="btn btn-success" @click.prevent="$router.push(`/admin-add`)">
-            + Add New Admin
+          <button
+            type="button"
+            class="btn btn-success"
+            @click.prevent="$router.push(`/content-add`)"
+          >
+            + Add New Content
           </button>
         </div>
       </div>
@@ -33,10 +37,9 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Date of Birth</th>
+                <th scope="col">Title</th>
+                <th scope="col">Type</th>
+                <th scope="col">Link URL</th>
                 <th scope="col">Action</th>
                 <th scope="col" width="50px"></th>
               </tr>
@@ -45,15 +48,14 @@ export default {
             <tbody>
               <tr>
                 <td>1</td>
-                <td>Admin 1</td>
-                <td>Admin1@mail.com</td>
-                <td>M</td>
-                <td>01/01/2000</td>
+                <td>Mental Health Podcast</td>
+                <td>Podcast</td>
+                <td>www.youtube.com</td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-warning text-light"
-                    @click.prevent="$router.push(`/admin-add`)"
+                    @click.prevent="$router.push(`/content-add`)"
                   >
                     Edit
                   </button>

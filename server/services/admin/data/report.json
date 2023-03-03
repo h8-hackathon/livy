@@ -1,0 +1,17 @@
+[
+  {
+    "postId": "string",
+    "commentId": "string",
+    "ReporterId": 2
+  },
+  {
+    "postId": "string",
+    "commentId": "string",
+    "ReporterId": 3
+  },
+  {
+    "postId": "string",
+    "commentId": "string",
+    "ReporterId": 4
+  }
+]
