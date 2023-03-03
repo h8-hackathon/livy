@@ -113,9 +113,6 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Reporter ID</th>
-                <th scope="col">Post ID</th>
-                <th scope="col">Comment ID</th>
                 <th scope="col">Note</th>
                 <th scope="col">Post ID</th>
                 <th scope="col">Comment ID</th>
