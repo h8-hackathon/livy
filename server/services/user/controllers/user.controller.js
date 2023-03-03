@@ -106,7 +106,7 @@ module.exports = class UserController {
                 const user = await User.findOne({
                     where: {
                         email:payload.email,
-                        role:role
+                        role:req.body.role
                     }
                 })
                 if (!user) throw { name: "InvalidCredentials", }
