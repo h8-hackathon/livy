@@ -5,7 +5,11 @@ import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({
-    baseUrl: "http://localhost:8080/",
+    baseUrl: "http://localhost:4002",
+    admins:[],
+    reports:[],
+    posts:[],
+    counselors:[]
   }),
 
   actions: {
@@ -59,6 +63,59 @@ export const useCounterStore = defineStore('counter', {
         this.errorNotification(error);
       }
     },
+
+
+    async fetchReports() {
+      console.log('Fetch data - from report page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + '/reports',
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Reports')
+        this.reports = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
     
+    async fetchPosts() {
+      console.log('Fetch data - from post page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + '/posts',
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Posts')
+        this.posts = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+
+    async fetchCounselors() {
+      console.log('Fetch data - from counselor page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + '/counselors',
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Posts')
+        this.counselors = data
+      } catch (error) {
+        console.log(error)
+      }
+    }
   },
 })
