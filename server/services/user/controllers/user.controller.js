@@ -128,7 +128,7 @@ module.exports = class UserController {
                     email: payload.email,
                     image: payload.picture,
                     helpful: 0,
-                    role: role
+                    role: req.body.role
                 }
             });
 
