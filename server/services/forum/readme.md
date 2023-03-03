@@ -4,23 +4,27 @@ Disini forum service menghandle user ForumPost dan ForumComment.
 
 ### Endpoint
 
-- `GET /posts` /done
-- `POST /posts` /done
-- `GET /posts/:postId` /done
-- `PUT /posts/:postId` /done
-- `DELETE /posts/:postId` /done
+- `GET /posts` 
+- `POST /posts` 
+- `GET /posts/:postId` 
+- `PUT /posts/:postId` 
+- `DELETE /posts/:postId` 
 
-- `GET /posts/:postId/comments` /done
-- `POST /posts/:postId/comments` /done
+- `GET /posts/:postId/comments`
+- `POST /posts/:postId/comments` 
 
-- `PUT //comments/:commentId` /done
-- `DELETE /comments/:commentId` /done
+- `PUT //comments/:commentId` 
+- `DELETE /comments/:commentId` 
 
-- `PUT /posts/:postId/helpful` /done
-- `DELETE /posts/:postId/helpful` /done
+- `PUT /posts/:postId/helpful` 
+- `DELETE /posts/:postId/helpful` 
+
+- `POST /posts/:postId/report` 
 
 - `PUT /comments/:commentId/helpful`
 - `DELETE /comments/:commentId/helpful`
+
+- `POST /comments/:commentId/report`
 
 ### `GET /posts`
 
@@ -43,8 +47,15 @@ query:
 200 Ok:
 
 ```json
-[
-  {
+{
+  "dataPage": {
+    "totalPage": "string",
+    "currentPage": "string",
+    "nextPage": "boolean",
+    "prevPage": "boolean"
+  },
+  "result" :[
+    {
     "id": "integer",
     "title": "string",
     "images": ["string"],
@@ -53,7 +64,9 @@ query:
     "helpful": ["integer"],
     "createdAt": "time"
   }
-]
+  ]
+}
+
 ```
 
 ### `POST /posts`
@@ -362,6 +375,53 @@ body:
 }
 ```
 
+### `POST /posts/:postId/report`
+
+- melaporkan suatu post yang kurang pantas
+
+#### Request
+
+params:
+
+```json
+{
+  "postId": "string"
+}
+```
+
+body:
+
+```json
+{
+  "UserId": "integer",
+  "note": "string",
+}
+```
+
+#### Response
+
+200 Ok:
+
+```json
+{
+  "message": "successfully reported"
+}
+```
+404 User Not Found:
+
+```json
+{
+  "message": "No user matched the query"
+}
+```
+404 Post Not Found:
+
+```json
+{
+  "message": "No documents matched the query"
+}
+```
+
 ### `PUT /comments/:commentId/helpful`
 
 - menambahkan user id ke helpful
@@ -423,5 +483,52 @@ body:
 ```json
 {
   "message": "successfully updated"
+}
+```
+
+### `POST /comments/:commentId/report`
+
+- melaporkan suatu comment yang kurang pantas
+
+#### Request
+
+params:
+
+```json
+{
+  "commentId": "string"
+}
+```
+
+body:
+
+```json
+{
+  "UserId": "integer",
+  "note": "string",
+}
+```
+
+#### Response
+
+200 Ok:
+
+```json
+{
+  "message": "successfully reported"
+}
+```
+404 User Not Found:
+
+```json
+{
+  "message": "No user matched the query"
+}
+```
+404 Comment Not Found:
+
+```json
+{
+  "message": "No documents matched the query"
 }
 ```
