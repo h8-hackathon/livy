@@ -11,5 +11,6 @@ router.delete('/users/:id', authentication, authorizationOnlyOwnAndAdmin, UserCo
 router.patch('/users/:id', authentication, authorizationOnlyOwnAndAdmin, UserController.patchUsers)
 router.post('/verify', UserController.verify)
 router.put('/counselor/:id/submissions', authentication, authorizationOnlyAdmin, UserController.putCounselorIdSubmissions)
+router.post('/users/admin', UserController.postUsersAdmin)
 
 module.exports = router
