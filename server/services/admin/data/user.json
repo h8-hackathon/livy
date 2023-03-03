@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Admin1",
+    "email": "admin1@gmail.com",
+    "gender": "F",
+    "dob": "01/01/1864",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Kendall_Jenner_at_Met_Gala_2021_5.jpg",
+    "role": "superadmin",
+    "helpful": 4
+  },
+  {
+    "name": "Admin2",
+    "email": "admin2@gmail.com",
+    "gender": "M",
+    "dob": "01/01/1990",
+    "image": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRTLO6mzbNcykX9Eh-lcYRhv7aaPmGfSha2ti2tp6rEa2hpPsC0",
+    "role": "superadmin",
+    "helpful": 5
+  },
+  {
+    "name": "Admin3",
+    "email": "admin3@gmail.com",
+    "gender": "M",
+    "dob": "01/01/1996",
+    "image": "http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcTL8lybGX7FykVKrcJ40mwAcWx3rA2BTCqtRYFI2T-hlSmQWDYz6x1Ro4rca4-iMmce",
+    "role": "admin",
+    "helpful": 4
+  }
+]
