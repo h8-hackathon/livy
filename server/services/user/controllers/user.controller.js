@@ -89,24 +89,24 @@ module.exports = class UserController {
               });
             const payload = response.data;
 
-            /* BELOW IS DUMMY PURPOSE @ilias*/
-           /*  const payload = {
+            /* BELOW IS DUMMY PURPOSE @ilias */
+            /* const payload = {
                 id: '114434339297979854205',
-                email: 'xvnyan@gmail.com',
+                email: 'xvnyan@test.com',
                 verified_email: true,
-                name: 'Gilang Ramadhan',
+                name: 'Testing Purpose',
                 given_name: 'Gilang',
                 family_name: 'Ramadhan',
                 picture: 'https://lh3.googleusercontent.com/a/AGNmyxa9f7amIsKzXc4FXr2NkMnjQoKB0Pi4fj7OZFTN=s96-c',
                 locale: 'id'
               }
-            const role = 'counselor'  */ 
+            const role = 'counselor'   */
             
             if ( req.body.role === 'admin' ) {
                 const user = await User.findOne({
                     where: {
                         email:payload.email,
-                        role:req.body.role
+                        role:role
                     }
                 })
                 if (!user) throw { name: "InvalidCredentials", }
@@ -128,7 +128,7 @@ module.exports = class UserController {
                     email: payload.email,
                     image: payload.picture,
                     helpful: 0,
-                    role: req.body.role
+                    role: role
                 }
             });
 
@@ -148,9 +148,17 @@ module.exports = class UserController {
                 await CounselorSubmission.create({status:'default'/* SET AS DEFAULT BECAUSE STATUS VALIDATION @ilias*/,submission:'',UserId:user.id})
             }
 
-            res.status(status).json({ access_token, user })
+            res.status(status).json({ access_token, user: {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "image": user.image,
+                "helpful": user.helpful,
+                "role": user.role,
+                "gender": user.gender,
+                "dob": user.dob
+            } })
         } catch (err) {
-            console.log(err)
             next(err)
         }
     }
@@ -165,6 +173,7 @@ module.exports = class UserController {
     }
     static async deleteUsers(req, res, next) {
         try {
+
             await User.destroy({ where: { id: req.params.id } })
 
             res.status(200).json({ "message": "successfuly deleted" })
@@ -176,7 +185,7 @@ module.exports = class UserController {
         const { helpful } = req.body
         try {
             const user = await User.findByPk(req.params.id)
-            if (helpful > 1 && helpful < -1) throw { name: "OnlyAccept 1 or -1" }
+            if (+helpful > 1 || +helpful < -1) throw { name: "OnlyAccept 1 or -1" }
             if (!(helpful < 0 && user.helpful < 1)) {
                 await User.increment('helpful', { by: +helpful, where: { id: req.params.id } })
             }
@@ -208,6 +217,16 @@ module.exports = class UserController {
             })
 
             res.status(200).json(response)
+        } catch (error) {
+            next(error)
+        }
+    }
+    static async putCounselorIdSubmissions(req, res, next) {
+        try {
+
+            await CounselorSubmission.update({ ...req.body }, { where: { id: req.params.id } })
+
+            res.status(200).json({ "message": "successfuly updated" })
         } catch (error) {
             next(error)
         }
