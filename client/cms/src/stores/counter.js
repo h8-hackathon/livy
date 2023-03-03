@@ -5,7 +5,9 @@ import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({
-    baseUrl: "http://localhost:8080/",
+    baseUrl: "http://localhost:4002",
+    admins:[],
+    reports:[]
   }),
 
   actions: {
@@ -59,6 +61,23 @@ export const useCounterStore = defineStore('counter', {
         this.errorNotification(error);
       }
     },
+
+    async fetchReports() {
+      console.log('Fetch data - from report page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + '/reports',
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Report')
+        this.reports = data
+      } catch (error) {
+        console.log(error)
+      }
+    }
     
   },
 })

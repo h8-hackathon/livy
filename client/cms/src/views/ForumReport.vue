@@ -1,31 +1,20 @@
 <script>
 import Navbar from '../components/Navbar.vue'
+import { mapActions, mapState } from 'pinia'
+import { useCounterStore } from '../stores/counter'
 
 export default {
   components: {
     Navbar
   },
   computed: {
-    baseUrl: 'http://localhost:8080/',
-    report: []
+    ...mapState(useCounterStore, ['reports'])
   },
   methods: {
-    async fetchReport() {
-      console.log('Fetch data - report page')
-      try {
-        const { data } = await axios({
-          url: this.baseUrl + '/reports', //! Masih belum dimasukin URL-nya
-          method: 'GET',
-          headers: {
-            access_token: localStorage.access_token
-          }
-        })
-        console.log(data, '<- Ini data Report')
-        this.admin = data
-      } catch (error) {
-        console.log(error)
-      }
-    }
+    ...mapActions(useCounterStore, ['fetchReports'])
+  },
+  created() {
+    this.fetchReports()
   }
 }
 </script>
@@ -59,6 +48,9 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
+                <th scope="col">Reporter ID</th>
+                <th scope="col">Post ID</th>
+                <th scope="col">Comment ID</th>
                 <th scope="col">Note</th>
                 <th scope="col">Action</th>
                 <th scope="col" width="50px"></th>
@@ -66,9 +58,12 @@ export default {
             </thead>
 
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Penggunaan kata yang dilarang</td>
+              <tr v-for="(el, index) in reports" :key="index">
+                <td>{{ ++index }}</td>
+                <td>{{ el.ReporterId }}</td>
+                <td>{{ el.postId }}</td>
+                <td>{{ el.commentId }}</td>
+                <td>{{ el.note }}</td>
                 <td>
                   <button type="button" class="btn btn-danger">Delete</button>
                 </td>
