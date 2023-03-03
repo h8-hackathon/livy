@@ -29,7 +29,18 @@ export default {
           <form id="new-job-form" @submit.prevent="submitFormHandler">
             <div class="mb-3">
               <label for="product-name">Title <span class="text-danger fw-bold">*</span></label>
-              <input type="text" class="form-control" autocomplete="off" required v-model="name" />
+              <input type="text" class="form-control" autocomplete="off" required v-model="title" />
+            </div>
+
+            <div class="mb-3">
+              <label for="product-name">Caption <span class="text-danger fw-bold">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                required
+                v-model="caption"
+              />
             </div>
 
             <div class="mb-3">
@@ -39,7 +50,7 @@ export default {
                 class="form-control"
                 autocomplete="off"
                 required
-                v-model="gender"
+                v-model="linkURL"
               />
             </div>
 

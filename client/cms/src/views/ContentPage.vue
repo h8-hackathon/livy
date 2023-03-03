@@ -38,6 +38,7 @@ export default {
               <tr>
                 <th scope="col">No.</th>
                 <th scope="col">Title</th>
+                <th scope="col">Caption</th>
                 <th scope="col">Type</th>
                 <th scope="col">Link URL</th>
                 <th scope="col">Action</th>
@@ -49,6 +50,7 @@ export default {
               <tr>
                 <td>1</td>
                 <td>Mental Health Podcast</td>
+                <td>Lorem Ipsum Dolor Sit Amet</td>
                 <td>Podcast</td>
                 <td>www.youtube.com</td>
                 <td>

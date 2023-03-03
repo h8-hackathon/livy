@@ -16,7 +16,7 @@ export default {}
       <div class="">
         <form id="new-job-form" @submit.prevent="submitFormHandler">
           <div class="mb-3">
-            <label for="product-name">Title <span class="text-danger fw-bold">*</span></label>
+            <label for="product-name">Note <span class="text-danger fw-bold">*</span></label>
             <input type="text" class="form-control" autocomplete="off" required v-model="name" />
           </div>
 

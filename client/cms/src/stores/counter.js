@@ -6,7 +6,6 @@ import Swal from 'sweetalert2'
 export const useCounterStore = defineStore('counter', {
   state: () => ({
     baseUrl: "http://localhost:8080/",
-
   }),
 
   actions: {
@@ -32,16 +31,16 @@ export const useCounterStore = defineStore('counter', {
       console.log("Test handle login by Google");
 
       try {
-        // const signinWithGoogle = await axios({
-        //   url: this.baseUrl + `login`,
-        //   method: "POST",
-        //   headers: {
-        //     "google-auth-token": input.credential,
-        //   },
-        // });
+        const signinWithGoogle = await axios({
+          url: this.baseUrl + `login`,
+          method: "POST",
+          headers: {
+            "google-auth-token": input.credential,
+          },
+        });
 
-        // const access_token = signinWithGoogle.data.access_token;
-        // console.log(access_token, '<- Ini access_token');
+        const access_token = signinWithGoogle.data.access_token;
+        console.log(access_token, '<- Ini access_token');
 
         await localStorage.setItem("access_token", 'ABCDE');
 
@@ -60,6 +59,6 @@ export const useCounterStore = defineStore('counter', {
         this.errorNotification(error);
       }
     },
-
+    
   },
 })

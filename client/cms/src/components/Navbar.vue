@@ -5,10 +5,9 @@ export default {
   methods: {
     async logoutHandler() {
       console.log('Test handle log out')
+      await localStorage.clear()
 
-     await localStorage.clear()
-
-           await this.$router.push("/login");
+      await this.$router.push("/login");
 
       Swal.fire({
         position: 'top-end',

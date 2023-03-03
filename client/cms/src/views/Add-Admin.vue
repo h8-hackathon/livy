@@ -55,7 +55,7 @@ export default {
 
             <div class="mb-3">
               <label for="product-category"
-                >Admin Type <span class="text-danger fw-bold">*</span></label
+                >Gender <span class="text-danger fw-bold">*</span></label
               >
               <select id="admin-gender" class="form-select" required v-model="jobType">
                 <option value="" selected disabled>-- Select Type --</option>
@@ -76,6 +76,18 @@ export default {
                 autocomplete="off"
                 required
                 v-model="dob"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="product-name">Image <span class="text-danger fw-bold">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="admin-image"
+                autocomplete="off"
+                required
+                v-model="image"
               />
             </div>
 

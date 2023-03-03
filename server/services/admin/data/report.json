@@ -12,6 +12,6 @@
   {
     "postId": "string",
     "commentId": "string",
-    "ReporterId": 4
+    "ReporterId": 1
   }
 ]
