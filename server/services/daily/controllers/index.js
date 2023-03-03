@@ -1,11 +1,13 @@
+const { convertArrayToArrayTodos } = require('../helpers')
+const askChatGpt = require('../chatgqt')
 const Todo = require('../mongo/models/Todo')
 
 class Controller {
   static async createTodo(req, res,) {
     try {
-      const { todos } = req.body
+      const { todos, userId } = req.body
 
-      await Todo.insertOne({ todos, UserId: 1 })
+      await Todo.insertOne({ todos, UserId: userId })
 
       res.status(200).json({ message: "successfully created" })
     } catch (error) {
@@ -17,9 +19,22 @@ class Controller {
     try {
       const { userId } = req.params
 
-      const todo = await Todo.findOne({
-        _id: new ObjectId(userId)
+      let todo = await Todo.findOne({
+        UserId: +userId
       })
+
+      if (!todo || new Date().getDay() !== todo.updatedAt.getDay()) {
+        const response = await askChatGpt()
+        const newTodo = convertArrayToArrayTodos(JSON.parse(response.choices[0].text))
+
+        const result = await Todo.findOneAndUpdate(
+          { UserId: +userId },
+          { $set: { todos: newTodo, updatedAt: new Date() } },
+          { upsert: true, returnDocument: 'after' }
+        )
+
+        todo = result.value
+      }
 
       res.status(200).json(todo)
     } catch (error) {
@@ -32,7 +47,7 @@ class Controller {
       const { userId } = req.params
       const { todos } = req.body
 
-      await Todo.updateOne({ _id: new ObjectId(userId) }, { $set: { todos } })
+      await Todo.updateOne({ UserId: +userId }, { $set: { todos } })
 
       res.status(200).json({ message: "successfully updated" })
     } catch (error) {
@@ -43,7 +58,7 @@ class Controller {
     try {
       const { userId } = req.params
 
-      await Todo.deleteOne({ UserId: userId })
+      await Todo.deleteOne({ UserId: +userId })
 
       res.status(200).json({ message: "successfully deleted" })
     } catch (error) {

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -10,16 +10,16 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
 
-    await queryInterface.addConstraint('Reports', {
+    await queryInterface.addConstraint('Reports',{
       type: 'FOREIGN KEY',
-      fields: ['ReporterId'],
+      fields: ['ReporterId'], 
       references: {
         table: 'Users',
-        field: 'id',
+        field: 'id'
       },
       onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    });
+      onUpdate: 'CASCADE'
+    })
   },
 
   async down(queryInterface, Sequelize) {
@@ -30,6 +30,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
 
-    await queryInterface.removeConstraint('Reports', 'Reports_ReporterId_Users_fk');
+    await queryInterface.removeConstraint('Reports', 'Reports_ReporterId_Users_fk')
   },
-};
+}
