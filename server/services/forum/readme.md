@@ -19,8 +19,12 @@ Disini forum service menghandle user ForumPost dan ForumComment.
 - `PUT /posts/:postId/helpful` 
 - `DELETE /posts/:postId/helpful` 
 
+- `POST /posts/:postId/report` 
+
 - `PUT /comments/:commentId/helpful`
 - `DELETE /comments/:commentId/helpful`
+
+- `POST /comments/:commentId/report`
 
 ### `GET /posts`
 
@@ -371,6 +375,53 @@ body:
 }
 ```
 
+### `POST /posts/:postId/report`
+
+- melaporkan suatu post yang kurang pantas
+
+#### Request
+
+params:
+
+```json
+{
+  "postId": "string"
+}
+```
+
+body:
+
+```json
+{
+  "UserId": "integer",
+  "note": "string",
+}
+```
+
+#### Response
+
+200 Ok:
+
+```json
+{
+  "message": "successfully reported"
+}
+```
+404 User Not Found:
+
+```json
+{
+  "message": "No user matched the query"
+}
+```
+404 Post Not Found:
+
+```json
+{
+  "message": "No documents matched the query"
+}
+```
+
 ### `PUT /comments/:commentId/helpful`
 
 - menambahkan user id ke helpful
@@ -432,5 +483,52 @@ body:
 ```json
 {
   "message": "successfully updated"
+}
+```
+
+### `POST /comments/:commentId/report`
+
+- melaporkan suatu comment yang kurang pantas
+
+#### Request
+
+params:
+
+```json
+{
+  "commentId": "string"
+}
+```
+
+body:
+
+```json
+{
+  "UserId": "integer",
+  "note": "string",
+}
+```
+
+#### Response
+
+200 Ok:
+
+```json
+{
+  "message": "successfully reported"
+}
+```
+404 User Not Found:
+
+```json
+{
+  "message": "No user matched the query"
+}
+```
+404 Comment Not Found:
+
+```json
+{
+  "message": "No documents matched the query"
 }
 ```
