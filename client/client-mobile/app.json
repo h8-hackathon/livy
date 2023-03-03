@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "livy",
+    "slug": "livy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "livy",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "chat.livy.livy"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e9db397a-db9c-4084-b523-99caf8cbe41d"
+      }
+    }
+  }
+}
