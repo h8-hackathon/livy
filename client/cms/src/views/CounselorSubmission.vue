@@ -1,43 +1,58 @@
 <script>
 import Navbar from '../components/Navbar.vue'
+import { mapActions, mapState } from 'pinia'
+import { useCounterStore } from '../stores/counter'
 
 export default {
   components: {
     Navbar
+  },
+  computed: {
+    ...mapState(useCounterStore, ['counselors'])
+  },
+  methods: {
+    ...mapActions(useCounterStore, ['fetchCounselors'])
+  },
+  created() {
+    this.fetchCounselors()
   }
 }
 </script>
 
 <template>
-<div>
-<Navbar/>
-  <section class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="company-section" style="margin: auto">
-    <div
-      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  <div>
+    <Navbar />
+    <section
+      class="col-md-9 ms-sm-auto col-lg-10 px-md-4"
+      id="company-section"
+      style="margin: auto"
     >
-      <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Counselors Page</h1>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <table class="table align-middle">
-          <!-- Untuk Table Jobs -->
-          <thead>
-            <tr>
-              <th scope="col">No.</th>
-              <th scope="col">Status</th>
-              <th scope="col">Submission</th>
-              <th scope="col">Counselors Name</th>
-              <th scope="col">Action</th>
-              <th scope="col" width="50px"></th>
-            </tr>
-          </thead>
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+      >
+        <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Counselors Page</h1>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <table class="table align-middle">
+            <!-- Untuk Table Jobs -->
+            <thead>
+              <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Status</th>
+                <th scope="col">Submission</th>
+                <th scope="col">Counselors Name</th>
+                <th scope="col">Action</th>
+                <th scope="col" width="50px"></th>
+              </tr>
+            </thead>
 
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Pending</td>
-                <td>Counselor Submission</td>
-                <td>Sulkhan</td>
+              <tr v-for="(el, index) in counselors" :key="index">
+                <td>{{ ++index }}</td>
+                <td>{{ el.status }}</td>
+                <td>{{ el.submissions }}</td>
+                <td>{{ el.UserId }}</td>
                 <td>
                   <button
                     type="button"

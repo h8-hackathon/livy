@@ -1,9 +1,20 @@
 <script>
 import Navbar from '../components/Navbar.vue'
+import { mapActions, mapState } from 'pinia'
+import { useCounterStore } from '../stores/counter'
 
 export default {
   components: {
     Navbar
+  },
+  computed: {
+    ...mapState(useCounterStore, ['posts'])
+  },
+  methods: {
+    ...mapActions(useCounterStore, ['fetchPosts'])
+  },
+  created() {
+    this.fetchPosts()
   }
 }
 </script>
@@ -38,6 +49,7 @@ export default {
               <tr>
                 <th scope="col">No.</th>
                 <th scope="col">Title</th>
+                <th scope="col">Caption</th>
                 <th scope="col">Type</th>
                 <th scope="col">Link URL</th>
                 <th scope="col">Action</th>
@@ -46,20 +58,21 @@ export default {
             </thead>
 
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mental Health Podcast</td>
-                <td>Podcast</td>
-                <td>www.youtube.com</td>
+              <tr v-for="(el, index) in posts" :key="index">
+                <td>{{ ++index }}</td>
+                <td>{{ el.title }}</td>
+                <td>{{ el.caption }}</td>
+                <td>{{ el.type }}</td>
+                <td>{{ el.url }}</td>
                 <td>
                   <button
                     type="button"
-                    class="btn btn-warning text-light"
+                    class="btn btn-warning text-light mb-2"
                     @click.prevent="$router.push(`/content-add`)"
                   >
                     Edit
                   </button>
-                  <button type="button" class="btn btn-danger m-2">Delete</button>
+                  <button type="button" class="btn btn-danger">Delete</button>
                 </td>
               </tr>
             </tbody>

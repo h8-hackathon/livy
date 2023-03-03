@@ -4,6 +4,27 @@ import Navbar from '../components/Navbar.vue'
 export default {
   components: {
     Navbar
+  },
+  computed: {
+    admin: []
+  },
+  methods: {
+    async fetchAdmin() {
+      console.log('Fetch data - admin page')
+      try {
+        const { data } = await axios({
+          // url: this.baseUrl + '/admin', //! Masih belum dimasukin URL-nya
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Admin')
+        this.admin = data
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 }
 </script>
@@ -33,10 +54,12 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
+                <th scope="col">Image</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Gender</th>
                 <th scope="col">Date of Birth</th>
+                <th scope="col">Role</th>
                 <th scope="col">Action</th>
                 <th scope="col" width="50px"></th>
               </tr>
@@ -45,10 +68,12 @@ export default {
             <tbody>
               <tr>
                 <td>1</td>
+                <td>Image URL</td>
                 <td>Admin 1</td>
                 <td>Admin1@mail.com</td>
                 <td>M</td>
                 <td>01/01/2000</td>
+                <td>Super Admin</td>
                 <td>
                   <button
                     type="button"
