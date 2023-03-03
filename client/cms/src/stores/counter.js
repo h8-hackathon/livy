@@ -7,7 +7,8 @@ export const useCounterStore = defineStore('counter', {
   state: () => ({
     baseUrl: "http://localhost:4002",
     admins:[],
-    reports:[]
+    reports:[],
+    posts:[]
   }),
 
   actions: {
@@ -62,6 +63,7 @@ export const useCounterStore = defineStore('counter', {
       }
     },
 
+
     async fetchReports() {
       console.log('Fetch data - from report page')
       try {
@@ -72,12 +74,29 @@ export const useCounterStore = defineStore('counter', {
             access_token: localStorage.access_token
           }
         })
-        console.log(data, '<- Ini data Report')
+        console.log(data, '<- Ini data Reports')
         this.reports = data
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+
     
+    async fetchPosts() {
+      console.log('Fetch data - from post page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + '/posts',
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Posts')
+        this.posts = data
+      } catch (error) {
+        console.log(error)
+      }
+    }
   },
 })
