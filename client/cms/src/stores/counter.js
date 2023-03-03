@@ -8,7 +8,8 @@ export const useCounterStore = defineStore('counter', {
     baseUrl: "http://localhost:4002",
     admins:[],
     reports:[],
-    posts:[]
+    posts:[],
+    counselors:[]
   }),
 
   actions: {
@@ -94,6 +95,24 @@ export const useCounterStore = defineStore('counter', {
         })
         console.log(data, '<- Ini data Posts')
         this.posts = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+
+    async fetchCounselors() {
+      console.log('Fetch data - from counselor page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + '/counselors',
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Posts')
+        this.counselors = data
       } catch (error) {
         console.log(error)
       }
