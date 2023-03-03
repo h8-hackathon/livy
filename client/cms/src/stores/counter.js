@@ -43,9 +43,9 @@ export const useCounterStore = defineStore('counter', {
         // const access_token = signinWithGoogle.data.access_token;
         // console.log(access_token, '<- Ini access_token');
 
-        localStorage.setItem("access_token", 'ABCDE');
+        await localStorage.setItem("access_token", 'ABCDE');
 
-        router.push('/')
+        await this.router.push('/')
 
         Swal.fire({
           position: "top-end",
