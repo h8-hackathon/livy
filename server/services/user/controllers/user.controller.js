@@ -1,7 +1,16 @@
 const { Op } = require('sequelize')
-const { User } = require('../models')
+const { User, CounselorSubmission } = require('../models')
 const jwt = require('jsonwebtoken')
+const axios = require('axios')
 module.exports = class UserController {
+
+    static async fetchUserInfo(token) {
+        let response = await axios.get("https://www.googleapis.com/userinfo/v2/me", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const useInfo = await response.data;
+        return useInfo
+    }
 
     static async getUsers(req, res, next) {
         const { type, search, limit } = req.query
@@ -55,7 +64,7 @@ module.exports = class UserController {
     static async getUserParamId(req, res, next) {
         try {
             const response = await User.findOne({
-                where: {id:req.params.id},
+                where: { id: req.params.id },
                 attributes: [
                     'id',
                     "name",
@@ -75,19 +84,81 @@ module.exports = class UserController {
     }
     static async postUsers(req, res, next) {
         try {
-            const { id, name, email, gender, dob, image, role, helpful } = await User.create({ ...req.body, helpful: 0 })
+            const response = await axios.get("https://www.googleapis.com/userinfo/v2/me", {
+                headers: { Authorization: `Bearer ${req.body.token}` }
+              });
+            const payload = response.data;
 
-            res.status(200).json({ id, name, email, gender, dob, image, role, helpful })
-        } catch (error) {
-            console.log(error)
-            next(error)
+            /* BELOW IS DUMMY PURPOSE @ilias*/
+           /*  const payload = {
+                id: '114434339297979854205',
+                email: 'xvnyan@gmail.com',
+                verified_email: true,
+                name: 'Gilang Ramadhan',
+                given_name: 'Gilang',
+                family_name: 'Ramadhan',
+                picture: 'https://lh3.googleusercontent.com/a/AGNmyxa9f7amIsKzXc4FXr2NkMnjQoKB0Pi4fj7OZFTN=s96-c',
+                locale: 'id'
+              }
+            const role = 'counselor'  */ 
+            
+            if ( req.body.role === 'admin' ) {
+                const user = await User.findOne({
+                    where: {
+                        email:payload.email,
+                        role:req.body.role
+                    }
+                })
+                if (!user) throw { name: "InvalidCredentials", }
+                else {
+
+                    const access_token = jwt.sign({
+                        id: user.id,
+                    }, process.env.JWT_SECRET || 'mamamuda')
+                    res.status(200).json({ access_token, user })
+
+                }
+                return
+            }
+
+            const [user, created] = await User.findOrCreate({
+                where: { email: payload.email },
+                defaults: {
+                    name: payload.name,
+                    email: payload.email,
+                    image: payload.picture,
+                    helpful: 0,
+                    role: req.body.role
+                }
+            });
+
+
+
+            let status
+            if (created) {
+                status = 201
+            } else {
+                status = 200
+            }
+
+            const access_token = jwt.sign({
+                id: user.id,
+            }, process.env.JWT_SECRET || 'mamamuda')
+            if(user.role === 'counselor'){
+                await CounselorSubmission.create({status:'default'/* SET AS DEFAULT BECAUSE STATUS VALIDATION @ilias*/,submission:'',UserId:user.id})
+            }
+
+            res.status(status).json({ access_token, user })
+        } catch (err) {
+            console.log(err)
+            next(err)
         }
     }
     static async putUsers(req, res, next) {
         try {
             await User.update({ ...req.body }, { where: { id: req.params.id } })
 
-            res.status(200).json({  "message": "successfuly updated" })
+            res.status(200).json({ "message": "successfuly updated" })
         } catch (error) {
             next(error)
         }
@@ -96,7 +167,7 @@ module.exports = class UserController {
         try {
             await User.destroy({ where: { id: req.params.id } })
 
-            res.status(200).json({"message": "successfuly deleted"})
+            res.status(200).json({ "message": "successfuly deleted" })
         } catch (error) {
             next(error)
         }
@@ -116,29 +187,29 @@ module.exports = class UserController {
         }
     }
 
-   static async verify(req, res, next) {
-    const {access_token} = req.body
-    
-    try {
-        if(!access_token)throw{ name: 'InvalidCredential' }
-        const payload = jwt.verify(access_token, process.env.JWT_SECRET || 'mamamuda')
-        const response = await User.findOne({
-            where: {id:payload.id},
-            attributes: [
-                'id',
-                "name",
-                "email",
-                "gender",
-                'dob',
-                'image',
-                'role',
-                'helpful'
-            ]
-        })
+    static async verify(req, res, next) {
+        const { access_token } = req.body
 
-        res.status(200).json(response)
-    } catch (error) {
-        next(error)
+        try {
+            if (!access_token) throw { name: 'InvalidCredential' }
+            const payload = jwt.verify(access_token, process.env.JWT_SECRET || 'mamamuda')
+            const response = await User.findOne({
+                where: { id: payload.id },
+                attributes: [
+                    'id',
+                    "name",
+                    "email",
+                    "gender",
+                    'dob',
+                    'image',
+                    'role',
+                    'helpful'
+                ]
+            })
+
+            res.status(200).json(response)
+        } catch (error) {
+            next(error)
+        }
     }
-   } 
 }
