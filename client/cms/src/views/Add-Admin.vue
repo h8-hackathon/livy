@@ -23,7 +23,7 @@ export default {
           class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
           style="margin: auto; text-align: center"
         >
-          Form - Add New Admin
+          Form - Admin
         </h1>
       </div>
       <div class="row" style="margin: auto; width: 50%">

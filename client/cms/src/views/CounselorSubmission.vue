@@ -9,7 +9,8 @@ export default {
 </script>
 
 <template>
-      <Navbar />
+<div>
+<Navbar/>
   <section class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="company-section" style="margin: auto">
     <div
       class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
@@ -31,26 +32,27 @@ export default {
             </tr>
           </thead>
 
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Pending</td>
-              <td>Counselor Submission</td>
-              <td>Sulkhan</td>
-              <td>
-                <button type="button" class="btn btn-danger m-2">Delete</button>
-                <button
-                  type="button"
-                  class="btn btn-success"
-                  @click.prevent="$router.push(`/counselor-edit`)"
-                >
-                  Edit
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Pending</td>
+                <td>Counselor Submission</td>
+                <td>Sulkhan</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-warning text-light"
+                    @click.prevent="$router.push(`/counselor-edit`)"
+                  >
+                    Edit
+                  </button>
+                  <button type="button" class="btn btn-danger m-2">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>

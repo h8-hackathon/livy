@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({
-    baseUrl: "",
+    baseUrl: "http://localhost:8080/",
 
   }),
 
@@ -14,7 +14,7 @@ export const useCounterStore = defineStore('counter', {
       Swal.fire({
         icon: "success",
         title: "Success!",
-        text: response.message,
+        // text: response.message,
       });
     },
 
@@ -23,7 +23,7 @@ export const useCounterStore = defineStore('counter', {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: error.response.data.message,
+        // text: error.response.data.message,
       });
     },
 
@@ -32,20 +32,20 @@ export const useCounterStore = defineStore('counter', {
       console.log("Test handle login by Google");
 
       try {
-        const signinWithGoogle = await axios({
-          url: this.baseUrl + `/pub/google-sign-in`,
-          method: "POST",
-          headers: {
-            "google-auth-token": input.credential,
-          },
-        });
+        // const signinWithGoogle = await axios({
+        //   url: this.baseUrl + `login`,
+        //   method: "POST",
+        //   headers: {
+        //     "google-auth-token": input.credential,
+        //   },
+        // });
 
-        const access_token = signinWithGoogle.data.access_token;
-        console.log(access_token, '<- Ini access_token');
+        // const access_token = signinWithGoogle.data.access_token;
+        // console.log(access_token, '<- Ini access_token');
 
-        localStorage.setItem("access_token", access_token);
+        localStorage.setItem("access_token", 'ABCDE');
 
-        this.router.push('/')
+        router.push('/')
 
         Swal.fire({
           position: "top-end",
