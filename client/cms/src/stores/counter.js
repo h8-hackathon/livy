@@ -28,19 +28,19 @@ export const useCounterStore = defineStore('counter', {
 
 
     async googleLoginHandler(input) {
-      console.log("Test handle login by Google");
-
+      
       try {
-        const signinWithGoogle = await axios({
-          url: this.baseUrl + `login`,
-          method: "POST",
-          headers: {
-            "google-auth-token": input.credential,
-          },
-        });
+        console.log("Test handle login by Google");
+        // const signinWithGoogle = await axios({
+        //   url: this.baseUrl + `login`,
+        //   method: "POST",
+        //   headers: {
+        //     "google-auth-token": input.credential,
+        //   },
+        // });
 
-        const access_token = signinWithGoogle.data.access_token;
-        console.log(access_token, '<- Ini access_token');
+        // const access_token = signinWithGoogle.data.access_token;
+        // console.log(access_token, '<- Ini access_token');
 
         await localStorage.setItem("access_token", 'ABCDE');
 
