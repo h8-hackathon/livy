@@ -179,6 +179,32 @@ Or
 }
 ```
 
+### `PUT /counselor/:id/submissions`
+- untuk merubah data dalam user
+#### Request:
+Header: 
+```json
+{
+  "access_token": "string"
+}
+```
+jadi parameter `:id` harus sesuai dengan id dari access_token atau kalau rolenya admin atau superadmin
+
+Body: 
+```json
+{
+  "status":"string",
+  "submission":"text"
+}
+```
+
+#### Response:
+200 OK:
+```json
+{
+  "message": "successfuly updated"
+}
+```
 ### Global Error:
 
 400 Bad request:

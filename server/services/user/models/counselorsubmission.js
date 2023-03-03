@@ -16,13 +16,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   CounselorSubmission.init({
     status: {
-      type:
-        DataTypes.STRING,
-      allowNull: false,
+      type:DataTypes.STRING,
+      // VALIDATION COMMENTED BECAUSE INIT PURPOSE @ilias 
+   /* allowNull: false,
       validate: {
         notNull: { msg: 'status is required' },
         notEmpty: { msg: 'status is required' }
-      }
+      } */
     },
     submissions: {
       type:

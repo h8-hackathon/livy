@@ -4,20 +4,20 @@ Disini forum service menghandle user ForumPost dan ForumComment.
 
 ### Endpoint
 
-- `GET /posts` /done
-- `POST /posts` /done
-- `GET /posts/:postId` /done
-- `PUT /posts/:postId` /done
-- `DELETE /posts/:postId` /done
+- `GET /posts` 
+- `POST /posts` 
+- `GET /posts/:postId` 
+- `PUT /posts/:postId` 
+- `DELETE /posts/:postId` 
 
-- `GET /posts/:postId/comments` /done
-- `POST /posts/:postId/comments` /done
+- `GET /posts/:postId/comments`
+- `POST /posts/:postId/comments` 
 
-- `PUT //comments/:commentId` /done
-- `DELETE /comments/:commentId` /done
+- `PUT //comments/:commentId` 
+- `DELETE /comments/:commentId` 
 
-- `PUT /posts/:postId/helpful` /done
-- `DELETE /posts/:postId/helpful` /done
+- `PUT /posts/:postId/helpful` 
+- `DELETE /posts/:postId/helpful` 
 
 - `PUT /comments/:commentId/helpful`
 - `DELETE /comments/:commentId/helpful`
@@ -43,8 +43,15 @@ query:
 200 Ok:
 
 ```json
-[
-  {
+{
+  "dataPage": {
+    "totalPage": "string",
+    "currentPage": "string",
+    "nextPage": "boolean",
+    "prevPage": "boolean"
+  },
+  "result" :[
+    {
     "id": "integer",
     "title": "string",
     "images": ["string"],
@@ -53,7 +60,9 @@ query:
     "helpful": ["integer"],
     "createdAt": "time"
   }
-]
+  ]
+}
+
 ```
 
 ### `POST /posts`
