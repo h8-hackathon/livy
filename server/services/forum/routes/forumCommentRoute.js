@@ -9,6 +9,8 @@ router.delete('/:commentId', forumCommentController.deleteComment)
 router.put('/:commentId/helpful', forumCommentController.createHelpfulComment)
 router.delete('/:commentId/helpful', forumCommentController.deleteHelpfulComment)
 
+router.post('/:commentId/report', forumCommentController.createReportComment)
+
 
 
 
