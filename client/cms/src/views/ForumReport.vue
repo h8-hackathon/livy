@@ -32,7 +32,7 @@ export default {
     async deletePost(postId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceForum}/posts/${postId}/` , //! Masih belum dimasukin URL-nya
+          url: `${baseUrlServiceForum}/posts/${postId}/`, //! Masih belum dimasukin URL-nya
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
@@ -46,10 +46,10 @@ export default {
         console.log(error)
       }
     },
-    async deleteComment(commentId,reportId) {
+    async deleteComment(commentId, reportId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceForum}/comments/${commentId}/` , //! Masih belum dimasukin URL-nya
+          url: `${baseUrlServiceForum}/comments/${commentId}/`, //! Masih belum dimasukin URL-nya
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
@@ -66,7 +66,7 @@ export default {
     async deleteReport(reportId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceAdmin}/reports/${reportId}/` , //! Masih belum dimasukin URL-nya
+          url: `${baseUrlServiceAdmin}/reports/${reportId}/`, //! Masih belum dimasukin URL-nya
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
@@ -76,10 +76,9 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
-    
+    }
   },
-  created(){
+  created() {
     this.fetchReport()
   }
 }
@@ -128,17 +127,29 @@ export default {
             </thead>
 
             <tbody>
-              <tr v-for="(data, index) in dataReports">
+              <tr v-for="(data, index) in dataReports" :key="index">
                 <td>{{ ++index }}</td>
                 <td>{{ data.note }}</td>
                 <td>{{ data.postId }}</td>
                 <td>{{ data.commentId }}</td>
                 <td>{{ data.ReporterId }}</td>
-                <td v-show="data.postId && !data.commentId ">
-                  <button @click.prevent="deletePost(data.postId,data.id)" type="button" class="btn btn-warning">Delete Post</button>
+                <td v-show="data.postId && !data.commentId">
+                  <button
+                    @click.prevent="deletePost(data.postId, data.id)"
+                    type="button"
+                    class="btn btn-warning"
+                  >
+                    Delete Post
+                  </button>
                 </td>
                 <td v-show="data.commentId">
-                  <button @click.prevent="deleteComment(data.commentId,data.id)" type="button" class="btn btn-danger">Delete Comment</button>
+                  <button
+                    @click.prevent="deleteComment(data.commentId, data.id)"
+                    type="button"
+                    class="btn btn-danger"
+                  >
+                    Delete Comment
+                  </button>
                 </td>
               </tr>
             </tbody>
