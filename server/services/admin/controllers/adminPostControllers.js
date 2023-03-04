@@ -80,6 +80,7 @@ class adminPostControllers {
         message: `Success updated ${findPost.title}`,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

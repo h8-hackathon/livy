@@ -9,6 +9,7 @@ export const useCounterStore = defineStore('counter', {
     admins: [],
     reports: [],
     posts: [],
+    postByID: {},
     counselors: []
   }),
 
@@ -96,9 +97,25 @@ export const useCounterStore = defineStore('counter', {
       }
     },
 
+    async fetchPostsByID(id) {
+      console.log('Fetch data - from post page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/posts/${id}`,
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.posts = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
     async addPosts(inputData) {
+      inputData["UserId"]=1 // Ini masih manual, tunggu sampai bisa autentikasi
       console.log('From button submit - add post');
-      inputData["UserId"]=1
       console.log(inputData);
       try {
         const { data } = await axios({
@@ -109,7 +126,41 @@ export const useCounterStore = defineStore('counter', {
           },
           data: inputData
         })
+        this.router.push('/content')
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
+    async editPosts(inputData, id) {
+      console.log('From button submit - edit post');
+      console.log(inputData);
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/posts/${id}`,
+          method: 'PUT',
+          headers: {
+            access_token: localStorage.access_token
+          },
+          data: inputData
+        })
+        this.router.push('/content')
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async deletePosts(id) {
+      console.log('From button submit - delete post');
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/posts/${id}`,
+          method: 'DELETE',
+          headers: {
+            access_token: localStorage.access_token
+          },
+        })
+        this.fetchPosts()
       } catch (error) {
         console.log(error);
       }
