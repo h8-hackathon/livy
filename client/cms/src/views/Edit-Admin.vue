@@ -2,6 +2,7 @@
 import Navbar from '../components/Navbar.vue'
 import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '../stores/counter'
+import axios from 'axios'
 
 export default {
   components: {
@@ -14,22 +15,56 @@ export default {
       gender: '',
       dob: '',
       image: '',
-      role: ''
+      role: '',
+      //   baseUrl: 'http://localhost:4002/'
+      baseUrl: 'https://api.livy.chat/'
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(useCounterStore, ['adminByID'])
+  },
   methods: {
-    ...mapActions(useCounterStore, ['addAdmin']),
-    handleAddAdmin() {
-      this.addAdmin({
-        name: this.name,
-        email: this.email,
-        gender: this.gender,
-        dob: this.dob,
-        image: this.image,
-        role: this.role
-      })
+    ...mapActions(useCounterStore, ['fetchAdminByID', 'editAdmin']),
+
+    async fetchAdminByID(id) {
+      console.log('Fetch data - from admin page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/admin/${id}`,
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<------ DATA')
+        this.name = data.name
+        this.email = data.email
+        this.gender = data.gender
+        this.dob = data.dob.substring(0, 10)
+        this.image = data.image
+        this.role = data.role.toLowerCase()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    handleEditAdmin() {
+      console.log(this.adminByID)
+      this.editAdmin(
+        {
+          name: this.name,
+          email: this.email,
+          gender: this.gender,
+          dob: this.dob,
+          image: this.image,
+          role: this.role
+        },
+        this.$route.params.id
+      )
     }
+  },
+  created() {
+    this.fetchAdminByID(this.$route.params.id)
   }
 }
 </script>
@@ -52,7 +87,7 @@ export default {
       </div>
       <div class="row" style="margin: auto; width: 50%">
         <div class="">
-          <form id="new-job-form" @submit.prevent="handleAddAdmin">
+          <form id="new-job-form" @submit.prevent="handleEditAdmin">
             <div class="mb-3">
               <label for="product-name">Name <span class="text-danger fw-bold">*</span></label>
               <input
@@ -60,7 +95,6 @@ export default {
                 class="form-control"
                 id="admin-name"
                 autocomplete="off"
-                required
                 v-model="name"
               />
             </div>
@@ -72,7 +106,6 @@ export default {
                 class="form-control"
                 id="admin-email"
                 autocomplete="off"
-                required
                 v-model="email"
               />
             </div>
@@ -83,8 +116,8 @@ export default {
               >
               <select id="admin-gender" class="form-select" required v-model="gender">
                 <option value="" selected disabled>-- Select Type --</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
               </select>
             </div>
 
@@ -98,7 +131,6 @@ export default {
                 id="admin-DOB"
                 placeholder="Enter input here"
                 autocomplete="off"
-                required
                 v-model="dob"
               />
             </div>
@@ -110,7 +142,6 @@ export default {
                 class="form-control"
                 id="admin-image"
                 autocomplete="off"
-                required
                 v-model="image"
               />
             </div>

@@ -7,6 +7,7 @@ export const useCounterStore = defineStore('counter', {
     // baseUrl: 'http://localhost:4002/',
     baseUrl: 'https://api.livy.chat/',
     admins: [],
+    adminByID:{},
     reports: [],
     posts: [],
     postByID: {},
@@ -212,6 +213,90 @@ export const useCounterStore = defineStore('counter', {
           },
         })
         this.fetchCounselors()
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async fetchAdmin() {
+      console.log('Fetch data - from admin page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + 'cms/admin',
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.admins = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async fetchAdminByID(id) {
+      console.log('Fetch data - from admin page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/admin/${id}`,
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.adminByID = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async addAdmin(inputData) {
+      console.log('From button submit - add admin');
+      console.log(inputData);
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + 'cms/admin',
+          method: 'POST',
+          headers: {
+            access_token: localStorage.access_token
+          },
+          data: inputData
+        })
+        this.router.push('/admin-list')
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async editAdmin(inputData, id) {
+      console.log('From button submit - edit admin');
+      console.log(inputData);
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/admin/${id}`,
+          method: 'PUT',
+          headers: {
+            access_token: localStorage.access_token
+          },
+          data: inputData
+        })
+        this.router.push('/admin-list')
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async deleteAdmin(id) {
+      console.log('From button submit - delete admin');
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/admin/${id}`,
+          method: 'DELETE',
+          headers: {
+            access_token: localStorage.access_token
+          },
+        })
+        this.fetchAdmin()
       } catch (error) {
         console.log(error);
       }

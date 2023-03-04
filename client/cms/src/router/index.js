@@ -3,6 +3,7 @@ import LoginPage from '../views/LoginPage.vue'
 import HomePage from '../views/HomePage.vue'
 import AdminPage from '../views/AdminPage.vue'
 import AddAdmin from '../views/Add-Admin.vue'
+import EditAdmin from '../views/Edit-Admin.vue'
 import ContentPage from '../views/ContentPage.vue'
 import AddContent from '../views/Add-Content.vue'
 import EditContent from '../views/Edit-Content.vue'
@@ -33,6 +34,11 @@ const router = createRouter({
       path: '/admin-add',
       name: 'admin-add',
       component: AddAdmin
+    },
+    {
+      path: '/admin-edit/:id',
+      name: 'admin-edit',
+      component: EditAdmin
     },
     {
       path: '/content',
