@@ -1,35 +1,21 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import axios from 'axios'
+import { mapActions, mapState } from 'pinia'
+import { useCounterStore } from '../stores/counter'
 let baseUrl = 'https://api.livy.chat'
 export default {
   components: {
     Navbar
   },
-  data() {
-    return {
-      dataPostReports: [],
-      dataCommentReports: []
-    }
+  computed: {
+    ...mapState(useCounterStore, ['dataPostReports', 'dataCommentReports'])
   },
+ 
+  
   methods: {
-    async fetchReport() {
-      console.log('Fetch data - report page')
-      try {
-        const { data } = await axios({
-          url: baseUrl + '/cms/forumreport', //! Masih belum dimasukin URL-nya
-          method: 'GET',
-          headers: {
-            access_token: localStorage.access_token
-          }
-        })
-        console.log(data, '<- Ini data Report')
-        this.dataPostReports = data.postReports
-        this.dataCommentReports = data.commentReports
-      } catch (error) {
-        console.log(error)
-      }
-    },
+    ...mapActions(useCounterStore, ['fetchReport']),
+    
     async deletePost(postId) {
       try {
         const { data } = await axios({

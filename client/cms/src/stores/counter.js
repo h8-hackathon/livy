@@ -7,11 +7,13 @@ export const useCounterStore = defineStore('counter', {
     // baseUrl: 'http://localhost:4002/',
     baseUrl: 'https://api.livy.chat/',
     admins: [],
-    adminByID:{},
+    adminByID: {},
     reports: [],
     posts: [],
     postByID: {},
-    counselors: []
+    counselors: [],
+    dataPostReports: [],
+    dataCommentReports: [],
   }),
 
   actions: {
@@ -32,21 +34,21 @@ export const useCounterStore = defineStore('counter', {
     },
 
     async googleLoginHandler(input) {
-      console.log(input, '<- ini inputnya');
+      console.log(input, '<- ini inputnya')
       try {
         console.log('Test handle login by Google')
         const signinWithGoogle = await axios({
           url: this.baseUrl + `login`,
-          method: "POST",
+          method: 'POST',
           data: {
             token: input.access_token,
             role: 'admin'
-          },
-        });
+          }
+        })
 
-        console.log(signinWithGoogle.data);
-        const access_token = signinWithGoogle.data.access_token;
-        console.log(access_token, '<- Ini access_token');
+        console.log(signinWithGoogle.data)
+        const access_token = signinWithGoogle.data.access_token
+        console.log(access_token, '<- Ini access_token')
 
         await localStorage.setItem('access_token', access_token)
 
@@ -115,9 +117,9 @@ export const useCounterStore = defineStore('counter', {
     },
 
     async addPosts(inputData) {
-      inputData["UserId"]=1 // Ini masih manual, tunggu sampai bisa autentikasi
-      console.log('From button submit - add post');
-      console.log(inputData);
+      inputData['UserId'] = 1 // Ini masih manual, tunggu sampai bisa autentikasi
+      console.log('From button submit - add post')
+      console.log(inputData)
       try {
         const { data } = await axios({
           url: this.baseUrl + 'cms/posts',
@@ -129,13 +131,13 @@ export const useCounterStore = defineStore('counter', {
         })
         this.router.push('/content')
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
 
     async editPosts(inputData, id) {
-      console.log('From button submit - edit post');
-      console.log(inputData);
+      console.log('From button submit - edit post')
+      console.log(inputData)
       try {
         const { data } = await axios({
           url: this.baseUrl + `cms/posts/${id}`,
@@ -147,23 +149,23 @@ export const useCounterStore = defineStore('counter', {
         })
         this.router.push('/content')
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
 
     async deletePosts(id) {
-      console.log('From button submit - delete post');
+      console.log('From button submit - delete post')
       try {
         const { data } = await axios({
           url: this.baseUrl + `cms/posts/${id}`,
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
-          },
+          }
         })
         this.fetchPosts()
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
 
@@ -196,25 +198,24 @@ export const useCounterStore = defineStore('counter', {
         })
         this.fetchCounselors()
         console.log(data)
-
       } catch (error) {
         console.log(error)
       }
     },
 
     async deleteCounselor(id) {
-      console.log('From button submit - delete counselor');
+      console.log('From button submit - delete counselor')
       try {
         const { data } = await axios({
           url: this.baseUrl + `cms/counselor/${id}`,
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
-          },
+          }
         })
         this.fetchCounselors()
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
 
@@ -251,8 +252,8 @@ export const useCounterStore = defineStore('counter', {
     },
 
     async addAdmin(inputData) {
-      console.log('From button submit - add admin');
-      console.log(inputData);
+      console.log('From button submit - add admin')
+      console.log(inputData)
       try {
         const { data } = await axios({
           url: this.baseUrl + 'cms/admin',
@@ -264,13 +265,13 @@ export const useCounterStore = defineStore('counter', {
         })
         this.router.push('/admin-list')
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
 
     async editAdmin(inputData, id) {
-      console.log('From button submit - edit admin');
-      console.log(inputData);
+      console.log('From button submit - edit admin')
+      console.log(inputData)
       try {
         const { data } = await axios({
           url: this.baseUrl + `cms/admin/${id}`,
@@ -282,23 +283,40 @@ export const useCounterStore = defineStore('counter', {
         })
         this.router.push('/admin-list')
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
 
     async deleteAdmin(id) {
-      console.log('From button submit - delete admin');
+      console.log('From button submit - delete admin')
       try {
         const { data } = await axios({
           url: this.baseUrl + `cms/admin/${id}`,
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
-          },
+          }
         })
         this.fetchAdmin()
       } catch (error) {
-        console.log(error);
+        console.log(error)
+      }
+    },
+    async fetchReport() {
+      console.log('Fetch data - report page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + 'cms/forumreport', 
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Report')
+        this.dataPostReports = data.postReports
+        this.dataCommentReports = data.commentReports
+      } catch (error) {
+        console.log(error)
       }
     },
   }
