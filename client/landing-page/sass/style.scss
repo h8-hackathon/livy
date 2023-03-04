@@ -1,0 +1,15 @@
+a{
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+ul, li{
+    list-style: none;
+}
+@import 
+    './variables/color', 
+    './header',
+    './cdn/icon.scss';
+
+
+
