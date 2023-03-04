@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app');
+const { app } = require('../app');
 const { User, AdminPost, CounselorSubmission, Report, sequelize } = require('../models');
 
 beforeAll(async () => {
@@ -77,16 +77,17 @@ afterAll(async () => {
   );
 });
 
-describe('for post', () => {
+describe('for posts', () => {
+  // posts 200
   it('Successfully read posts', async () => {
     const response = await request(app).get('/posts');
-    // console.log(response);
     expect(response.status).toBe(200);
     expect(response.body[0]).toHaveProperty('id', expect.any(Number));
     expect(response.body[0]).toHaveProperty('title', 'Mental health: build predictive models to steer policy');
     expect(response.body[0]).toHaveProperty('url', expect.any(String));
   });
 
+  // post 201
   it('Successfully post posts', async () => {
     const response = await request(app).post('/posts').send({
       id: 6,
@@ -96,15 +97,79 @@ describe('for post', () => {
       type: 'Article',
       UserId: 1,
     });
-    console.log(response);
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('message', 'Success created Mental health: build predictive models to steer policy');
   });
 
-  it('Successfully get posts id', async () => {
+  // post 400 title is required
+  it('title is required', async () => {
+    const response = await request(app).post('/posts').send({
+      id: 6,
+      url: 'https://www.nature.com/articles/d41586-021-02581-9',
+      caption: 'Combine economic, social and medical data to forecast need and design services to address the growing crisis.',
+      type: 'Article',
+      UserId: 1,
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'title is required');
+  });
+
+  // post 400 type is required
+  it('type is required', async () => {
+    const response = await request(app).post('/posts').send({
+      id: 6,
+      title: 'Mental health: build predictive models to steer policy',
+      url: 'https://www.nature.com/articles/d41586-021-02581-9',
+      caption: 'Combine economic, social and medical data to forecast need and design services to address the growing crisis.',
+      UserId: 1,
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'type is required');
+  });
+
+  // get posts id 200
+  it('Successfully get posts by id', async () => {
     const response = await request(app).get('/posts/6');
-    console.log(response);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('id', expect.any(Number));
+  });
+
+  // get post id 404
+  it('posts id not found', async () => {
+    const response = await request(app).get('/posts/1000');
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty('error', 'not found');
+  });
+
+  // put post id 200
+  it('Successfully put posts by id', async () => {
+    const response = await request(app).put(`/posts/1`);
+    console.log(response);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'Success updated Mental health: build predictive models to steer policy');
+  });
+
+  // put post id 404
+  it('id not found', async () => {
+    const response = await request(app).put(`/posts/1000`);
+    console.log(response);
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty('error', 'not found');
+  });
+
+  // put post id 200
+  it('Successfully delete posts by id', async () => {
+    const response = await request(app).delete(`/posts/1`);
+    console.log(response);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'Success deleted Mental health: build predictive models to steer policy');
+  });
+
+  // put post id 404
+  it('Unsuccess delete posts by id, because id not found', async () => {
+    const response = await request(app).delete(`/posts/10`);
+    console.log(response);
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty('error', 'not found');
   });
 });

@@ -7,7 +7,7 @@
     "reset": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all ",
     "dev": "nodemon ./bin/www",
     "start": "node ./bin/www",
-    "test": "jest --forceExit --detectOpenHandles --testTimeout 50000",
+    "test": "jest --forceExit --detectOpenHandles",
     "reset-test": "sequelize db:drop --env test && sequelize db:create --env test && sequelize db:migrate --env test"
   },
   "keywords": [],

@@ -1,7 +1,7 @@
 const { AdminPost, User } = require('../models/index');
 
 class adminPostControllers {
-  static async readPosts(req, res) {
+  static async readPosts(req, res, next) {
     try {
       const { type } = req.query;
 
@@ -17,11 +17,11 @@ class adminPostControllers {
         res.status(200).json(posts);
       }
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  static async createPost(req, res) {
+  static async createPost(req, res, next) {
     try {
       const { id, title, url, caption, type, UserId } = req.body;
 
@@ -31,14 +31,14 @@ class adminPostControllers {
         message: `Success created ${newPost.title}`,
       });
     } catch (error) {
-      console.log(error, 'error ya');
+      next(error);
     }
   }
 
-  static async readPostById(req, res) {
+  static async readPostById(req, res, next) {
     try {
       const { id } = req.params;
-
+      console.log(id, 'ini id');
       const findPost = await AdminPost.findByPk(+id);
 
       if (!findPost) {
@@ -47,11 +47,11 @@ class adminPostControllers {
 
       res.status(200).json(findPost);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  static async updatePostById(req, res) {
+  static async updatePostById(req, res, next) {
     try {
       const { id } = req.params;
       const { title, url, caption, type, UserId } = req.body;
@@ -79,11 +79,11 @@ class adminPostControllers {
         message: `Success updated ${findPost.title}`,
       });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  static async deletePostById(req, res) {
+  static async deletePostById(req, res, next) {
     try {
       const { id } = req.params;
 
@@ -101,7 +101,7 @@ class adminPostControllers {
         message: `Success deleted ${findPost.title}`,
       });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 }
