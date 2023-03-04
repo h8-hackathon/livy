@@ -60,7 +60,6 @@ export default {
                 class="form-control"
                 id="admin-name"
                 autocomplete="off"
-                required
                 v-model="name"
               />
             </div>
@@ -72,7 +71,6 @@ export default {
                 class="form-control"
                 id="admin-email"
                 autocomplete="off"
-                required
                 v-model="email"
               />
             </div>
@@ -81,7 +79,7 @@ export default {
               <label for="product-category"
                 >Gender <span class="text-danger fw-bold">*</span></label
               >
-              <select id="admin-gender" class="form-select" required v-model="gender">
+              <select id="admin-gender" class="form-select" v-model="gender">
                 <option value="" selected disabled>-- Select Type --</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -98,7 +96,6 @@ export default {
                 id="admin-DOB"
                 placeholder="Enter input here"
                 autocomplete="off"
-                required
                 v-model="dob"
               />
             </div>
@@ -110,7 +107,6 @@ export default {
                 class="form-control"
                 id="admin-image"
                 autocomplete="off"
-                required
                 v-model="image"
               />
             </div>
@@ -119,7 +115,7 @@ export default {
               <label for="product-category"
                 >Admin Type <span class="text-danger fw-bold">*</span></label
               >
-              <select id="admin-type" class="form-select" required v-model="role">
+              <select id="admin-type" class="form-select" v-model="role">
                 <option value="" selected disabled>-- Select Type --</option>
                 <option value="superadmin">Super Admin</option>
                 <option value="admin">Admin</option>

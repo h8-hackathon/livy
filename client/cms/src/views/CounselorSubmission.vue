@@ -90,7 +90,7 @@ export default {
                     class="btn btn-danger m-2"
                     @click.prevent="handleRejectCounselor(el.id)"
                   >
-                    Delete / Reject
+                    Delete/Reject
                   </button>
                 </td>
               </tr>

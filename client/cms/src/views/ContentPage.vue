@@ -80,7 +80,11 @@ export default {
                   >
                     Edit
                   </button>
-                  <button type="button" class="btn btn-danger" @click.prevent="deletePosts(el.id)">
+                  <button
+                    type="button"
+                    class="btn btn-danger m-2"
+                    @click.prevent="deletePosts(el.id)"
+                  >
                     Delete
                   </button>
                 </td>
