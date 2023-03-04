@@ -2,39 +2,35 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-
 export const useCounterStore = defineStore('counter', {
   state: () => ({
-    baseUrl: "http://localhost:4002",
-    admins:[],
-    reports:[],
-    posts:[],
-    counselors:[]
+    baseUrl: 'http://localhost:4002',
+    admins: [],
+    reports: [],
+    posts: [],
+    counselors: []
   }),
 
   actions: {
     succesNotification(response) {
       Swal.fire({
-        icon: "success",
-        title: "Success!",
+        icon: 'success',
+        title: 'Success!'
         // text: response.message,
-      });
+      })
     },
-
 
     errorNotification(error) {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
+        icon: 'error',
+        title: 'Oops...'
         // text: error.response.data.message,
-      });
+      })
     },
 
-
     async googleLoginHandler(input) {
-      
       try {
-        console.log("Test handle login by Google");
+        console.log('Test handle login by Google')
         // const signinWithGoogle = await axios({
         //   url: this.baseUrl + `login`,
         //   method: "POST",
@@ -46,24 +42,22 @@ export const useCounterStore = defineStore('counter', {
         // const access_token = signinWithGoogle.data.access_token;
         // console.log(access_token, '<- Ini access_token');
 
-        await localStorage.setItem("access_token", 'ABCDE');
+        await localStorage.setItem('access_token', 'ABCDE')
 
         await this.router.push('/')
 
         Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Successfully log in",
+          position: 'top-end',
+          icon: 'success',
+          title: 'Successfully log in',
           showConfirmButton: false,
-          timer: 1500,
-        });
-
+          timer: 1500
+        })
       } catch (error) {
-        console.log(error);
-        this.errorNotification(error);
+        console.log(error)
+        this.errorNotification(error)
       }
     },
-
 
     async fetchReports() {
       console.log('Fetch data - from report page')
@@ -82,7 +76,6 @@ export const useCounterStore = defineStore('counter', {
       }
     },
 
-    
     async fetchPosts() {
       console.log('Fetch data - from post page')
       try {
@@ -100,7 +93,6 @@ export const useCounterStore = defineStore('counter', {
       }
     },
 
-
     async fetchCounselors() {
       console.log('Fetch data - from counselor page')
       try {
@@ -116,6 +108,25 @@ export const useCounterStore = defineStore('counter', {
       } catch (error) {
         console.log(error)
       }
+    },
+
+    async updateStatusCounselor(value) {
+      console.log(value, 'data updated')
+      try {
+        const { data } = await axios.patch(
+          baseUrl + `/counselors/${value}`,
+          {},
+          {
+            headers: {
+              access_token: localStorage.access_token
+            }
+          }
+        )
+        this.fetchCounselors()
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
     }
-  },
+  }
 })

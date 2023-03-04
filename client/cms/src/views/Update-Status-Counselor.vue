@@ -1,4 +1,18 @@
-<script></script>
+<script>
+// import Navbar from '../components/Navbar.vue'
+// import { mapActions } from 'pinia'
+// import { useCounterStore } from '../stores/counter'
+
+// export default {
+//   props: {
+//     counselor: String
+//   },
+//   methods: mapActions(useCounterStore, ['updateStatusCounselor']),
+//   statusCounselor(id) {
+//     this.updateStatusCounselor(id)
+//   }
+// }
+</script>
 
 <template>
   <section class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="new-job-section" style="margin: auto">
@@ -14,7 +28,9 @@
       <div class="">
         <form id="new-job-form" @submit.prevent="submitFormHandler">
           <div class="mb-3">
-            <label for="product-name">Status<span class="text-danger fw-bold">*</span></label>
+            <label for="product-name"
+              >{{ counselor }}<span class="text-danger fw-bold">*</span></label
+            >
             <input
               type="text"
               class="form-control"
