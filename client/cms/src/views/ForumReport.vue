@@ -33,31 +33,30 @@ export default {
     async deletePost(postId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceForum}/posts/${postId}/`, //! Masih belum dimasukin URL-nya
+          url: `${baseUrl}/cms/forumreport/posts/${postId}`,
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
           }
         })
         console.log(data, '<- Ini data Delete')
-        await this.deleteReport(reportId)
         await this.fetchReport()
         await this.$router.push('/forum')
       } catch (error) {
         console.log(error)
       }
     },
-    async deleteComment(commentId, reportId) {
+    async deleteComment(commentId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceForum}/comments/${commentId}/`, //! Masih belum dimasukin URL-nya
+          url: `${baseUrl}/cms/forumreport/comments/${commentId}`,
+
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
           }
         })
         console.log(data, '<- Ini data Delete Comment')
-        await this.deleteReport(reportId)
         await this.fetchReport()
         await this.$router.push('/forum')
       } catch (error) {
@@ -73,7 +72,7 @@ export default {
             access_token: localStorage.access_token
           }
         })
-        console.log(data, '<- Ini data Delete Report')
+        console.log(data, '<- Ini data Ignore Report')
         await this.fetchReport()
         await this.$router.push('/forum')
       } catch (error) {
@@ -83,13 +82,15 @@ export default {
     async ignoreReportComment(commentID) {
       try {
         const { data } = await axios({
-          url: `${baseUrl}/reports/${reportId}/`,
-          method: 'DELETE',
+          url: `${baseUrl}/cms//forumreport/comments/ignore/${commentID}/`,
+          method: 'GET',
           headers: {
             access_token: localStorage.access_token
           }
         })
-        console.log(data, '<- Ini data Delete Report')
+        console.log(data, '<- Ini data Ignore Report')
+        await this.fetchReport()
+        await this.$router.push('/forum')
       } catch (error) {
         console.log(error)
       }
@@ -179,9 +180,8 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Title</th>
-                <th scope="col">Images</th>
-                <th scope="col">Caption</th>
+             
+                <th scope="col">Text</th>
                 <th scope="col">Author Name</th>
                 <th scope="col">Author Email</th>
                 <th scope="col">Action</th>
@@ -193,9 +193,8 @@ export default {
             <tbody>
               <tr v-for="(data, index) in dataCommentReports" :key="index">
                 <td>{{ ++index }}</td>
-                <td>{{ data.title }}</td>
-                <td>{{ data.images }}</td>
-                <td>{{ data.caption }}</td>
+                <td>{{ data.text }}</td>
+           
                 <td>{{ data.author.name }}</td>
                 <td>{{ data.author.email }}</td>
            
