@@ -25,7 +25,7 @@ class adminCounselorControllers {
         message: 'Success updated status counselor',
       });
     } catch (error) {
-      console.log(error);
+      console.log(error, 'error update');
     }
   }
 

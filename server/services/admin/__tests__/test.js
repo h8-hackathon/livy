@@ -173,3 +173,21 @@ describe('for posts', () => {
     expect(response.body).toHaveProperty('error', 'not found');
   });
 });
+
+describe('for counselor', () => {
+  // posts 200
+  it('Successfully read counselors', async () => {
+    const response = await request(app).get('/counselors');
+    expect(response.status).toBe(200);
+    expect(response.body[0]).toHaveProperty('id', expect.any(Number));
+    expect(response.body[0]).toHaveProperty('status', expect.any(String));
+  });
+
+  // post 200
+  it.only('Successfully patch counselor by id', async () => {
+    const response = await request(app).patch(`/counselors/2`);
+    console.log(response);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'Success updated status counselor');
+  });
+});
