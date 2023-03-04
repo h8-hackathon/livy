@@ -1,32 +1,32 @@
 const { Report } = require('../models/index');
 
 class adminReportControllers {
-  static async readReports(req, res) {
+  static async readReports(req, res, next) {
     try {
       const reports = await Report.findAll();
 
       res.status(200).json(reports);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  static async createReport(req, res) {
+  static async createReport(req, res, next) {
     try {
-      const { id, postId, commentId, ReporterId } = req.body;
+      const { id, postId, commentId, ReporterId, note } = req.body;
 
-      const newReport = await Report.create({ id, postId, commentId, ReporterId });
+      const newReport = await Report.create({ id, postId, commentId, ReporterId, note });
 
       res.status(201).json({
         message: 'Success report',
         newReport,
       });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  static async deleteReportById(req, res) {
+  static async deleteReportById(req, res, next) {
     try {
       const { id } = req.params;
 
@@ -44,7 +44,7 @@ class adminReportControllers {
         message: 'Success deleted',
       });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 }

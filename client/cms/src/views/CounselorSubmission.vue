@@ -2,8 +2,10 @@
 import Navbar from '../components/Navbar.vue'
 import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '../stores/counter'
+import Card from '../components/Card.vue'
 
 export default {
+  props: ['counselor'],
   components: {
     Navbar
   },
@@ -11,7 +13,7 @@ export default {
     ...mapState(useCounterStore, ['counselors'])
   },
   methods: {
-    ...mapActions(useCounterStore, ['fetchCounselors'])
+    ...mapActions(useCounterStore, ['fetchCounselors', 'updateStatusCounselor'])
   },
   created() {
     this.fetchCounselors()
@@ -47,6 +49,8 @@ export default {
               </tr>
             </thead>
 
+            <!-- <Card v-for="(counselor, i) in counselors" :key="i" :counselor="counselor" /> -->
+
             <tbody>
               <tr v-for="(el, index) in counselors" :key="index">
                 <td>{{ ++index }}</td>
@@ -59,7 +63,7 @@ export default {
                     class="btn btn-warning text-light"
                     @click.prevent="$router.push(`/counselor-edit`)"
                   >
-                    Edit
+                    Accept
                   </button>
                   <button type="button" class="btn btn-danger m-2">Delete</button>
                 </td>
