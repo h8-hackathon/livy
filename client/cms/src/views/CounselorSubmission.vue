@@ -2,12 +2,12 @@
 import Navbar from '../components/Navbar.vue'
 import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '../stores/counter'
-import Card from '../components/Card.vue'
 import axios from 'axios'
+
 let baseUrl = 'https://api.livy.chat'
 
 export default {
-  props: ['counselor'],
+  // props: ['counselor'],
   components: {
     Navbar
   },
@@ -18,16 +18,28 @@ export default {
     ...mapActions(useCounterStore, ['fetchCounselors', 'updateStatusCounselor']),
     // acceptCounselor(id) {},
     async acceptCounselor(id) {
-      await axios.patch(
-        baseUrl + `/counselor/${id}`,
-        {
-          headers: {
-            access_token: localStorage.access_token
-          }
+      console.log("AAAAAAAAA");
+      await axios({
+        method: 'patch',
+        url: baseUrl + `/counselor/${id}`,
+        headers: {
+          access_token: localStorage.access_token
         }
-      )
+      })
       await this.fetchCounselors()
-      await this.$router.push('/forum')
+      await this.router.push('/counselor')
+    },
+    async rejectCounselor(id) {
+      await axios({
+        method: 'patch',
+        url: baseUrl + `/counselor/${id}`,
+     
+        headers: {
+          access_token: localStorage.access_token
+        }
+      })
+      await this.fetchCounselors()
+      await this.router.push('/counselor')
     }
   },
   created() {
@@ -81,7 +93,7 @@ export default {
                   <button
                     type="button"
                     class="btn btn-success text-light"
-                    @click.prevent="acceptCounselor(el.id)"
+                    @click.prevent="acceptCounselor(el.UserId)"
                   >
                     Accept
                   </button>
