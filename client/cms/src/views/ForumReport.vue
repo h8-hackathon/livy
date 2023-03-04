@@ -73,7 +73,7 @@ export default {
             access_token: localStorage.access_token
           }
         })
-        console.log(data, '<- Ini data Delete Report')
+        console.log(data, '<- Ini data Ignore Report')
         await this.fetchReport()
         await this.$router.push('/forum')
       } catch (error) {
@@ -83,13 +83,15 @@ export default {
     async ignoreReportComment(commentID) {
       try {
         const { data } = await axios({
-          url: `${baseUrl}/reports/${reportId}/`,
-          method: 'DELETE',
+          url: `${baseUrl}/cms//forumreport/comments/ignore/${commentID}/`,
+          method: 'GET',
           headers: {
             access_token: localStorage.access_token
           }
         })
-        console.log(data, '<- Ini data Delete Report')
+        console.log(data, '<- Ini data Ignore Report')
+        await this.fetchReport()
+        await this.$router.push('/forum')
       } catch (error) {
         console.log(error)
       }
