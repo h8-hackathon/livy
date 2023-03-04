@@ -5,10 +5,10 @@ import Headers from "./Headers";
 
 export default function Chats() {
   return (
-    <div className="w-4/6 flex flex-col">
+    <>
       <Headers />
       <Content />
       <ChatInput />
-    </div>
+    </>
   )
 }
