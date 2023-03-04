@@ -1,3 +1,5 @@
+const askChatGpt = require('../chatgpt')
+const { convertChatToPrompts } = require('../helpers')
 const Chat = require('../mongo/models/Chat')
 
 class Controller {
@@ -9,7 +11,7 @@ class Controller {
         UserId: +userId
       })
 
-      if (!chat) throw { name: 'NotFound' }
+      if (!chat) throw { message: 'Not Found' }
 
       res.status(200).json(chat)
     } catch (error) {
@@ -19,16 +21,56 @@ class Controller {
 
   static async createChat(req, res, next) {
     try {
-      // const { text, sender } = req.body
-      // const { userId } = req.params
+      const { counselorId, chat } = req.body
+      const { userId } = req.params
 
-      // await Chat.insertOne({ userId  })
+      let chats = await Chat.findOne({
+        UserId: +userId,
+        CounselorId: +counselorId
+      })
 
-      // res.status(200).json({ message: "successfully created" })
+      if (!chats) chats = { UserId: +userId, chats: [], CounselorId: counselorId }
 
-      // if (!chat) throw { name: 'NotFound' }
+      chats.chats.push({ ...chat, time: new Date() })
 
-      res.status(200).json({ "message": "successfully created" })
+      await Chat.updateOne(
+        { UserId: +userId, CounselorId: +counselorId },
+        { $set: { ...chats } },
+        { upsert: true }
+      )
+
+      res.status(200).json({ message: "successfully created" })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async chatWithLivy(req, res, next) {
+    try {
+      const { text, sender } = req.body
+      const { userId } = req.params
+
+      let chats = await Chat.findOne({
+        UserId: +userId,
+        CounselorId: null
+      })
+
+      if (!chats) {
+        chats = { UserId: +userId, chats: [], CounselorId: null }
+      } else {
+        chats.chats.push({ text, time: new Date(), sender })
+      }
+      
+      const response = await askChatGpt(convertChatToPrompts(chats.chats))
+      chats.chats.push({ text: response.choices[0].text, time: new Date() })
+
+      await Chat.updateOne(
+        { UserId: +userId, CounselorId: null },
+        { $set: { ...chats } },
+        { upsert: true }
+      )
+
+      res.status(200).json({ message: "successfully created" })
     } catch (error) {
       next(error)
     }
