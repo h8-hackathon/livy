@@ -115,8 +115,8 @@ class CMSController {
 
   static async acceptCounselor(req, res, next) {
     try {
-      const { id } = req.params;
-      await userAPI.put(`/counselor/${id}/submissions`, { status: "accepted" });
+      const { submissionId } = req.params;
+      await userAPI.put(`/counselor/${submissionId}/submissions`, { status: "accepted" });
       res.status(200).json({ message: "data successfully updated" });
     } catch (error) {
       next(error);
@@ -187,8 +187,10 @@ class CMSController {
 
   static async rejectCounselor(req, res, next) {
     try {
-      const { id } = req.params;
-      await userAPI.delete(`/users/${id}`);
+      const { submissionId } = req.params;
+      const { data: counselors } = await adminAPI.get("/counselors");
+      const counselor = counselors.find((el) => el.id == submissionId);
+      await userAPI.delete(`/users/${counselor.UserId}`);
       res.status(200).json({ message: "data successfully updated" });
     } catch (error) {
       next(error);

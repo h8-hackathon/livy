@@ -11,8 +11,8 @@ router.put('/posts/:id',CMSController.updatePost)
 router.delete('/posts/:id',CMSController.deletePost)
 
 router.get('/counselor', CMSController.getAllCounselor)
-router.patch('/counselor/:id', CMSController.acceptCounselor)
-router.delete('/counselor/:id', CMSController.rejectCounselor)
+router.patch('/counselor/:submissionId', CMSController.acceptCounselor)
+router.delete('/counselor/:submissionId', CMSController.rejectCounselor)
 
 router.get('/forumreport', CMSController.getForumReport)
 
