@@ -66,23 +66,13 @@ class CMSController {
   static async updatePost(req, res, next) {
     try {
       const { id } = req.params;
-      const { title, url, caption, type, UserId } = req.body;
-      const { data: post } = await adminAPI.get("/posts/" + id);
-      const { data: user } = await userAPI.get("/users/" + UserId);
-      if (!post || !user) {
-        throw { name: "NotFound" };
-      }
-      await adminAPI({
-        method: "put",
-        url: "/posts/" + id,
-        data: {
-          title,
-          url,
-          caption,
-          type,
-          UserId,
-        },
-      });
+      // const { title, url, caption, type, UserId } = req.body;
+      // const { data: post } = await adminAPI.get("/posts/" + id);
+      // const { data: user } = await userAPI.get("/users/" + UserId);
+      // if (!post || !user) {
+      //   throw { name: "NotFound" };
+      // }
+      await adminAPI.put('/posts/' + id, req.body);
       await redis.del(POSTS);
       res.status(200).json({ message: "data successfully updated" });
     } catch (error) {

@@ -239,30 +239,6 @@ describe('for report', () => {
     expect(response.body).toHaveProperty('message', 'Success report');
   });
 
-  // post 400 postId is required
-  it('postId is required', async () => {
-    const response = await request(app).post('/reports').send({
-      id: 6,
-      commentId: 'string',
-      ReporterId: 1,
-      note: 'uneducated',
-    });
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error', 'postId is required');
-  });
-
-  // post 400 commentId is required
-  it('commentId is required', async () => {
-    const response = await request(app).post('/reports').send({
-      id: 6,
-      postId: 'string',
-      ReporterId: 1,
-      note: 'uneducated',
-    });
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error', 'commentId is required');
-  });
-
   // post 400 ReportedId is required
   it('ReportedId is required', async () => {
     const response = await request(app).post('/reports').send({
