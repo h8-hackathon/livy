@@ -1,0 +1,84 @@
+services:
+  user-service:
+    build: ./services/user
+    container_name: user-service
+    ports:
+      - '4001:4001'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4001
+      JWT_SECRET: ${JWT_SECRET}
+      MONGODB_DATABASE_URL: ${MONGODB_DATABASE_URL}
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+  admin-service:
+    build: ./services/admin
+    container_name: admin-service
+    ports:
+      - '4002:4002'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4002
+      MONGODB_DATABASE_URL: ${MONGODB_DATABASE_URL}
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+  chat-service:
+    build: ./services/chat
+    container_name: chat-service
+    ports:
+      - '4004:4004'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4004
+      MONGODB_DATABASE_URL: ${MONGODB_DATABASE_URL}
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+  daily-service:
+    build: ./services/daily
+    container_name: daily-service
+    ports:
+      - '4006:4006'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4006
+      MONGODB_DATABASE_URL: ${MONGODB_DATABASE_URL}
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+  forum-service:
+    build: ./services/forum
+    container_name: forum-service
+    ports:
+      - '4003:4003'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4003
+      MONGODB_DATABASE_URL: ${MONGODB_DATABASE_URL}
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+  schedule-service:
+    build: ./services/schedule
+    container_name: schedule-service
+    ports:
+      - '4005:4005'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4005
+      MONGODB_DATABASE_URL: ${MONGODB_DATABASE_URL}
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      DATABASE_URL: ${DATABASE_URL}
+
+  orchestrator:
+    build: ./orchestrator
+    container_name: orchestrator
+    ports:
+      - '4000:4000'
+    environment:
+      NODE_ENV: 'production'
+      PORT: 4000
+      REDIS_URL: ${REDIS_URL}
+      USER_URL: 'http://user-service:4001'
+      ADMIN_URL: 'http://admin-service:4002'
+      FORUM_URL: 'http://forum-service:4003'
+      CHAT_URL: 'http://chat-service:4004'
+      SCHEDULE_URL: 'http://schedule-service:4005'
+      DAILY_URL: 'http://daily-service:4006'
