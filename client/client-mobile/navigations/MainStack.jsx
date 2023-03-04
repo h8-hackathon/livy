@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 import MainTab from './MainTab'
 import Login from '../screens/Login'
+import LivyChat from '../screens/LivyChat'
 
 const Stack = createStackNavigator()
 
@@ -24,6 +25,14 @@ export default function MainStack() {
           headerShown: false,
         }}
         component={Login}
+      />
+
+      <Stack.Screen
+        name='LivyChat'
+        options={{
+          headerShown: false,
+        }}
+        component={LivyChat}
       />
     </Stack.Navigator>
   )

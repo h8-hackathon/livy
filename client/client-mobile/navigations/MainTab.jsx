@@ -97,6 +97,7 @@ export default function MainTab() {
 
                   elevation: 5,
                 }}
+                onPress={() => navigation.navigate('LivyChat')}
               >
                 <Ionicons
                   name={`ios-chatbubbles-outline`}
