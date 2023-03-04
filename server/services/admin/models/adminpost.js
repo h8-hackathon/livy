@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class AdminPost extends Model {
     /**
@@ -11,18 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      AdminPost.belongsTo(models.User)
+      AdminPost.belongsTo(models.User);
     }
   }
-  AdminPost.init({
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: { msg: 'title is required' },
-        notEmpty: { msg: 'title is required' }
-      }
-    },
+  AdminPost.init(
+    {
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: { msg: 'title is required' },
+          notEmpty: { msg: 'title is required' },
+        },
+      },
     url: {
       type: DataTypes.STRING
     },
@@ -46,9 +45,6 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'cascade',
       onDelete: 'cascade'
     }
-  }, {
-    sequelize,
-    modelName: 'AdminPost',
-  });
+  );
   return AdminPost;
 };
