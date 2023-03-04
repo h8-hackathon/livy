@@ -176,30 +176,45 @@ export const useCounterStore = defineStore('counter', {
             access_token: localStorage.access_token
           }
         })
-        console.log(data, '<- Ini data Posts')
+        console.log(data, '<- Ini data Counselors')
         this.counselors = data
       } catch (error) {
         console.log(error)
       }
     },
 
-    async updateStatusCounselor(value) {
-      console.log(value, 'data updated')
+    async updateStatusCounselor(status, id) {
       try {
-        const { data } = await axios.patch(
-          baseUrl + `/counselors/${value}`,
-          {},
-          {
-            headers: {
-              access_token: localStorage.access_token
-            }
-          }
-        )
+        const { data } = await axios({
+          method: 'PATCH',
+          url: this.baseUrl + `cms/counselor/${id}`,
+          headers: {
+            access_token: localStorage.access_token
+          },
+          body: { status }
+        })
         this.fetchCounselors()
         console.log(data)
+
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+
+    async deleteCounselor(id) {
+      console.log('From button submit - delete counselor');
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/counselor/${id}`,
+          method: 'DELETE',
+          headers: {
+            access_token: localStorage.access_token
+          },
+        })
+        this.fetchCounselors()
+      } catch (error) {
+        console.log(error);
+      }
+    },
   }
 })
