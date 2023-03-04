@@ -33,31 +33,30 @@ export default {
     async deletePost(postId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceForum}/posts/${postId}/`, //! Masih belum dimasukin URL-nya
+          url: `${baseUrl}/cms/forumreport/posts/${postId}`,
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
           }
         })
         console.log(data, '<- Ini data Delete')
-        await this.deleteReport(reportId)
         await this.fetchReport()
         await this.$router.push('/forum')
       } catch (error) {
         console.log(error)
       }
     },
-    async deleteComment(commentId, reportId) {
+    async deleteComment(commentId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceForum}/comments/${commentId}/`, //! Masih belum dimasukin URL-nya
+          url: `${baseUrl}/cms/forumreport/comments/${commentId}`,
+
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
           }
         })
         console.log(data, '<- Ini data Delete Comment')
-        await this.deleteReport(reportId)
         await this.fetchReport()
         await this.$router.push('/forum')
       } catch (error) {
