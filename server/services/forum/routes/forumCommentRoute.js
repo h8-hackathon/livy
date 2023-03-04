@@ -3,6 +3,8 @@ const forumCommentController = require('../controllers/forumCommentController')
 const router = require('express').Router()
 
 
+router.get('/:commentId', forumCommentController.getCommentById)
+
 router.put('/:commentId', forumCommentController.updateComment)
 router.delete('/:commentId', forumCommentController.deleteComment)
 
