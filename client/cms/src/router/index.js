@@ -45,7 +45,7 @@ const router = createRouter({
       component: AddContent
     },
     {
-      path: '/content-edit',
+      path: '/content-edit/:id',
       name: 'content-edit',
       component: EditContent
     },

@@ -1,7 +1,8 @@
 <script>
 import Navbar from '../components/Navbar.vue'
-import { mapActions, mapState } from 'pinia'
+import { mapActions, mapState, mapStores } from 'pinia'
 import { useCounterStore } from '../stores/counter'
+import axios from 'axios'
 
 export default {
   components: {
@@ -12,11 +13,37 @@ export default {
       title: '',
       caption: '',
       contentType: '',
-      linkURL: ''
+      linkURL: '',
+      //   baseUrl: 'http://localhost:4002/'
+      baseUrl: 'https://api.livy.chat/'
     }
   },
+  computed: {
+    ...mapState(useCounterStore, ['postByID'])
+  },
   methods: {
-    ...mapActions(useCounterStore, ['editPosts'])
+    ...mapActions(useCounterStore, ['editPosts']),
+    async fetchPostsByID(id) {
+      console.log('Fetch data - from post page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/posts/${id}`,
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.title = data.title
+        this.caption = data.caption
+        this.contentType = data.type.toLowerCase()
+        this.linkURL = data.url
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  },
+  created() {
+    this.fetchPostsByID(this.$route.params.id)
   }
 }
 </script>
@@ -49,7 +76,7 @@ export default {
                   type: this.contentType,
                   url: this.linkURL
                 },
-                5
+                $route.params.id
               )
             "
           >

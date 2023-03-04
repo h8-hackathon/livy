@@ -19,7 +19,7 @@ export default {
     ...mapState(useCounterStore, ['posts'])
   },
   methods: {
-    ...mapActions(useCounterStore, ['fetchPosts', 'addPosts'])
+    ...mapActions(useCounterStore, ['fetchPosts', 'addPosts', 'deletePosts'])
   },
   created() {
     this.fetchPosts()
@@ -76,11 +76,13 @@ export default {
                   <button
                     type="button"
                     class="btn btn-warning text-light"
-                    @click.prevent="$router.push(`/content-edit`)"
+                    @click.prevent="$router.push(`/content-edit/${el.id}`)"
                   >
                     Edit
                   </button>
-                  <button type="button" class="btn btn-danger">Delete</button>
+                  <button type="button" class="btn btn-danger" @click.prevent="deletePosts(el.id)">
+                    Delete
+                  </button>
                 </td>
               </tr>
             </tbody>

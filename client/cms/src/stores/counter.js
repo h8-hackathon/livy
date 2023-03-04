@@ -4,11 +4,12 @@ import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({
-    baseUrl: 'http://localhost:4002/',
-    // baseUrl: 'https://api.livy.chat/',
+    // baseUrl: 'http://localhost:4002/',
+    baseUrl: 'https://api.livy.chat/',
     admins: [],
     reports: [],
     posts: [],
+    postByID: {},
     counselors: []
   }),
 
@@ -84,7 +85,23 @@ export const useCounterStore = defineStore('counter', {
       console.log('Fetch data - from post page')
       try {
         const { data } = await axios({
-          url: this.baseUrl + 'posts',
+          url: this.baseUrl + 'cms/posts',
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.posts = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async fetchPostsByID(id) {
+      console.log('Fetch data - from post page')
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/posts/${id}`,
           method: 'GET',
           headers: {
             access_token: localStorage.access_token
@@ -97,12 +114,12 @@ export const useCounterStore = defineStore('counter', {
     },
 
     async addPosts(inputData) {
-      inputData["UserId"]=1
+      inputData["UserId"]=1 // Ini masih manual, tunggu sampai bisa autentikasi
       console.log('From button submit - add post');
       console.log(inputData);
       try {
         const { data } = await axios({
-          url: this.baseUrl + '/cms/posts',
+          url: this.baseUrl + 'cms/posts',
           method: 'POST',
           headers: {
             access_token: localStorage.access_token
@@ -120,7 +137,7 @@ export const useCounterStore = defineStore('counter', {
       console.log(inputData);
       try {
         const { data } = await axios({
-          url: this.baseUrl + `posts/${id}`,
+          url: this.baseUrl + `cms/posts/${id}`,
           method: 'PUT',
           headers: {
             access_token: localStorage.access_token
@@ -128,6 +145,22 @@ export const useCounterStore = defineStore('counter', {
           data: inputData
         })
         this.router.push('/content')
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async deletePosts(id) {
+      console.log('From button submit - delete post');
+      try {
+        const { data } = await axios({
+          url: this.baseUrl + `cms/posts/${id}`,
+          method: 'DELETE',
+          headers: {
+            access_token: localStorage.access_token
+          },
+        })
+        this.fetchPosts()
       } catch (error) {
         console.log(error);
       }
