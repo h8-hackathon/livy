@@ -180,9 +180,8 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Title</th>
-                <th scope="col">Images</th>
-                <th scope="col">Caption</th>
+             
+                <th scope="col">Text</th>
                 <th scope="col">Author Name</th>
                 <th scope="col">Author Email</th>
                 <th scope="col">Action</th>
@@ -194,9 +193,8 @@ export default {
             <tbody>
               <tr v-for="(data, index) in dataCommentReports" :key="index">
                 <td>{{ ++index }}</td>
-                <td>{{ data.title }}</td>
-                <td>{{ data.images }}</td>
-                <td>{{ data.caption }}</td>
+                <td>{{ data.text }}</td>
+           
                 <td>{{ data.author.name }}</td>
                 <td>{{ data.author.email }}</td>
            
