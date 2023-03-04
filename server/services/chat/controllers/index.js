@@ -75,6 +75,22 @@ class Controller {
       next(error)
     }
   }
+
+  static async listChatByCounselor(req, res, next) {
+    try {
+      const { counselorId } = req.params
+      
+      let chat = await Chat.find({
+        CounselorId: +counselorId
+      }).toArray()
+
+      if (!chat) throw { message: 'Not Found' }
+
+      res.status(200).json(chat)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = Controller
