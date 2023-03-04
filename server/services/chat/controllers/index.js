@@ -60,7 +60,7 @@ class Controller {
       } else {
         chats.chats.push({ text, time: new Date(), sender })
       }
-      
+
       const response = await askChatGpt(convertChatToPrompts(chats.chats))
       chats.chats.push({ text: response.choices[0].text, time: new Date() })
 
@@ -70,7 +70,7 @@ class Controller {
         { upsert: true }
       )
 
-      res.status(200).json({ message: "successfully created" })
+      res.status(200).json({ message: response.choices[0].text, })
     } catch (error) {
       next(error)
     }
