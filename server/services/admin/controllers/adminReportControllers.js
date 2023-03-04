@@ -47,5 +47,49 @@ class adminReportControllers {
       next(error);
     }
   }
+
+  static async deleteByPostId(req, res, next) {
+    try {
+      const { postId } = req.params;
+
+      const findReport = await Report.findOne({ where: { postId } });
+
+      if (!findReport) {
+        throw { name: 'NotFound' };
+      }
+
+      await Report.destroy({
+        where: { postId },
+      });
+
+      res.status(200).json({
+        message: 'Success deleted',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteByCommentId(req, res, next) {
+    try {
+      const { commentId } = req.params;
+
+      const findReport = await Report.findOne({ where: { commentId } });
+
+      if (!findReport) {
+        throw { name: 'NotFound' };
+      }
+
+      await Report.destroy({
+        where: { commentId },
+      });
+
+      res.status(200).json({
+        message: 'Success deleted',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 module.exports = adminReportControllers;

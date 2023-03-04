@@ -22,9 +22,9 @@ export default function Login() {
     if (response?.type === 'success') {
       console.log(response.authentication.accessToken)
       axios
-        .post('https://bceb-114-124-240-220.ngrok.io/users', {
+        .post('https://api.livy.chat/login', {
           token: response.authentication.accessToken,
-          role: 'admin',
+          role: 'user',
         })
         .then(({ data }) => {
           console.log(data)
