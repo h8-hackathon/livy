@@ -90,6 +90,10 @@ const migrateChats = async () => {
             bsonType: 'number',
             description: 'UserId must be an number and is required',
           },
+          CounselorId: {
+            bsonType: ['number', 'null'],
+            description: 'CounselorId must be an number or null and is required',
+          },
           chats: {
             bsonType: 'array',
             description: 'chats must be an array',
