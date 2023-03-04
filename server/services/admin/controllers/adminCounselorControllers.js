@@ -1,17 +1,17 @@
 const { CounselorSubmission } = require('../models/index');
 
 class adminCounselorControllers {
-  static async readCounselors(req, res) {
+  static async readCounselors(req, res, next) {
     try {
       const counselors = await CounselorSubmission.findAll();
 
       res.status(200).json(counselors);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  static async updateStatusCounselor(req, res) {
+  static async updateStatusCounselor(req, res, next) {
     try {
       const { id } = req.params;
       const { status } = req.body;
@@ -25,11 +25,11 @@ class adminCounselorControllers {
         message: 'Success updated status counselor',
       });
     } catch (error) {
-      console.log(error, 'error update');
+      next(error);
     }
   }
 
-  static async deleteCounselorById(req, res) {
+  static async deleteCounselorById(req, res, next) {
     try {
       const { id } = req.params;
 
@@ -44,10 +44,10 @@ class adminCounselorControllers {
       });
 
       res.status(200).json({
-        message: 'Success deleted counselor',
+        message: 'Success deleted status counselor',
       });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 }

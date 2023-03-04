@@ -5,6 +5,7 @@ const { User, AdminPost, CounselorSubmission, Report, sequelize } = require('../
 beforeAll(async () => {
   try {
     await User.create({
+      id: 1,
       name: 'admin1',
       email: 'admin1@gmail.com',
       gender: 'F',
@@ -29,9 +30,10 @@ beforeAll(async () => {
       UserId: 1,
     });
     await Report.create({
+      id: 1,
       postId: 'string',
       commentId: 'string',
-      ReporterId: 2,
+      ReporterId: 1,
     });
   } catch (error) {
     console.log(error, 'ini errornya');
@@ -157,7 +159,7 @@ describe('for posts', () => {
     expect(response.body).toHaveProperty('error', 'not found');
   });
 
-  // put post id 200
+  // delete post id 200
   it('Successfully delete posts by id', async () => {
     const response = await request(app).delete(`/posts/1`);
     console.log(response);
@@ -165,7 +167,7 @@ describe('for posts', () => {
     expect(response.body).toHaveProperty('message', 'Success deleted Mental health: build predictive models to steer policy');
   });
 
-  // put post id 404
+  // delete post id 404
   it('Unsuccess delete posts by id, because id not found', async () => {
     const response = await request(app).delete(`/posts/10`);
     console.log(response);
@@ -175,7 +177,7 @@ describe('for posts', () => {
 });
 
 describe('for counselor', () => {
-  // posts 200
+  // counselors 200
   it('Successfully read counselors', async () => {
     const response = await request(app).get('/counselors');
     expect(response.status).toBe(200);
@@ -183,11 +185,108 @@ describe('for counselor', () => {
     expect(response.body[0]).toHaveProperty('status', expect.any(String));
   });
 
-  // post 200
-  it.only('Successfully patch counselor by id', async () => {
+  // patch counselors 200
+  it('Successfully patch counselor by id', async () => {
     const response = await request(app).patch(`/counselors/2`);
-    console.log(response);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('message', 'Success updated status counselor');
+  });
+
+  // patch counselors id 404
+  it('id not found', async () => {
+    const response = await request(app).patch(`/counselors/1000`);
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty('error', 'not found');
+  });
+
+  // delete counselors id 200
+  it('Successfully delete counselors by id', async () => {
+    const response = await request(app).delete(`/counselors/2`);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'Success deleted status counselor');
+  });
+
+  // delete counselors id 404
+  it('Unsuccess delete counselors by id, because id not found', async () => {
+    const response = await request(app).delete(`/counselors/10`);
+    console.log(response);
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty('error', 'not found');
+  });
+});
+
+describe('for report', () => {
+  // reports 200
+  it('Successfully read reports', async () => {
+    const response = await request(app).get('/reports');
+    expect(response.status).toBe(200);
+    expect(response.body[0]).toHaveProperty('id', expect.any(Number));
+    expect(response.body[0]).toHaveProperty('postId', expect.any(String));
+    expect(response.body[0]).toHaveProperty('commentId', expect.any(String));
+    expect(response.body[0]).toHaveProperty('ReporterId', expect.any(Number));
+  });
+
+  // post report 201
+  it('Successfully post reports', async () => {
+    const response = await request(app).post('/reports').send({
+      id: 6,
+      postId: 'string',
+      commentId: 'string',
+      ReporterId: 1,
+      note: 'uneducated',
+    });
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('message', 'Success report');
+  });
+
+  // post 400 postId is required
+  it('postId is required', async () => {
+    const response = await request(app).post('/reports').send({
+      id: 6,
+      commentId: 'string',
+      ReporterId: 1,
+      note: 'uneducated',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'postId is required');
+  });
+
+  // post 400 commentId is required
+  it('commentId is required', async () => {
+    const response = await request(app).post('/reports').send({
+      id: 6,
+      postId: 'string',
+      ReporterId: 1,
+      note: 'uneducated',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'commentId is required');
+  });
+
+  // post 400 ReportedId is required
+  it('ReportedId is required', async () => {
+    const response = await request(app).post('/reports').send({
+      id: 6,
+      postId: 'string',
+      commentId: 'string',
+      note: 'uneducated',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', 'ReportedId is required');
+  });
+
+  // delete reports id 200
+  it('Successfully delete reports by id', async () => {
+    const response = await request(app).delete(`/reports/1`);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'Success deleted');
+  });
+
+  // delete reports id 404
+  it('Unsuccess delete reports by id, because id not found', async () => {
+    const response = await request(app).delete(`/reports/10`);
+    console.log(response);
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty('error', 'not found');
   });
 });
