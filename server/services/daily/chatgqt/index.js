@@ -1,14 +1,4 @@
-if (process.env.NODE_ENV != 'production') {
-  require('dotenv').config()
-}
-
-const { Configuration, OpenAIApi } = require("openai");
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
+const openai = require("./setup");
 
 const defaultPromts = "5 list aktifitas hari ini untuk seseorang yang berumur 50 tahun dan bergender laki laki dalam menjaga kesehatan mental,"
 

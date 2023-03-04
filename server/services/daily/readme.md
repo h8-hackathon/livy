@@ -10,7 +10,7 @@
 Request:
 ```json
 {
-  "UserId": "integer",
+  "userId": "integer",
   "todos": [
     {
       "activity": "string",

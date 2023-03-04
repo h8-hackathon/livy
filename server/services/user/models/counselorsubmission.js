@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class CounselorSubmission extends Model {
     /**
@@ -14,32 +12,32 @@ module.exports = (sequelize, DataTypes) => {
       CounselorSubmission.belongsTo(models.User)
     }
   }
-  CounselorSubmission.init({
-    status: {
-      type:DataTypes.STRING,
-      // VALIDATION COMMENTED BECAUSE INIT PURPOSE @ilias 
-   /* allowNull: false,
-      validate: {
-        notNull: { msg: 'status is required' },
-        notEmpty: { msg: 'status is required' }
-      } */
+  CounselorSubmission.init(
+    {
+      status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: { msg: 'status is required' },
+          notEmpty: { msg: 'status is required' },
+        },
+      },
+      submissions: {
+        type: DataTypes.TEXT,
+      },
+      UserId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: 'UserId is required' },
+          notEmpty: { msg: 'UserId is required' },
+        },
+      },
     },
-    submissions: {
-      type:
-        DataTypes.TEXT
-    },
-    UserId: {
-      type:
-        DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: { msg: 'UserId is required' },
-        notEmpty: { msg: 'UserId is required' }
-      }
+    {
+      sequelize,
+      modelName: 'CounselorSubmission',
     }
-  }, {
-    sequelize,
-    modelName: 'CounselorSubmission',
-  });
-  return CounselorSubmission;
-};
+  )
+  return CounselorSubmission
+}
