@@ -1,8 +1,6 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import axios from 'axios'
-let baseUrlServiceAdmin = 'http://localhost:4002'
-let baseUrlServiceForum = 'http://localhost:4003'
 let baseUrl = 'https://api.livy.chat'
 export default {
   components: {
@@ -10,7 +8,8 @@ export default {
   },
   data() {
     return {
-      dataReports: []
+      dataPostReports: [],
+      dataCommentReports: []
     }
   },
   methods: {
@@ -25,7 +24,8 @@ export default {
           }
         })
         console.log(data, '<- Ini data Report')
-        this.dataReports = [...data.postReports, ...data.commentReports]
+        this.dataPostReports = data.postReports
+        this.dataCommentReports = data.commentReports
       } catch (error) {
         console.log(error)
       }
@@ -64,10 +64,26 @@ export default {
         console.log(error)
       }
     },
-    async deleteReport(reportId) {
+    async ignoreReportPost(postID) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceAdmin}/reports/${reportId}/`,
+          url: `${baseUrl}/cms/forumreport/posts/ignore/${postID}/`,
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Delete Report')
+        await this.fetchReport()
+        await this.$router.push('/forum')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async ignoreReportComment(commentID) {
+      try {
+        const { data } = await axios({
+          url: `${baseUrl}/reports/${reportId}/`,
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
@@ -121,7 +137,7 @@ export default {
             </thead>
 
             <tbody>
-              <tr v-for="(data, index) in dataReports" :key="index">
+              <tr v-for="(data, index) in dataPostReports" :key="index">
                 <td>{{ ++index }}</td>
                 <td>{{ data.title }}</td>
                 <td>{{ data.images }}</td>
@@ -139,7 +155,7 @@ export default {
                 </td>
                 <td>
                   <button
-                    @click.prevent="deleteReport(data.id)"
+                    @click.prevent="ignoreReportPost(data._id)"
                     type="button"
                     class="btn btn-warning"
                   >
@@ -175,7 +191,7 @@ export default {
             </thead>
 
             <tbody>
-              <tr v-for="(data, index) in dataReports" :key="index">
+              <tr v-for="(data, index) in dataCommentReports" :key="index">
                 <td>{{ ++index }}</td>
                 <td>{{ data.title }}</td>
                 <td>{{ data.images }}</td>
@@ -194,7 +210,7 @@ export default {
                 </td>
                 <td>
                   <button
-                    @click.prevent="deleteReport(data.id)"
+                    @click.prevent="ignoreReportComment(data._id)"
                     type="button"
                     class="btn btn-warning"
                   >
