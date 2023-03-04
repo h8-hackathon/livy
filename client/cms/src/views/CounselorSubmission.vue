@@ -4,42 +4,30 @@ import { mapActions, mapState } from 'pinia'
 import { useCounterStore } from '../stores/counter'
 import axios from 'axios'
 
-let baseUrl = 'https://api.livy.chat'
+// let baseUrl = 'https://api.livy.chat'
+let baseUrl = 'http://localhost:4002'
 
 export default {
-  // props: ['counselor'],
   components: {
     Navbar
+  },
+  data() {
+    return {
+      status: 'pending'
+    }
   },
   computed: {
     ...mapState(useCounterStore, ['counselors'])
   },
   methods: {
-    ...mapActions(useCounterStore, ['fetchCounselors', 'updateStatusCounselor']),
-    // acceptCounselor(id) {},
-    async acceptCounselor(id) {
-      console.log("AAAAAAAAA");
-      await axios({
-        method: 'patch',
-        url: baseUrl + `/counselor/${id}`,
-        headers: {
-          access_token: localStorage.access_token
-        }
-      })
-      await this.fetchCounselors()
-      await this.router.push('/counselor')
+    ...mapActions(useCounterStore, ['fetchCounselors', 'updateStatusCounselor', 'deleteCounselor']),
+
+    handleAcceptCounselor(id) {
+      this.updateStatusCounselor('accepted', id)
     },
-    async rejectCounselor(id) {
-      await axios({
-        method: 'patch',
-        url: baseUrl + `/counselor/${id}`,
-     
-        headers: {
-          access_token: localStorage.access_token
-        }
-      })
-      await this.fetchCounselors()
-      await this.router.push('/counselor')
+
+    handleRejectCounselor(id) {
+      this.deleteCounselor(id)
     }
   },
   created() {
@@ -93,14 +81,14 @@ export default {
                   <button
                     type="button"
                     class="btn btn-success text-light"
-                    @click.prevent="acceptCounselor(el.UserId)"
+                    @click.prevent="handleAcceptCounselor(el.id)"
                   >
                     Accept
                   </button>
                   <button
                     type="button"
                     class="btn btn-danger m-2"
-                    @click.prevent="rejectCounselor(el.id)"
+                    @click.prevent="handleRejectCounselor(el.id)"
                   >
                     Delete / Reject
                   </button>
