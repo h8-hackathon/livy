@@ -3,8 +3,8 @@ const { MongoClient } = require('mongodb')
 let DATABASE_URL, DATABASE_NAME
 
 if (process.env.NODE_ENV === 'production') {
-  DATABASE_URL = process.env.DATABASE_URL
-  DATABASE_NAME = process.env.DATABASE_NAME
+  DATABASE_URL = process.env.MONGODB_DATABASE_URL
+  DATABASE_NAME = process.env.MONGODB_DATABASE_NAME
 } else {
   DATABASE_URL = 'mongodb://0.0.0.0:27017/'
   DATABASE_NAME = 'livy_mongodb_development'

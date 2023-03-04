@@ -22,27 +22,28 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: { msg: 'title is required' },
         },
       },
-      url: {
-        type: DataTypes.STRING,
-      },
-      caption: {
-        type: DataTypes.TEXT,
-      },
-      type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notNull: { msg: 'type is required' },
-          notEmpty: { msg: 'type is required' },
-        },
-      },
-      UserId: {
-        type: DataTypes.INTEGER,
-      },
+    url: {
+      type: DataTypes.STRING
     },
-    {
-      sequelize,
-      modelName: 'AdminPost',
+    caption: {
+      type: DataTypes.TEXT
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: { msg: 'type is required' },
+        notEmpty: { msg: 'type is required' }
+      }
+    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id'
+      },
+      onUpdate: 'cascade',
+      onDelete: 'cascade'
     }
   );
   return AdminPost;

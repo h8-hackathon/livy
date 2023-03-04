@@ -1,6 +1,7 @@
 const { User } = require('../models')
 module.exports = {
     authorizationOnlyOwnAndAdmin: async (req, res, next) => {
+
         try {
             if(req.headers.access_token === 'skip'){
                 next()
