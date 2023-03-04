@@ -1,7 +1,7 @@
 const convertChatToPrompts = (chats) => {
   if (chats.length)
     return chats.map(el => {
-      return `${el.sender?.name || 'livy'}: ${el.text}`
+      return `${el.sender?.name || 'livy'}: ${el.text?.replaceAll('\n', '')}`
     }).join('\n') + '\nlivy: '
 
   return ''

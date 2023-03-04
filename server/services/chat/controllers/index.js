@@ -60,8 +60,8 @@ class Controller {
       } else {
         chats.chats.push({ text, time: new Date(), sender })
       }
+      
       const response = await askChatGpt(convertChatToPrompts(chats.chats))
-
       chats.chats.push({ text: response.choices[0].text, time: new Date() })
 
       await Chat.updateOne(
