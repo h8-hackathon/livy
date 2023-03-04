@@ -9,4 +9,8 @@ adminReportRouters.post('/', adminReportControllers.createReport);
 
 adminReportRouters.delete('/:id', adminReportControllers.deleteReportById);
 
+adminReportRouters.delete('/post/:postId', adminReportControllers.deleteByPostId);
+
+adminReportRouters.delete('/comment/:commentId', adminReportControllers.deleteByCommentId);
+
 module.exports = adminReportRouters;

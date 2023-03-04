@@ -55,20 +55,20 @@ class forumPostController {
   }
   static async createPost(req, res) {
     try {
-      let { title, images, caption, UserId, helpful } = req.body;
+      let { title, images, caption, UserId } = req.body;
       await ForumPost.insertOne({
         title,
-        images,
+        images: [],
         caption,
-        UserId,
-        helpful,
+        UserId: +UserId,
+        helpful: [],
         createdAt: new Date(),
       });
       res.status(201).json({
         message: "successfully created",
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.errInfo.details.schemaRulesNotSatisfied[0].propertiesNotSatisfied);
     }
   }
   static async getPostById(req, res) {

@@ -3,7 +3,9 @@ const { CounselorSubmission } = require('../models/index');
 class adminCounselorControllers {
   static async readCounselors(req, res, next) {
     try {
-      const counselors = await CounselorSubmission.findAll();
+      const counselors = await CounselorSubmission.findAll({
+        include: ['User'],
+      });
 
       res.status(200).json(counselors);
     } catch (error) {
