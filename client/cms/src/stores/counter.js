@@ -90,21 +90,28 @@ export const useCounterStore = defineStore('counter', {
             access_token: localStorage.access_token
           }
         })
-        console.log(data, '<- Ini data Posts')
         this.posts = data
       } catch (error) {
         console.log(error)
       }
     },
 
-    async addPosts(){
-      console.log('add post');
+    async addPosts(inputData) {
+      console.log('From button submit - add post');
+      inputData["UserId"]=1
+      console.log(inputData);
       try {
-        const {data}=await axios({
-          
+        const { data } = await axios({
+          url: this.baseUrl + 'cms/posts',
+          method: 'POST',
+          headers: {
+            access_token: localStorage.access_token
+          },
+          data: inputData
         })
+
       } catch (error) {
-        
+        console.log(error);
       }
     },
 

@@ -11,7 +11,7 @@ export default {
     ...mapState(useCounterStore, ['posts'])
   },
   methods: {
-    ...mapActions(useCounterStore, ['fetchPosts'])
+    ...mapActions(useCounterStore, ['fetchPosts', 'addPosts'])
   },
   created() {
     this.fetchPosts()

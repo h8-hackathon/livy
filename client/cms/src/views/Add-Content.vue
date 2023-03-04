@@ -1,9 +1,22 @@
 <script>
 import Navbar from '../components/Navbar.vue'
+import { mapActions, mapState } from 'pinia'
+import { useCounterStore } from '../stores/counter'
 
 export default {
   components: {
     Navbar
+  },
+  data() {
+    return {
+      title: '',
+      caption: '',
+      contentType: '',
+      linkURL: ''
+    }
+  },
+  methods: {
+    ...mapActions(useCounterStore, ['addPosts'])
   }
 }
 </script>
@@ -26,7 +39,17 @@ export default {
       </div>
       <div class="row" style="margin: auto; width: 50%">
         <div class="">
-          <form id="new-job-form" @submit.prevent="submitFormHandler">
+          <form
+            id="new-job-form"
+            @submit.prevent="
+              addPosts({
+                title: this.title,
+                caption: this.caption,
+                type: this.contentType,
+                url: this.linkURL
+              })
+            "
+          >
             <div class="mb-3">
               <label for="product-name">Title <span class="text-danger fw-bold">*</span></label>
               <input type="text" class="form-control" autocomplete="off" required v-model="title" />
@@ -47,11 +70,11 @@ export default {
               <label for="product-category"
                 >Content Type <span class="text-danger fw-bold">*</span></label
               >
-              <select id="content-type" class="form-select" required v-model="jobType">
+              <select id="content-type" class="form-select" required v-model="contentType">
                 <option value="" selected disabled>-- Select Type --</option>
-                <option value="Article">Article</option>
-                <option value="Podcast">Podcast</option>
-                <option value="Video">Video</option>
+                <option value="article">Article</option>
+                <option value="podcast">Podcast</option>
+                <option value="video">Video</option>
               </select>
             </div>
 

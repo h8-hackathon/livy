@@ -31,6 +31,7 @@ class adminPostControllers {
         message: `Success created ${newPost.title}`,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
