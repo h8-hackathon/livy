@@ -25,7 +25,7 @@ export default {
           }
         })
         console.log(data, '<- Ini data Report')
-        this.dataReports = data
+        this.dataReports = [...data.postReports,...data.commentReports]
       } catch (error) {
         console.log(error)
       }
@@ -105,10 +105,11 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Note</th>
-                <th scope="col">Post ID</th>
-                <th scope="col">Comment ID</th>
-                <th scope="col">Reporter ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Images</th>
+                <th scope="col">Caption</th>
+                <th scope="col">Author Name</th>
+                <th scope="col">Author Email</th>
                 <th scope="col">Action</th>
                 <th scope="col col-span"></th>
                 <th scope="col" width="50px"></th>
@@ -118,28 +119,38 @@ export default {
             <tbody>
               <tr v-for="(data, index) in dataReports" :key="index">
                 <td>{{ ++index }}</td>
-                <td>{{ data.note }}</td>
-                <td>{{ data.postId }}</td>
-                <td>{{ data.commentId }}</td>
-                <td>{{ data.ReporterId }}</td>
-                <td v-show="data.postId && !data.commentId">
+                <td>{{ data.title }}</td>
+                <td>{{ data.images }}</td>
+                <td>{{ data.caption }}</td>
+                <td>{{ data.author.name }}</td>
+                <td>{{ data.author.email }}</td>
+                <td >
                   <button
-                    @click.prevent="deletePost(data.postId, data.id)"
+                    @click.prevent="deletePost(data._id)"
                     type="button"
-                    class="btn btn-warning"
+                    class="btn btn-danger"
                   >
                     Delete Post
                   </button>
                 </td>
-                <td v-show="data.commentId">
+                <td >
                   <button
-                    @click.prevent="deleteComment(data.commentId, data.id)"
+                    @click.prevent="deletePost(data._id)"
+                    type="button"
+                    class="btn btn-warning"
+                  >
+                    Ignore Report
+                  </button>
+                </td>
+                <!-- <td >
+                  <button
+                    @click.prevent="deleteComment(data._id)"
                     type="button"
                     class="btn btn-danger"
                   >
                     Delete Comment
                   </button>
-                </td>
+                </td> -->
               </tr>
             </tbody>
           </table>

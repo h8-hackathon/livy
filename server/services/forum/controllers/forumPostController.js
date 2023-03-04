@@ -249,6 +249,7 @@ class forumPostController {
           res.status(201).json({
             message: "successfully reported",
           });
+          console.log(result.dataValues);
         } else {
           res.status(404).json({ message: "No documents matched the query" });
         }
