@@ -18,13 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       postId: {
         type: DataTypes.STRING,
-        allowNull: true,
-     
       },
       commentId: {
         type: DataTypes.STRING,
-        allowNull: true,
-      
       },
       ReporterId: {
         type: DataTypes.INTEGER,

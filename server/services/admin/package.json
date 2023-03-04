@@ -4,7 +4,8 @@
   "description": "posts\r - `GET /posts`\r - `GET /posts/:id`\r - `POST /posts`\r - `PUT /posts/:id`\r - `DELETE /posts/:id`\r counselors\r - `GET /counselors`\r - `PATCH /counselors/:id`\r - `DELETE /counselors/:id`\r reports\r - `GET /reports`\r - `POST /reports`\r - `DELETE /reports`",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon bin/www"
+    "dev": "nodemon bin/www",
+    "start": "node bin/www"
   },
   "keywords": [],
   "author": "",
