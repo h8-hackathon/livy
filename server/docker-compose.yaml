@@ -71,7 +71,7 @@ services:
     build: ./orchestrator
     container_name: orchestrator
     ports:
-      - '4000:4000'
+      - '80:4000'
     environment:
       NODE_ENV: 'production'
       PORT: 4000
