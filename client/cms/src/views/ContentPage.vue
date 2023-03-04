@@ -7,6 +7,14 @@ export default {
   components: {
     Navbar
   },
+  data() {
+    return {
+      title: '',
+      caption: '',
+      contentType: '',
+      linkURL: ''
+    }
+  },
   computed: {
     ...mapState(useCounterStore, ['posts'])
   },
@@ -68,7 +76,7 @@ export default {
                   <button
                     type="button"
                     class="btn btn-warning text-light"
-                    @click.prevent="$router.push(`/content-add`)"
+                    @click.prevent="$router.push(`/content-edit`)"
                   >
                     Edit
                   </button>
