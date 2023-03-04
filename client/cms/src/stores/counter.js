@@ -4,7 +4,8 @@ import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({
-    baseUrl: 'http://localhost:4002',
+    // baseUrl: 'http://localhost:4002/',
+    baseUrl: 'https://api.livy.chat/',
     admins: [],
     reports: [],
     posts: [],
@@ -29,20 +30,23 @@ export const useCounterStore = defineStore('counter', {
     },
 
     async googleLoginHandler(input) {
+      console.log(input, '<- ini inputnya');
       try {
         console.log('Test handle login by Google')
-        // const signinWithGoogle = await axios({
-        //   url: this.baseUrl + `login`,
-        //   method: "POST",
-        //   headers: {
-        //     "google-auth-token": input.credential,
-        //   },
-        // });
+        const signinWithGoogle = await axios({
+          url: this.baseUrl + `login`,
+          method: "POST",
+          data: {
+            token: input.access_token,
+            role: 'admin'
+          },
+        });
 
-        // const access_token = signinWithGoogle.data.access_token;
-        // console.log(access_token, '<- Ini access_token');
+        console.log(signinWithGoogle.data);
+        const access_token = signinWithGoogle.data.access_token;
+        console.log(access_token, '<- Ini access_token');
 
-        await localStorage.setItem('access_token', 'ABCDE')
+        await localStorage.setItem('access_token', access_token)
 
         await this.router.push('/')
 
@@ -63,7 +67,7 @@ export const useCounterStore = defineStore('counter', {
       console.log('Fetch data - from report page')
       try {
         const { data } = await axios({
-          url: this.baseUrl + '/reports',
+          url: this.baseUrl + 'cms/forumreport',
           method: 'GET',
           headers: {
             access_token: localStorage.access_token
@@ -80,7 +84,7 @@ export const useCounterStore = defineStore('counter', {
       console.log('Fetch data - from post page')
       try {
         const { data } = await axios({
-          url: this.baseUrl + '/posts',
+          url: this.baseUrl + 'cms/posts',
           method: 'GET',
           headers: {
             access_token: localStorage.access_token
@@ -93,11 +97,22 @@ export const useCounterStore = defineStore('counter', {
       }
     },
 
+    async addPosts(){
+      console.log('add post');
+      try {
+        const {data}=await axios({
+          
+        })
+      } catch (error) {
+        
+      }
+    },
+
     async fetchCounselors() {
       console.log('Fetch data - from counselor page')
       try {
         const { data } = await axios({
-          url: this.baseUrl + '/counselors',
+          url: this.baseUrl + 'cms/counselor',
           method: 'GET',
           headers: {
             access_token: localStorage.access_token

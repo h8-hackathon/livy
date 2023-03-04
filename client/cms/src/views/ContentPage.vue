@@ -67,7 +67,7 @@ export default {
                 <td>
                   <button
                     type="button"
-                    class="btn btn-warning text-light mb-2"
+                    class="btn btn-warning text-light"
                     @click.prevent="$router.push(`/content-add`)"
                   >
                     Edit

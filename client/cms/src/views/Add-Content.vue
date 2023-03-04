@@ -44,17 +44,6 @@ export default {
             </div>
 
             <div class="mb-3">
-              <label for="product-name">Link URL <span class="text-danger fw-bold">*</span></label>
-              <input
-                type="text"
-                class="form-control"
-                autocomplete="off"
-                required
-                v-model="linkURL"
-              />
-            </div>
-
-            <div class="mb-3">
               <label for="product-category"
                 >Content Type <span class="text-danger fw-bold">*</span></label
               >
@@ -64,6 +53,17 @@ export default {
                 <option value="Podcast">Podcast</option>
                 <option value="Video">Video</option>
               </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="product-name">Link URL <span class="text-danger fw-bold">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                autocomplete="off"
+                required
+                v-model="linkURL"
+              />
             </div>
 
             <div class="row mt-4 mb-3">
