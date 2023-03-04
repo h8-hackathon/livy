@@ -3,19 +3,25 @@ const askChatGpt = require('../chatgqt')
 const Todo = require('../mongo/models/Todo')
 
 class Controller {
-  static async createTodo(req, res,) {
+  static async createTodo(req, res, next) {
     try {
       const { todos, userId } = req.body
 
-      await Todo.insertOne({ todos, UserId: userId })
+      let todo = await Todo.findOne({
+        UserId: +userId
+      })
+
+      if (todo) throw { message: "Document exist" }
+
+      await Todo.insertOne({ todos, UserId: userId, updatedAt: new Date() })
 
       res.status(200).json({ message: "successfully created" })
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" })
+      next(error)
     }
   }
 
-  static async findById(req, res,) {
+  static async findById(req, res, next) {
     try {
       const { userId } = req.params
 
@@ -38,31 +44,43 @@ class Controller {
 
       res.status(200).json(todo)
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" })
+      next(error)
     }
   }
 
-  static async updateTodo(req, res,) {
+  static async updateTodo(req, res, next) {
     try {
       const { userId } = req.params
       const { todos } = req.body
+
+      let todo = await Todo.findOne({
+        UserId: +userId
+      })
+
+      if (!todo) throw { message: 'Document Not Found' }
 
       await Todo.updateOne({ UserId: +userId }, { $set: { todos } })
 
       res.status(200).json({ message: "successfully updated" })
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" })
+      next(error)
     }
   }
-  static async deleteTodo(req, res,) {
+  static async deleteTodo(req, res, next) {
     try {
       const { userId } = req.params
+
+      let todo = await Todo.findOne({
+        UserId: +userId
+      })
+
+      if (!todo) throw { message: 'Not Found' }
 
       await Todo.deleteOne({ UserId: +userId })
 
       res.status(200).json({ message: "successfully deleted" })
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" })
+      next(error)
     }
   }
 }
