@@ -6,8 +6,8 @@ if (process.env.NODE_ENV === 'production') {
   DATABASE_URL = process.env.MONGODB_DATABASE_URL
   DATABASE_NAME = process.env.MONGODB_DATABASE_NAME
 } else {
-  DATABASE_URL = 'mongodb://0.0.0.0:27017/'
-  DATABASE_NAME = 'livy_mongodb_development'
+  DATABASE_URL = 'mongodb://livy:2236861b4c8f6ca1d6c86fb7fbccca8e@5.78.81.54:27017/livy'
+  DATABASE_NAME = 'livy'
 }
 
 const client = new MongoClient(DATABASE_URL)

@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar.vue'
 import axios from 'axios'
 let baseUrlServiceAdmin = 'http://localhost:4002'
 let baseUrlServiceForum = 'http://localhost:4003'
+let baseUrl = 'https://api.livy.chat'
 export default {
   components: {
     Navbar
@@ -17,7 +18,7 @@ export default {
       console.log('Fetch data - report page')
       try {
         const { data } = await axios({
-          url: baseUrlServiceAdmin + '/reports', //! Masih belum dimasukin URL-nya
+          url: baseUrl + '/cms/forumreport', //! Masih belum dimasukin URL-nya
           method: 'GET',
           headers: {
             access_token: localStorage.access_token
@@ -66,7 +67,7 @@ export default {
     async deleteReport(reportId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceAdmin}/reports/${reportId}/`, //! Masih belum dimasukin URL-nya
+          url: `${baseUrlServiceAdmin}/reports/${reportId}/`,
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
