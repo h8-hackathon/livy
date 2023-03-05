@@ -6,6 +6,9 @@ a{
 ul, li{
     list-style: none;
 }
+body{
+    font-family: 'Poppins', sans-serif !important;
+}
 @import 
     './variables/color', 
     './header',
