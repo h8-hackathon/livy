@@ -34,7 +34,7 @@ class ClientController {
   static async getSchedule(req, res, next) {
     try {
       const { access_token } = req.headers
-      const { data: user } = await userAPI.get('/verify', { access_token })
+      const { data: user } = await userAPI.post('/verify', { access_token })
       const { data: schedules } = await scheduleAPI.get(
         '/schedules/user/' + user.id
       )
@@ -63,7 +63,7 @@ class ClientController {
   static async getChatWithLivy(req, res, next) {
     try {
       const { access_token } = req.headers
-      const { data: user } = await userAPI.get('/verify', { access_token })
+      const { data: user } = await userAPI.post('/verify', { access_token })
       const { data: chat } = await chatAPI.get('/chat/' + user.id + '/livy')
 
       res.status(200).json(chat)
@@ -76,7 +76,7 @@ class ClientController {
     try {
       const { access_token } = req.headers
       const { text } = req.body
-      const { data: user } = await userAPI.get('/verify', { access_token })
+      const { data: user } = await userAPI.post('/verify', { access_token })
       const { data: reply } = await chatAPI.post('/chat/' + user.id + '/livy', {
         text,
         sender: user,
