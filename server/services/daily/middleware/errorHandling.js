@@ -7,12 +7,13 @@ const errorHandling = async (err, req, res, next) => {
       status = 404
       message = 'Document Not Found'
       break;
+    case "Params Number":
+      status = 400
+      message = 'Params must a number and required'
+      break;
     case "Document failed validation":
       status = 400
       message = err.errInfo.details.schemaRulesNotSatisfied[0].propertiesNotSatisfied[0].description
-    case "Document exist":
-      status = 400
-      message = "Document already exist"
 
   }
 

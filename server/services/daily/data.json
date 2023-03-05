@@ -1,0 +1,28 @@
+[
+  {
+    "userId": 98,
+    "todos": [
+      {
+        "activity": "satu",
+        "completed": false
+      },
+      {
+        "activity": "dua",
+        "completed": false
+      }
+    ]
+  },
+  {
+    "userId": 98,
+    "todos": [
+      {
+        "activity": "satu",
+        "completed": false
+      },
+      {
+        "activity": "dua",
+        "completed": false
+      }
+    ]
+  }
+]

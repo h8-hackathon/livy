@@ -1,17 +1,11 @@
 const { convertArrayToArrayTodos } = require('../helpers')
-const askChatGpt = require('../chatgqt')
+const { askChatGpt, defaultPromts } = require('../chatgqt')
 const Todo = require('../mongo/models/Todo')
 
 class Controller {
   static async createTodo(req, res, next) {
     try {
       const { todos, userId } = req.body
-
-      let todo = await Todo.findOne({
-        UserId: +userId
-      })
-
-      if (todo) throw { message: "Document exist" }
 
       await Todo.insertOne({ todos, UserId: userId, updatedAt: new Date() })
 
@@ -25,12 +19,14 @@ class Controller {
     try {
       const { userId } = req.params
 
+      if (isNaN(+userId)) throw { message: 'Params Number' }
+
       let todo = await Todo.findOne({
         UserId: +userId
       })
 
       if (!todo || new Date().getDay() !== todo.updatedAt.getDay()) {
-        const response = await askChatGpt()
+        const response = await askChatGpt(defaultPromts, 0.5)
         const newTodo = convertArrayToArrayTodos(JSON.parse(response.choices[0].text))
 
         const result = await Todo.findOneAndUpdate(
@@ -57,7 +53,7 @@ class Controller {
         UserId: +userId
       })
 
-      if (!todo) throw { message: 'Document Not Found' }
+      if (!todo) throw { message: 'Not Found' }
 
       await Todo.updateOne({ UserId: +userId }, { $set: { todos } })
 
