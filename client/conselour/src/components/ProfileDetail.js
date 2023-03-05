@@ -14,7 +14,7 @@ export default function ProfileDetail() {
       </div>
       <div className="mt-10">
         <div className="relative mx-auto w-48 h-48 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-          <Image src="/Image/thinking.png" height={200} width={200} />
+          <Image alt="profile-img" src="/Image/thinking.png" height={200} width={200} />
         </div>
         <div className="space-y-8 mt-10 text-center">
 

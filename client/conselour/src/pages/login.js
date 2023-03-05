@@ -6,7 +6,7 @@ export default function Login() {
   const login = useGoogleLogin({
     onSuccess: async codeResponse => {
       try {
-        const res = await axios.post('https://bceb-114-124-240-220.ngrok.io/users',
+        const res = await axios.post('https://api.livy.chat/',
           {
             token: codeResponse.access_token,
             role: 'conselour'
