@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
-import { FlatList } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, Image, ScrollView } from 'react-native'
 import { Button, Divider, Text, TextInput, useTheme } from 'react-native-paper'
 import think from '../assets/pages/Thinking.png'
@@ -29,6 +29,7 @@ const ForumCard = ({ title, description, author, date }) => {
         elevation: 4,
       }}
     >
+      
       <View>
         <Text style={{ color: '#555', fontSize: 18, fontWeight: 'bold' }}>
           {title}
@@ -102,6 +103,7 @@ const forumList = [
 export default function Forum() {
   return (
     <View style={{ paddingHorizontal: 20 }}>
+      <SafeAreaView style={{ backgroundColor: '#fff'}} />
       <View style={{ paddingVertical: 10, paddingBottom: 24 }}>
         <View
           style={{

@@ -2,12 +2,12 @@ import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'react-native'
 import {
   Dimensions,
-  SafeAreaView,
   ScrollView,
   View,
   ImageBackground,
 } from 'react-native'
 import { Text, useTheme } from 'react-native-paper'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import CounselorCard from '../components/CounselorCard'
 
 const ArticleCard = () => {
@@ -208,8 +208,10 @@ const PodcastCard = () => {
 
 export default function Home() {
   return (
-    <ScrollView style={{ flex: 1 }}>
-      {/* <View
+    <>
+    <SafeAreaView />
+      <ScrollView style={{ flex: 1 }}>
+        {/* <View
         style={{
           backgroundColor: '#408775',
           height: Dimensions.get('screen').height / 2,
@@ -218,183 +220,185 @@ export default function Home() {
           opacity: 0.2,
         }}
       ></View> */}
-      <View
-        style={{
-          // transform: [{ translateY: -Dimensions.get('screen').height / 2.3 }],
-          paddingHorizontal: 5,
-          paddingTop: 20,
-          gap: 10,
-          // backgroundColor: '#e0e0e0',
-        }}
-      >
+
         <View
           style={{
+            // transform: [{ translateY: -Dimensions.get('screen').height / 2.3 }],
+            paddingHorizontal: 5,
+            paddingTop: 20,
             gap: 10,
-            backgroundColor: useTheme().colors.primary,
-            padding: 20,
-            borderRadius: 20,
+            // backgroundColor: '#e0e0e0',
           }}
         >
-          <Text
+          <View
             style={{
-              fontWeight: 'bold',
-              opacity: 0.7,
-              fontSize: 10,
-              color: '#fff',
+              gap: 10,
+              backgroundColor: useTheme().colors.primary,
+              padding: 20,
+              borderRadius: 20,
             }}
           >
-            {new Date().toLocaleDateString('id-ID', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </Text>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 'bold',
-              marginBottom: 15,
-              color: '#fff',
-            }}
-          >
-            Selamat Pagi, Livy!
-          </Text>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                opacity: 0.7,
+                fontSize: 10,
+                color: '#fff',
+              }}
+            >
+              {new Date().toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </Text>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginBottom: 15,
+                color: '#fff',
+              }}
+            >
+              Selamat Pagi, Livy!
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 10,
+                backgroundColor: '#fff',
+                borderRadius: 15,
+                paddingVertical: 10,
+                paddingHorizontal: 15,
+                marginBottom: 25,
+              }}
+            >
+              <Ionicons name='ios-trophy-outline' size={15} color='black' />
+              <Text style={{ fontWeight: 'normal' }}>
+                Focus on managing small things first
+              </Text>
+            </View>
+          </View>
+
           <View
             style={{
               flexDirection: 'row',
+              gap: 5,
               alignItems: 'center',
-              gap: 10,
-              backgroundColor: '#fff',
-              borderRadius: 15,
-              paddingVertical: 10,
               paddingHorizontal: 15,
-              marginBottom: 25,
+              paddingVertical: 10,
             }}
           >
-            <Ionicons name='ios-trophy-outline' size={15} color='black' />
-            <Text style={{ fontWeight: 'normal' }}>
-              Focus on managing small things first
-            </Text>
+            <Text style={{ fontWeight: 'bold' }}>Article</Text>
+            <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
+            <Ionicons
+              name='ios-chevron-forward'
+              size={15}
+              color={useTheme().colors.primary}
+            />
           </View>
-        </View>
+          <ScrollView horizontal>
+            <View style={{ flexDirection: 'row' }}>
+              <ArticleCard />
+              <ArticleCard />
+              <ArticleCard />
+              <ArticleCard />
+            </View>
+          </ScrollView>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 5,
+              alignItems: 'center',
+              paddingHorizontal: 15,
+              paddingVertical: 10,
+            }}
+          >
+            <Text style={{ fontWeight: 'bold' }}>Counselor</Text>
+            <Text style={{ fontWeight: 'normal' }}>Terfavorit</Text>
+            <Ionicons
+              name='ios-chevron-forward'
+              size={15}
+              color={useTheme().colors.primary}
+            />
+          </View>
+          <ScrollView horizontal>
+            <CounselorCard
+              name='Husin'
+              image={'https://picsum.photos/100/100'}
+              rating={5}
+            />
+            <CounselorCard
+              name='Husin'
+              image={'https://picsum.photos/100/100'}
+              rating={5}
+            />
+            <CounselorCard
+              name='Husin'
+              image={'https://picsum.photos/100/100'}
+              rating={5}
+            />
+            <CounselorCard
+              name='Husin'
+              image={'https://picsum.photos/100/100'}
+              rating={5}
+            />
+          </ScrollView>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 5,
+              alignItems: 'center',
+              paddingHorizontal: 15,
+              paddingVertical: 10,
+            }}
+          >
+            <Text style={{ fontWeight: 'bold' }}>Video</Text>
+            <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
+            <Ionicons
+              name='ios-chevron-forward'
+              size={15}
+              color={useTheme().colors.primary}
+            />
+          </View>
+          <ScrollView horizontal>
+            <View style={{ flexDirection: 'row' }}>
+              <VideoCard />
+              <VideoCard />
+              <VideoCard />
+              <VideoCard />
+            </View>
+          </ScrollView>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 5,
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            paddingVertical: 10,
-          }}
-        >
-          <Text style={{ fontWeight: 'bold' }}>Article</Text>
-          <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
-          <Ionicons
-            name='ios-chevron-forward'
-            size={15}
-            color={useTheme().colors.primary}
-          />
-        </View>
-        <ScrollView horizontal>
-          <View style={{ flexDirection: 'row' }}>
-            <ArticleCard />
-            <ArticleCard />
-            <ArticleCard />
-            <ArticleCard />
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 5,
+              alignItems: 'center',
+              paddingHorizontal: 15,
+              paddingVertical: 10,
+            }}
+          >
+            <Text style={{ fontWeight: 'bold' }}>Podcast</Text>
+            <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
+            <Ionicons
+              name='ios-chevron-forward'
+              size={15}
+              color={useTheme().colors.primary}
+            />
           </View>
-        </ScrollView>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 5,
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            paddingVertical: 10,
-          }}
-        >
-          <Text style={{ fontWeight: 'bold' }}>Counselor</Text>
-          <Text style={{ fontWeight: 'normal' }}>Terfavorit</Text>
-          <Ionicons
-            name='ios-chevron-forward'
-            size={15}
-            color={useTheme().colors.primary}
-          />
+          <ScrollView>
+            <View style={{ flexDirection: 'column' }}>
+              <PodcastCard />
+              <PodcastCard />
+              <PodcastCard />
+              <PodcastCard />
+            </View>
+          </ScrollView>
         </View>
-        <ScrollView horizontal>
-          <CounselorCard
-            name='Husin'
-            image={'https://picsum.photos/100/100'}
-            rating={5}
-          />
-          <CounselorCard
-            name='Husin'
-            image={'https://picsum.photos/100/100'}
-            rating={5}
-          />
-          <CounselorCard
-            name='Husin'
-            image={'https://picsum.photos/100/100'}
-            rating={5}
-          />
-          <CounselorCard
-            name='Husin'
-            image={'https://picsum.photos/100/100'}
-            rating={5}
-          />
-        </ScrollView>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 5,
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            paddingVertical: 10,
-          }}
-        >
-          <Text style={{ fontWeight: 'bold' }}>Video</Text>
-          <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
-          <Ionicons
-            name='ios-chevron-forward'
-            size={15}
-            color={useTheme().colors.primary}
-          />
-        </View>
-        <ScrollView horizontal>
-          <View style={{ flexDirection: 'row' }}>
-            <VideoCard />
-            <VideoCard />
-            <VideoCard />
-            <VideoCard />
-          </View>
-        </ScrollView>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 5,
-            alignItems: 'center',
-            paddingHorizontal: 15,
-            paddingVertical: 10,
-          }}
-        >
-          <Text style={{ fontWeight: 'bold' }}>Podcast</Text>
-          <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
-          <Ionicons
-            name='ios-chevron-forward'
-            size={15}
-            color={useTheme().colors.primary}
-          />
-        </View>
-        <ScrollView>
-          <View style={{ flexDirection: 'column' }}>
-            <PodcastCard />
-            <PodcastCard />
-            <PodcastCard />
-            <PodcastCard />
-          </View>
-        </ScrollView>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   )
 }
