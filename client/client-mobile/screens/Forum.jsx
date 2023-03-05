@@ -1,9 +1,103 @@
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
+import { FlatList } from 'react-native'
 import { View, Image, ScrollView } from 'react-native'
 import { Button, Divider, Text, TextInput, useTheme } from 'react-native-paper'
 import think from '../assets/pages/Thinking.png'
-const SearchIcon = () => <TextInput.Icon name='search' />
+
+const ForumCard = ({ title, description, author, date }) => {
+  return (
+    <View
+      style={{
+        backgroundColor: '#fefefe',
+        paddingVertical: 12,
+        paddingHorizontal: 15,
+        borderRadius: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderColor: '#eee',
+        borderWidth: 2,
+        shadowColor: useTheme().colors.primary,
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
+
+        elevation: 4,
+      }}
+    >
+      <View>
+        <Text style={{ color: '#555', fontSize: 18, fontWeight: 'bold' }}>
+          {title}
+        </Text>
+        <Text style={{ color: '#555', fontSize: 10, color: '#444' }}>
+          {date.toLocaleDateString([], {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </Text>
+        <Text style={{ color: '#555', fontSize: 12 }}>{description}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <Ionicons
+              name='heart-outline'
+              size={10}
+              color={useTheme().colors.secondary}
+            />
+            <Text style={{ fontSize: 10 }}>20</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <Ionicons
+              name='chatbox-ellipses-outline'
+              size={10}
+              color={useTheme().colors.primary}
+            />
+            <Text style={{ fontSize: 10 }}>5</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <Ionicons
+              name='person-outline'
+              size={10}
+              color={useTheme().colors.primary}
+            />
+            <Text style={{ color: '#555', fontSize: 12 }}>{author}</Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+const forumList = [
+  {
+    title: 'How to get a job',
+    description: 'I need help getting a job',
+    author: 'Livy',
+    date: new Date(),
+  },
+  {
+    title: 'How to get a job',
+    description: 'I need help getting a job',
+    author: 'Livy',
+    date: new Date(),
+  },
+  {
+    title: 'How to get a job',
+    description: 'I need help getting a job',
+    author: 'Livy',
+    date: new Date(),
+  },
+  {
+    title: 'How to get a job',
+    description: 'I need help getting a job',
+    author: 'Livy',
+    date: new Date(),
+  },
+]
 
 export default function Forum() {
   return (
@@ -73,81 +167,15 @@ export default function Forum() {
         </View>
         <Divider />
         <View style={{ paddingBottom: 120, gap: 12 }}>
-          <View
-            style={{
-              width: '100%',
-              borderWidth: 1,
-              borderRadius: 5,
-              aspectRatio: 16 / 9,
-              padding: 10,
-              paddingBottom: 90,
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              </Text>
-              <Text style={{ fontSize: 10 }}>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Id
-                nihil pariatur, porro vero necessitatibus iure voluptas quis
-                voluptates commodi at eius debitis placeat sunt molestiae
-                dolorum magnam minus officiis odit.
-              </Text>
-            </View>
-            <View>
-              <Text>Husin</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              borderWidth: 1,
-              borderRadius: 5,
-              aspectRatio: 16 / 9,
-              padding: 10,
-              paddingBottom: 90,
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              </Text>
-              <Text style={{ fontSize: 10 }}>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Id
-                nihil pariatur, porro vero necessitatibus iure voluptas quis
-                voluptates commodi at eius debitis placeat sunt molestiae
-                dolorum magnam minus officiis odit.
-              </Text>
-            </View>
-            <View>
-              <Text>Husin</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              borderWidth: 1,
-              borderRadius: 5,
-              aspectRatio: 16 / 9,
-              padding: 10,
-              paddingBottom: 90,
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              </Text>
-              <Text style={{ fontSize: 10 }}>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Id
-                nihil pariatur, porro vero necessitatibus iure voluptas quis
-                voluptates commodi at eius debitis placeat sunt molestiae
-                dolorum magnam minus officiis odit.
-              </Text>
-            </View>
-            <View>
-              <Text>Husin</Text>
-            </View>
-          </View>
+          {forumList.map((item, i) => (
+            <ForumCard
+              key={i}
+              title={item.title}
+              description={item.description}
+              author={item.author}
+              date={item.date}
+            />
+          ))}
         </View>
       </ScrollView>
     </View>
