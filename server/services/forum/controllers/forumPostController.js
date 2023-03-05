@@ -112,7 +112,7 @@ class forumPostController {
       let result = await ForumPost.deleteOne({ _id: new ObjectId(postId) });
       if (result.deletedCount === 1) {
         res.status(200).json({
-          message: "successfully updated",
+          message: "successfully deleted",
         });
       } else {
         res.status(404).json({ message: "No documents matched the query" });
