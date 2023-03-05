@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: { msg: 'UserId is required' },
         },
       },
+      rate: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
