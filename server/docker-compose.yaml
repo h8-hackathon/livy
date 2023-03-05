@@ -33,6 +33,7 @@ services:
       MONGODB_DATABASE_URL: ${MONGODB_DATABASE_URL}
       MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
       DATABASE_URL: ${DATABASE_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
   daily-service:
     build: ./services/daily
     container_name: daily-service
@@ -71,7 +72,7 @@ services:
     build: ./orchestrator
     container_name: orchestrator
     ports:
-      - '80:4000'
+      - '4000:4000'
     environment:
       NODE_ENV: 'production'
       PORT: 4000

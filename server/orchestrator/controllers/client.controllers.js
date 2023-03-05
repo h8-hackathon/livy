@@ -77,10 +77,13 @@ class ClientController {
       const { access_token } = req.headers
       const { text } = req.body
       const { data: user } = await userAPI.post('/verify', { access_token })
-      const { data: reply } = await chatAPI.post('/chats/' + user.id + '/livy', {
-        text,
-        sender: user,
-      })
+      const { data: reply } = await chatAPI.post(
+        '/chats/' + user.id + '/livy',
+        {
+          text,
+          sender: { UserId: user.id, name: user.name },
+        }
+      )
 
       res.status(200).json(reply)
     } catch (error) {

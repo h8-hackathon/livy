@@ -3,6 +3,7 @@ import { FlatList, Image, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Button, Text, useTheme } from 'react-native-paper'
 import { TextInput } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const me = 123
 
@@ -204,6 +205,7 @@ const Profile = () => {
 export default function LivyChat() {
   return (
     <View style={{ flex: 1 }}>
+      <SafeAreaView style={{backgroundColor: '#eee'}} />
       <View style={{ flex: 1 }}>
         <Profile />
         <FlatList
