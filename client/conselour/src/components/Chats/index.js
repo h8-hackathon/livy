@@ -10,7 +10,7 @@ import socketIOClient from 'socket.io-client'
 const socket = socketIOClient('https://api.livy.chat/')
 
 export default function Chats() {
-  const { counselor, setCounselor } = useCounselor()
+  const { counselor } = useCounselor()
 
   const { setMessages, setJoined, setSocket, setLastIndex, messages } = useChat()
 
@@ -45,27 +45,12 @@ export default function Chats() {
       socket.disconnect()
       setSocket(null)
     }
-  }, [UserId, counselor])
+  }, [])
 
 
   return (
     <>
       <Headers />
-      {counselor ? (
-        <h1>
-          Chat as {counselor.id} with {UserId}
-        </h1>
-      ) : (
-        <div>
-          <h1>Unauthorized</h1>
-          <button
-            className='border p-1'
-            onClick={() => setCounselor({ id: 456 })}
-          >
-            Login
-          </button>
-        </div>
-      )}
       <Content />
       <ChatInput />
     </>
