@@ -8,6 +8,7 @@ import {
   ImageBackground,
 } from 'react-native'
 import { Text, useTheme } from 'react-native-paper'
+import CounselorCard from '../components/CounselorCard'
 
 const ArticleCard = () => {
   return (
@@ -277,6 +278,7 @@ export default function Home() {
             </Text>
           </View>
         </View>
+
         <View
           style={{
             flexDirection: 'row',
@@ -301,6 +303,45 @@ export default function Home() {
             <ArticleCard />
             <ArticleCard />
           </View>
+        </ScrollView>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 5,
+            alignItems: 'center',
+            paddingHorizontal: 15,
+            paddingVertical: 10,
+          }}
+        >
+          <Text style={{ fontWeight: 'bold' }}>Counselor</Text>
+          <Text style={{ fontWeight: 'normal' }}>Terfavorit</Text>
+          <Ionicons
+            name='ios-chevron-forward'
+            size={15}
+            color={useTheme().colors.primary}
+          />
+        </View>
+        <ScrollView horizontal>
+          <CounselorCard
+            name='Husin'
+            image={'https://picsum.photos/100/100'}
+            rating={5}
+          />
+          <CounselorCard
+            name='Husin'
+            image={'https://picsum.photos/100/100'}
+            rating={5}
+          />
+          <CounselorCard
+            name='Husin'
+            image={'https://picsum.photos/100/100'}
+            rating={5}
+          />
+          <CounselorCard
+            name='Husin'
+            image={'https://picsum.photos/100/100'}
+            rating={5}
+          />
         </ScrollView>
         <View
           style={{
