@@ -46,6 +46,7 @@ export default function MainTab() {
           ),
           tabBarShowLabel: true,
           tabBarHideOnKeyboard: true,
+          // headerShown: false,
         }}
         component={HomeScreen}
       />

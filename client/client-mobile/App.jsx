@@ -26,7 +26,6 @@ export default function App() {
   return (
     <PaperProvider theme={theme}>
       <SafeAreaProvider>
-        <SafeAreaView style={{backgroundColor: theme.colors.background}}/>
         <NavigationContainer theme={theme}>
           <MainStack />
         </NavigationContainer>
