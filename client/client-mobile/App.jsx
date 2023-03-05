@@ -1,11 +1,12 @@
 import MainStack from './navigations/MainStack'
-import Login from './screens/Login'
 import {
   MD3LightTheme as DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { NavigationContainer, Theme } from '@react-navigation/native'
+import { Provider } from 'jotai'
+import MainLayouts from './components/layouts/MainLayouts'
 
 const theme = {
   ...DefaultTheme,
@@ -24,12 +25,16 @@ Orange: #F99417
 */
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <SafeAreaProvider>
-        <NavigationContainer theme={theme}>
-          <MainStack />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </PaperProvider>
+    <Provider>
+      <MainLayouts>
+        <PaperProvider theme={theme}>
+          <SafeAreaProvider>
+            <NavigationContainer theme={theme}>
+              <MainStack />
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </PaperProvider>
+      </MainLayouts>
+    </Provider>
   )
 }

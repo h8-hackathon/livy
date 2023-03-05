@@ -11,6 +11,7 @@ import Login from '../screens/Login'
 import Forum from '../screens/Forum'
 import ScheduleScreen from '../screens/Schedule'
 import LivyChat from '../screens/LivyChat'
+import AccountScreen from '../screens/Account'
 
 const Tab = createBottomTabNavigator()
 
@@ -129,12 +130,11 @@ export default function MainTab() {
               name={focused ? `ios-person-circle` : `ios-person-circle-outline`}
               size={size}
               color={color}
-              onPress={() => navigation.navigate('Login')}
             />
           ),
           tabBarShowLabel: true,
         }}
-        component={HomeScreen}
+        component={AccountScreen}
       />
     </Tab.Navigator>
   )
