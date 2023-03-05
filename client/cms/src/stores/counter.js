@@ -20,16 +20,16 @@ export const useCounterStore = defineStore('counter', {
     succesNotification(response) {
       Swal.fire({
         icon: 'success',
-        title: 'Success!'
-        // text: response.message,
+        title: 'Success!',
+        text: response.message,
       })
     },
 
     errorNotification(error) {
       Swal.fire({
         icon: 'error',
-        title: 'Oops...'
-        // text: error.response.data.message,
+        title: 'Oops...',
+        text: error.response.data.message,
       })
     },
 
@@ -130,8 +130,23 @@ export const useCounterStore = defineStore('counter', {
           data: inputData
         })
         this.router.push('/content')
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully add new content",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       } catch (error) {
         console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.responseJSON?.data?.message || "Something went wrong",
+        });
       }
     },
 
@@ -148,8 +163,23 @@ export const useCounterStore = defineStore('counter', {
           data: inputData
         })
         this.router.push('/content')
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully edit new content",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       } catch (error) {
         console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.responseJSON?.data?.message || "Something went wrong",
+        });
       }
     },
 
@@ -164,8 +194,23 @@ export const useCounterStore = defineStore('counter', {
           }
         })
         this.fetchPosts()
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully delete content",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       } catch (error) {
         console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.responseJSON?.data?.message || "Something went wrong",
+        });
       }
     },
 
@@ -197,9 +242,23 @@ export const useCounterStore = defineStore('counter', {
           body: { status }
         })
         this.fetchCounselors()
-        console.log(data)
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully update status counselor submission",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       } catch (error) {
         console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.responseJSON?.data?.message || "Something went wrong",
+        });
       }
     },
 
@@ -214,8 +273,23 @@ export const useCounterStore = defineStore('counter', {
           }
         })
         this.fetchCounselors()
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully delete counselor submission",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       } catch (error) {
         console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.responseJSON?.data?.message || "Something went wrong",
+        });
       }
     },
 
@@ -264,8 +338,23 @@ export const useCounterStore = defineStore('counter', {
           data: inputData
         })
         this.router.push('/admin-list')
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully add new admin",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       } catch (error) {
         console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.responseJSON?.data?.message || "Something went wrong",
+        });
       }
     },
 
@@ -282,8 +371,23 @@ export const useCounterStore = defineStore('counter', {
           data: inputData
         })
         this.router.push('/admin-list')
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully edit admin's data",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       } catch (error) {
         console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.responseJSON?.data?.message || "Something went wrong",
+        });
       }
     },
 
@@ -298,10 +402,26 @@ export const useCounterStore = defineStore('counter', {
           }
         })
         this.fetchAdmin()
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Successfully delete admin",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       } catch (error) {
         console.log(error)
+
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.responseJSON?.data?.message || "Something went wrong",
+        });
       }
     },
+
     async fetchReport() {
       console.log('Fetch data - report page')
       try {
