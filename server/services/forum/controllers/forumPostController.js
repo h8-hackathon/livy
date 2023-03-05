@@ -89,11 +89,11 @@ class forumPostController {
       //   await connectDB
       let { postId } = req.params;
       console.log(postId);
-      let { title, images, caption, UserId, helpful } = req.body;
-      console.log(title, images, caption, UserId, helpful);
+      let { title, images, caption, UserId } = req.body;
+      console.log(title, images, caption, UserId);
       let result = await ForumPost.updateOne(
         { _id: new ObjectId(postId) },
-        { $set: { title, images, caption, UserId, helpful } }
+        { $set: { title, images, caption, UserId } }
       );
       if (result) {
         res.status(200).json({
@@ -112,7 +112,7 @@ class forumPostController {
       let result = await ForumPost.deleteOne({ _id: new ObjectId(postId) });
       if (result.deletedCount === 1) {
         res.status(200).json({
-          message: "successfully updated",
+          message: "successfully deleted",
         });
       } else {
         res.status(404).json({ message: "No documents matched the query" });
