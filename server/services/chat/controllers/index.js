@@ -76,6 +76,25 @@ class Controller {
     }
   }
 
+  static async getChatWithLivy(req, res, next) {
+    try {
+      const { userId } = req.params
+
+      let chats = await Chat.findOne({
+        UserId: +userId,
+        CounselorId: null
+      })
+
+      if (!chats) {
+        chats = { UserId: +userId, chats: [], CounselorId: null }
+      }
+
+      res.status(200).json(chats)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async listChatByCounselor(req, res, next) {
     try {
       const { counselorId } = req.params

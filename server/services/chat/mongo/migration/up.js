@@ -173,6 +173,61 @@ const migrateTodos = async () => {
   })
 }
 
+
+const migrateAvailability = async () => {
+  const db = getDb()
+
+  await db.createCollection('Availabilities', {
+    validator: {
+      $jsonSchema: {
+        bsonType: 'object',
+        required: ['UserId', 'availability'],
+        properties: {
+          UserId: {
+            bsonType: 'number',
+            description: 'UserId must be an number and is required',
+          },
+          availability: {
+            bsonType: 'array',
+            description: 'availability must be an array',
+            items: {
+              bsonType: 'object',
+              required: ['dayOfWeek', 'slots'],
+              properties: {
+                dayOfWeek: {
+                  bsonType: 'string',
+                  description: 'dayOfWeek must be a string and is required',
+                },
+                slots: {
+                  bsonType: 'array',
+                  description: 'slots must be an array',
+                  items: {
+                    bsonType: 'object',
+                    required: ['startTime', 'endTime'],
+                    properties: {
+                      startTime: {
+                        bsonType: 'date',
+                        description: 'startTime must be a date and is required',
+                      },
+                      endTime: {
+                        bsonType: 'date',
+                        description: 'endTime must be a date and is required',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+}
+
+
+
+
 const wrapper = async (fn) => {
   try {
     await fn()
@@ -200,6 +255,9 @@ const main = async () => {
 
     await wrapper(migrateTodos)
     console.log('Migration Todos completed')
+
+    await wrapper(migrateAvailability)
+    console.log('Migration Availability completed')
 
   } catch (error) {
     console.log(error)

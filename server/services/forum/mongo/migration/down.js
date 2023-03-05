@@ -10,6 +10,8 @@ const main = async () => {
 
   await db.dropCollection('Chats')
   await db.dropCollection('Todos')
+  
+  await db.dropCollection('Availabilities')
 
   await disconnect()
 }

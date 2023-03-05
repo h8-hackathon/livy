@@ -1,5 +1,4 @@
 const { getDb } = require('../config/db')
-// create typedef for ChatMessage
 
 /**
  * @typedef {Object} Sender
