@@ -4,7 +4,8 @@ const { connect, disconnect, ForumPost, ForumComment } = require("../mongo");
 const { ObjectId } = require("mongodb");
 const { User, Report } = require("../models");
 const { sequelize } = require("../models");
-let postId = "64046f090b6db0204b94e9f8";
+// let postId = "6403731acf990b268c0256eb";
+let postId = "64046e5b38c7ff79803b75cc";
 
 beforeAll(async () => {
   try {
@@ -144,7 +145,7 @@ describe("for posts", () => {
   });
 
   // delete post id 200
-  it.only("Successfully delete posts by id", async () => {
+  it("Successfully delete posts by id", async () => {
     const response = await request(app).delete(`/posts/`+postId);
     console.log(response);
     expect(response.status).toBe(200);
@@ -161,6 +162,48 @@ describe("for posts", () => {
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("error", "not found");
   });
+
+  // get comments by posts id 200
+  it("Successfully get comments by posts id", async () => {
+    const response = await request(app).get(`/posts/${postId}/comments`);
+    console.log(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body[0]).toBeInstanceOf(Object);
+    expect(response.body[0]).toHaveProperty("_id", expect.any(String));
+    expect(response.body[0]).toHaveProperty("text", expect.any(String));
+    expect(response.body[0]).toHaveProperty("forumPostId", expect.any(String));
+    expect(response.body[0]).toHaveProperty(
+      "UserId",
+      expect.any(Number)
+    );
+  });
+
+  // post comments by posts id 200
+  it("Successfully post comments by posts id", async () => {
+    const response = await request(app).post(`/posts/${postId}/comments`).send({
+      text: "commentar",
+      UserId: 2,
+      helpful: []
+    })
+    console.log(response.body);
+    expect(response.status).toBe(201);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message", "successfully created");
+  });
+
+  // create helpful by posts id 200
+  it("Successfully create helpfull by posts id", async () => {
+   
+    const response = await request(app).put(`/posts/${postId}/helpful`).send({
+      UserId: 2,
+    })
+    console.log(response.body);
+    expect(response.status).toBe(201);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message", "successfully created");
+  });
+
 });
 
 
