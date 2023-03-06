@@ -123,6 +123,7 @@ export default function LivyChat() {
             sender: { UserId: user.id, name: user.name },
           },
         ])
+        setText('')
         if (access_token) {
           api
             .post(
@@ -138,6 +139,11 @@ export default function LivyChat() {
               const { message } = res.data
               setMessages([
                 ...messages,
+                {
+                  text,
+                  time: new Date().toISOString(),
+                  sender: { UserId: user.id, name: user.name },
+                },
                 { text: message, time: new Date().toISOString() },
               ])
               setText('')
