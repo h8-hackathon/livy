@@ -30,7 +30,9 @@ export default {
                       id="google-button"
                       style="padding: 20px; display: flex; justify-content: center"
                     >
-                      <GoogleLogin :callback="googleLoginHandler" />
+                      <GoogleLogin :callback="googleLoginHandler" popup-type="TOKEN"
+                        ><button>Login</button></GoogleLogin
+                      >
                     </div>
 
                     <!-- LOGIN BUTTON -->

@@ -1,8 +1,18 @@
 import Card from "./Card";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { api } from "@/helpers";
 
 export default function Sidebar() {
+  const [schedules, setSchedules] = useState()
+
+  useEffect(() => {
+    api.get('/counselor/chats').then(({ data }) => {
+      setSchedules(data)
+    })
+  }, [])
+
   return (
     <>
       <div className="px-8 py-5 ">
@@ -17,17 +27,9 @@ export default function Sidebar() {
         </div>
       </div>
       <div className="overflow-auto scroll-smooth">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {schedules && schedules.map((item, index) =>
+          <Card key={index} item={item} />
+        )}
       </div>
     </>
   )

@@ -120,6 +120,74 @@ module.exports = class UserController {
               }
             const role = 'counselor'   */
 
+            
+            if ( req.body.role === 'admin' ) {
+                const user = await User.findOne({
+                    where: {
+                        email:payload.email,
+                        role:req.body.role
+                    }
+                })
+                if (!user) throw { name: "InvalidCredentials", }
+                else {
+
+                    const access_token = jwt.sign({
+                        id: user.id,
+                    }, process.env.JWT_SECRET || 'mamamuda')
+                    res.status(200).json({ access_token, user })
+
+                }
+                return
+            }
+
+            const [user, created] = await User.findOrCreate({
+                where: { email: payload.email },
+                defaults: {
+                    name: payload.name,
+                    email: payload.email,
+                    image: payload.picture,
+                    helpful: 0,
+                    role: req.body.role
+                }
+            });
+
+
+
+            let status
+            if (created) {
+                status = 201
+            } else {
+                status = 200
+            }
+
+            const access_token = jwt.sign({
+                id: user.id,
+                role:user.role
+            }, process.env.JWT_SECRET || 'mamamuda')
+            if(user.role === 'counselor'){
+                await CounselorSubmission.create({status:'pending'/* SET AS DEFAULT BECAUSE STATUS VALIDATION @ilias*/,submission:'',UserId:user.id})
+            }
+
+            res.status(status).json({ access_token, user: {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "image": user.image,
+                "helpful": user.helpful,
+                "role": user.role,
+                "gender": user.gender,
+                "dob": user.dob
+            } })
+        } catch (err) {
+            console.log(err);
+            next(err)
+        }
+    }
+    static async putUsers(req, res, next) {
+        try {
+            await User.update({ ...req.body }, { where: { id: req.params.id } })
+
+
       if (req.body.role === 'admin') {
         const user = await User.findOne({
           where: {
