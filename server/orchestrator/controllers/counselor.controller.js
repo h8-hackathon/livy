@@ -59,6 +59,23 @@ class CounselorController {
       next(error)
     }
   }
+  
+  static async updateCounselorProfile(req, res, next) {
+    try {
+      const { access_token } = req.headers
+      const {
+        data: { id },
+      } = await userAPI.post('/verify', { access_token })
+      const { dob, name, gender } = req.body
+      const { data } = await userAPI.put(`/users/${id}`, { dob, name, gender })
+
+      res.status(200).json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
 }
 
 module.exports = CounselorController
