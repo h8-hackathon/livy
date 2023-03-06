@@ -5,9 +5,27 @@ const router = Router()
 
 router.get('/home', ClientController.getHome)
 router.get('/counselors', ClientController.getAllCounselor)
-router.get('/schedule', ClientController.getSchedule)
+
+router.get('/schedule', ClientController.getSchedule) //!
+router.post('/schedule', ClientController.createSchedule) //!
 
 router.get('/chatLivy', ClientController.getChatWithLivy)
 router.post('/chatLivy', ClientController.chatWithLivy)
+
+router.get('/forum/top', ClientController.getForumTop)
+router.get('/forum/new', ClientController.getForumNew)
+router.post('/forum/post', ClientController.createForumPost)
+router.get('/forum/post/:postId', ClientController.getForumPostById)
+router.post('/forum/post/:postId', ClientController.createComment)
+router.delete('/forum/post/:postId', ClientController.deleteForumPostById)
+router.put('/forum/post/:postId', ClientController.updateForumPostById)
+
+router.put('/forum/post/:postId/helpful', ClientController.createHelpfulPost)
+router.post('/forum/post/:postId/report', ClientController.createReportPost)
+
+router.get('/forum/comment/:postId', ClientController.getForumCommentByPostId)
+router.put('/forum/comment/:commentId/helpful', ClientController.createHelpfulComment)
+router.post('/forum/comment/:commentId/report', ClientController.createReportComment)
+
 
 module.exports = router
