@@ -1,16 +1,18 @@
 import { Ionicons } from '@expo/vector-icons'
+import { useEffect, useState } from 'react'
 import { Image } from 'react-native'
-import {
-  Dimensions,
-  ScrollView,
-  View,
-  ImageBackground,
-} from 'react-native'
+import { Dimensions, ScrollView, View, ImageBackground } from 'react-native'
 import { Text, useTheme } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CounselorCard from '../components/CounselorCard'
+import { api } from '../helpers/axios'
+import { useUser } from '../hooks/useUser'
 
-const ArticleCard = () => {
+const ArticleCard = ({
+  title,
+  date,
+  image,
+}) => {
   return (
     <View
       style={{
@@ -30,13 +32,13 @@ const ArticleCard = () => {
         ellipsizeMode='tail'
         numberOfLines={2}
       >
-        Ini Judul Article Tentang Sesuatu
+        {title}
       </Text>
       <Text
         style={{ fontWeight: 'normal', fontSize: 10, flex: 1, opacity: 0.7 }}
         ellipsizeMode='clip'
       >
-        {new Date().toLocaleDateString('id-ID', {
+        {new Date(date).toLocaleDateString('id-ID', {
           weekday: 'long',
           year: 'numeric',
           month: 'long',
@@ -45,7 +47,7 @@ const ArticleCard = () => {
       </Text>
       <View>
         <Image
-          source={{ uri: 'https://picsum.photos/800/450' }}
+          source={{ uri: image }}
           style={{
             width: '100%',
             aspectRatio: 16 / 9,
@@ -115,7 +117,11 @@ const VideoCard = () => {
     </View>
   )
 }
-const PodcastCard = () => {
+const PodcastCard = ({
+  title,
+  date,
+  description
+}) => {
   return (
     <View
       style={{
@@ -160,7 +166,7 @@ const PodcastCard = () => {
               ellipsizeMode='tail'
               numberOfLines={1}
             >
-              Ini Judul Podcast Tentang Sesuatu ads asd asd asd asd asd asd
+              {title}
             </Text>
             <Text
               style={{
@@ -172,10 +178,7 @@ const PodcastCard = () => {
               ellipsizeMode='tail'
               numberOfLines={2}
             >
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit
-              doloribus at tempora et cum aspernatur ea, quidem mollitia ad,
-              ipsam laboriosam perferendis tenetur sapiente. Accusamus ipsa
-              consequuntur corporis atque excepturi.
+              {description}
             </Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -192,7 +195,7 @@ const PodcastCard = () => {
               <Ionicons name='ios-play' size={10} color='#fff' />
             </View>
             <Text style={{ fontSize: 10 }}>
-              {new Date().toLocaleDateString('id-ID', {
+              {new Date(date).toLocaleDateString('id-ID', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -207,9 +210,19 @@ const PodcastCard = () => {
 }
 
 export default function Home() {
+  const [home, setHome] = useState(null)
+  const { user } = useUser()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await api.get('/client/home')
+      setHome(res.data)
+    }
+    fetchData()
+  }, [])
   return (
     <>
-    <SafeAreaView />
+      <SafeAreaView />
       <ScrollView style={{ flex: 1 }}>
         {/* <View
         style={{
@@ -261,7 +274,7 @@ export default function Home() {
                 color: '#fff',
               }}
             >
-              Selamat Pagi, Livy!
+              Selamat Pagi{user ? user.name : ''}!
             </Text>
             <View
               style={{
@@ -301,10 +314,14 @@ export default function Home() {
           </View>
           <ScrollView horizontal>
             <View style={{ flexDirection: 'row' }}>
-              <ArticleCard />
-              <ArticleCard />
-              <ArticleCard />
-              <ArticleCard />
+              {home?.articles.map((article) => (
+                <ArticleCard
+                  key={article.id}
+                  title={article.title}
+                  image={article.url}
+                  date={article.createdAt}
+                />
+              ))}
             </View>
           </ScrollView>
           <View
@@ -391,10 +408,16 @@ export default function Home() {
           </View>
           <ScrollView>
             <View style={{ flexDirection: 'column' }}>
-              <PodcastCard />
-              <PodcastCard />
-              <PodcastCard />
-              <PodcastCard />
+
+              {home?.podcasts.map((podcast) => (
+                <PodcastCard
+                  key={podcast.id}
+                  title={podcast.title}
+                  url={podcast.url}
+                  date={podcast.createdAt}
+                  description={podcast.caption}
+                />
+              ))}
             </View>
           </ScrollView>
         </View>
