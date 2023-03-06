@@ -11,6 +11,6 @@ router.post('/verify', AuthController.verify)
 
 router.use('/cms', cmsRouter)
 router.use('/client', client)
-
+router.use('/counselor', require('./counselor.routes'))
 router.use(errorMiddleware)
 module.exports = router
