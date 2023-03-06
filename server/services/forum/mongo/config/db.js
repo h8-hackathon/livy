@@ -23,7 +23,10 @@ const connect = async () => {
 
 const disconnect = async () => {
   try {
-    await client.close()
+    if (process.env.NODE_ENV === 'production') {
+      
+      await client.close()
+    } 
     console.log('Disconnected from database')
   } catch (error) {
     console.log(error)
