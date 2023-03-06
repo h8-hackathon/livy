@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
         })
         message.sender = { UserId: user.id, name: user.name }
         io.to(room).emit('message', message)
-        const [userId, counselorId] = room.split('-')
+        const [counselorId, userId] = room.split('-')
         await chatAPI.post(`/chats/${userId}`, {
           counselorId: +counselorId,
           chat: { text: message.text, sender: message.sender },
