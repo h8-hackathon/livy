@@ -4,7 +4,7 @@ const connectDB = connect();
 const { User, Report } = require("../models");
 const { sequelize } = require("../models/");
 class forumPostController {
-  static async getAllPost(req, res) {
+  static async getAllPost(req, res, next) {
     try {
       let { page = 1, sortBy = "_id", limit = 10 } = req.query;
       console.log(page, sortBy, limit);
@@ -49,16 +49,16 @@ class forumPostController {
       console.log(result.length, "<<<<<<<<< total data");
       res.status(200).json({ dataPage, result });
     } catch (error) {
-      console.log(error);
+      next(error)
       res.status(500).json(error);
     }
   }
-  static async createPost(req, res) {
+  static async createPost(req, res, next) {
     try {
-      let { title, images, caption, UserId } = req.body;
+      let { title, images = [], caption, UserId } = req.body;
       await ForumPost.insertOne({
         title,
-        images: [],
+        images,
         caption,
         UserId: +UserId,
         helpful: [],
@@ -68,10 +68,9 @@ class forumPostController {
         message: "successfully created",
       });
     } catch (error) {
-      console.log(error.errInfo.details.schemaRulesNotSatisfied[0].propertiesNotSatisfied);
-    }
+next(error)    }
   }
-  static async getPostById(req, res) {
+  static async getPostById(req, res, next) {
     try {
       let { postId } = req.params;
       let postById = await ForumPost.findOne({ _id: new ObjectId(postId) });
@@ -81,19 +80,19 @@ class forumPostController {
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
-  static async updatePostById(req, res) {
+  static async updatePostById(req, res, next) {
     try {
       //   await connectDB
       let { postId } = req.params;
       console.log(postId);
-      let { title, images, caption, UserId, helpful } = req.body;
-      console.log(title, images, caption, UserId, helpful);
+      let { title, images, caption, UserId } = req.body;
+      console.log(title, images, caption, UserId);
       let result = await ForumPost.updateOne(
         { _id: new ObjectId(postId) },
-        { $set: { title, images, caption, UserId, helpful } }
+        { $set: { title, images, caption, UserId } }
       );
       if (result) {
         res.status(200).json({
@@ -103,10 +102,10 @@ class forumPostController {
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
-  static async deletePostById(req, res) {
+  static async deletePostById(req, res, next) {
     try {
       let { postId } = req.params;
       let result = await ForumPost.deleteOne({ _id: new ObjectId(postId) });
@@ -118,10 +117,10 @@ class forumPostController {
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
-  static async getCommentByPostId(req, res) {
+  static async getCommentByPostId(req, res, next) {
     try {
       let { postId } = req.params;
       let comments = await ForumComment.find({ forumPostId: postId }).toArray();
@@ -132,10 +131,10 @@ class forumPostController {
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
-  static async createComment(req, res) {
+  static async createComment(req, res, next) {
     try {
       let { postId } = req.params;
       let { text, UserId, helpful } = req.body;
@@ -150,11 +149,11 @@ class forumPostController {
         message: "successfully created",
       });
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
 
-  static async createHelpfulPost(req, res) {
+  static async createHelpfulPost(req, res, next) {
     try {
       let { postId } = req.params;
       // console.log(postId);
@@ -190,10 +189,10 @@ class forumPostController {
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
-  static async deleteHelpfulPost(req, res) {
+  static async deleteHelpfulPost(req, res, next) {
     try {
       let { postId } = req.params;
       // console.log(postId);
@@ -232,10 +231,10 @@ class forumPostController {
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
-  static async createReportPost(req, res) {
+  static async createReportPost(req, res, next) {
     try {
       let { postId } = req.params;
       let { UserId, note } = req.body;
@@ -249,12 +248,13 @@ class forumPostController {
           res.status(201).json({
             message: "successfully reported",
           });
+          console.log(result.dataValues);
         } else {
           res.status(404).json({ message: "No documents matched the query" });
         }
       }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
 }

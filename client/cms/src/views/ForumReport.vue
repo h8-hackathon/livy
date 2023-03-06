@@ -1,85 +1,88 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import axios from 'axios'
-let baseUrlServiceAdmin = 'http://localhost:4002'
-let baseUrlServiceForum = 'http://localhost:4003'
+import { mapActions, mapState } from 'pinia'
+import { useCounterStore } from '../stores/counter'
+let baseUrl = 'https://api.livy.chat'
 export default {
   components: {
     Navbar
   },
-  data() {
-    return {
-      dataReports: []
-    }
+  computed: {
+    ...mapState(useCounterStore, ['dataPostReports', 'dataCommentReports'])
   },
+ 
+  
   methods: {
-    async fetchReport() {
-      console.log('Fetch data - report page')
-      try {
-        const { data } = await axios({
-          url: baseUrlServiceAdmin + '/reports', //! Masih belum dimasukin URL-nya
-          method: 'GET',
-          headers: {
-            access_token: localStorage.access_token
-          }
-        })
-        console.log(data, '<- Ini data Report')
-        this.dataReports = data
-      } catch (error) {
-        console.log(error)
-      }
-    },
+    ...mapActions(useCounterStore, ['fetchReport']),
+    
     async deletePost(postId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceForum}/posts/${postId}/` , //! Masih belum dimasukin URL-nya
+          url: `${baseUrl}/cms/forumreport/posts/${postId}`,
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
           }
         })
         console.log(data, '<- Ini data Delete')
-        await this.deleteReport(reportId)
         await this.fetchReport()
         await this.$router.push('/forum')
       } catch (error) {
         console.log(error)
       }
     },
-    async deleteComment(commentId,reportId) {
+    async deleteComment(commentId) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceForum}/comments/${commentId}/` , //! Masih belum dimasukin URL-nya
+          url: `${baseUrl}/cms/forumreport/comments/${commentId}`,
+
           method: 'DELETE',
           headers: {
             access_token: localStorage.access_token
           }
         })
         console.log(data, '<- Ini data Delete Comment')
-        await this.deleteReport(reportId)
         await this.fetchReport()
         await this.$router.push('/forum')
       } catch (error) {
         console.log(error)
       }
     },
-    async deleteReport(reportId) {
+    async ignoreReportPost(postID) {
       try {
         const { data } = await axios({
-          url: `${baseUrlServiceAdmin}/reports/${reportId}/` , //! Masih belum dimasukin URL-nya
-          method: 'DELETE',
+          url: `${baseUrl}/cms/forumreport/posts/ignore/${postID}/`,
+          method: 'GET',
           headers: {
             access_token: localStorage.access_token
           }
         })
-        console.log(data, '<- Ini data Delete Report')
+        console.log(data, '<- Ini data Ignore Report')
+        await this.fetchReport()
+        await this.$router.push('/forum')
       } catch (error) {
         console.log(error)
       }
     },
-    
+    async ignoreReportComment(commentID) {
+      try {
+        const { data } = await axios({
+          url: `${baseUrl}/cms//forumreport/comments/ignore/${commentID}/`,
+          method: 'GET',
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data, '<- Ini data Ignore Report')
+        await this.fetchReport()
+        await this.$router.push('/forum')
+      } catch (error) {
+        console.log(error)
+      }
+    }
   },
-  created(){
+  created() {
     this.fetchReport()
   }
 }
@@ -97,27 +100,23 @@ export default {
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
       >
         <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Forum Report Page</h1>
-        <!-- <div>
-          <button
-            type="button"
-            class="btn btn-success"
-            @click.prevent="$router.push(`/report-add`)"
-          >
-            + Add New Report
-          </button>
-        </div> -->
+      </div>
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+      >
+        <h5 class="text-center fw-bold  mx-1 mx-md-4 ">Forum Report Post</h5>
       </div>
       <div class="row">
         <div class="col-12">
           <table class="table align-middle">
-            <!-- Untuk Table Jobs -->
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Note</th>
-                <th scope="col">Post ID</th>
-                <th scope="col">Comment ID</th>
-                <th scope="col">Reporter ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Images</th>
+                <th scope="col">Caption</th>
+                <th scope="col">Author Name</th>
+                <th scope="col">Author Email</th>
                 <th scope="col">Action</th>
                 <th scope="col col-span"></th>
                 <th scope="col" width="50px"></th>
@@ -125,17 +124,83 @@ export default {
             </thead>
 
             <tbody>
-              <tr v-for="(data, index) in dataReports">
+              <tr v-for="(data, index) in dataPostReports" :key="index">
                 <td>{{ ++index }}</td>
-                <td>{{ data.note }}</td>
-                <td>{{ data.postId }}</td>
-                <td>{{ data.commentId }}</td>
-                <td>{{ data.ReporterId }}</td>
-                <td v-show="data.postId && !data.commentId ">
-                  <button @click.prevent="deletePost(data.postId,data.id)" type="button" class="btn btn-warning">Delete Post</button>
+                <td>{{ data.title }}</td>
+                <td>{{ data.images }}</td>
+                <td>{{ data.caption }}</td>
+                <td>{{ data.author.name }}</td>
+                <td>{{ data.author.email }}</td>
+                <td>
+                  <button
+                    @click.prevent="deletePost(data._id)"
+                    type="button"
+                    class="btn btn-danger"
+                  >
+                    Delete Post
+                  </button>
                 </td>
-                <td v-show="data.commentId">
-                  <button @click.prevent="deleteComment(data.commentId,data.id)" type="button" class="btn btn-danger">Delete Comment</button>
+                <td>
+                  <button
+                    @click.prevent="ignoreReportPost(data._id)"
+                    type="button"
+                    class="btn btn-warning"
+                  >
+                    Ignore Report
+                  </button>
+                </td>
+               
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+      >
+        <h5 class="text-center fw-bold  mx-1 mx-md-4 ">Forum Report Comments</h5>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th scope="col">No.</th>
+             
+                <th scope="col">Text</th>
+                <th scope="col">Author Name</th>
+                <th scope="col">Author Email</th>
+                <th scope="col">Action</th>
+                <th scope="col col-span"></th>
+                <th scope="col" width="50px"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="(data, index) in dataCommentReports" :key="index">
+                <td>{{ ++index }}</td>
+                <td>{{ data.text }}</td>
+           
+                <td>{{ data.author.name }}</td>
+                <td>{{ data.author.email }}</td>
+           
+                <td >
+                  <button
+                    @click.prevent="deleteComment(data._id)"
+                    type="button"
+                    class="btn btn-danger"
+                  >
+                    Delete Comment
+                  </button>
+                </td>
+                <td>
+                  <button
+                    @click.prevent="ignoreReportComment(data._id)"
+                    type="button"
+                    class="btn btn-warning"
+                  >
+                    Ignore Report
+                  </button>
                 </td>
               </tr>
             </tbody>

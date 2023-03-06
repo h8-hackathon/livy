@@ -1,30 +1,20 @@
 <script>
 import Navbar from '../components/Navbar.vue'
+import { mapActions, mapState } from 'pinia'
+import { useCounterStore } from '../stores/counter'
 
 export default {
   components: {
     Navbar
   },
   computed: {
-    admin: []
+    ...mapState(useCounterStore, ['admins'])
   },
   methods: {
-    async fetchAdmin() {
-      console.log('Fetch data - admin page')
-      try {
-        const { data } = await axios({
-          // url: this.baseUrl + '/admin', //! Masih belum dimasukin URL-nya
-          method: 'GET',
-          headers: {
-            access_token: localStorage.access_token
-          }
-        })
-        console.log(data, '<- Ini data Admin')
-        this.admin = data
-      } catch (error) {
-        console.log(error)
-      }
-    }
+    ...mapActions(useCounterStore, ['fetchAdmin', 'deleteAdmin'])
+  },
+  created() {
+    this.fetchAdmin()
   }
 }
 </script>
@@ -54,6 +44,7 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
+                <th scope="col">Admin ID</th>
                 <th scope="col">Image</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
@@ -66,23 +57,30 @@ export default {
             </thead>
 
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Image URL</td>
-                <td>Admin 1</td>
-                <td>Admin1@mail.com</td>
-                <td>M</td>
-                <td>01/01/2000</td>
-                <td>Super Admin</td>
+              <tr v-for="(el, index) in admins" :key="index">
+                <td>{{ ++index }}</td>
+                <td>{{ el.id }}</td>
+                <td>{{ el.image }}</td>
+                <td>{{ el.name }}</td>
+                <td>{{ el.email }}</td>
+                <td>{{ el.gender }}</td>
+                <td>{{ el.dob }}</td>
+                <td>{{ el.role }}</td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-warning text-light"
-                    @click.prevent="$router.push(`/admin-add`)"
+                    @click.prevent="$router.push(`/admin-edit/${el.id}`)"
                   >
                     Edit
                   </button>
-                  <button type="button" class="btn btn-danger m-2">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-danger m-2"
+                    @click.prevent="deleteAdmin(el.id)"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             </tbody>

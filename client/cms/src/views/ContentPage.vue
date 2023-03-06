@@ -7,11 +7,19 @@ export default {
   components: {
     Navbar
   },
+  data() {
+    return {
+      title: '',
+      caption: '',
+      contentType: '',
+      linkURL: ''
+    }
+  },
   computed: {
     ...mapState(useCounterStore, ['posts'])
   },
   methods: {
-    ...mapActions(useCounterStore, ['fetchPosts'])
+    ...mapActions(useCounterStore, ['fetchPosts', 'addPosts', 'deletePosts'])
   },
   created() {
     this.fetchPosts()
@@ -67,12 +75,18 @@ export default {
                 <td>
                   <button
                     type="button"
-                    class="btn btn-warning text-light mb-2"
-                    @click.prevent="$router.push(`/content-add`)"
+                    class="btn btn-warning text-light"
+                    @click.prevent="$router.push(`/content-edit/${el.id}`)"
                   >
                     Edit
                   </button>
-                  <button type="button" class="btn btn-danger">Delete</button>
+                  <button
+                    type="button"
+                    class="btn btn-danger m-2"
+                    @click.prevent="deletePosts(el.id)"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             </tbody>

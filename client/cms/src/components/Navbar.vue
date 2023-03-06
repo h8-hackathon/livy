@@ -25,7 +25,8 @@ export default {
   <nav class="navbar navbar-expand-lg navbar-red navbar-dark">
     <div class="wrapper"></div>
     <div class="container-fluid all-show">
-      <a class="navbar-brand" href="#">LIVY ADMIN CMS <i class="fa fa-codepen"></i></a>
+      <img src="../assets/Logo.png" style="height: 60px; margin-right: 30px;"/>
+      <a class="navbar-brand" href="#" @click.prevent="$router.push(`/`)">LIVY Admin <i class="fa fa-codepen"></i></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -127,7 +128,7 @@ body {
   width: 100%;
   position: absolute;
   height: 100%;
-  background-color: #000;
+  background-color: #5a9f63;
   clip-path: polygon(81% 0, 100% 0, 100% 50%, 100% 100%, 71% 100%);
   transition: 1s all;
 }
@@ -148,7 +149,7 @@ body {
 }
 
 .navbar-red {
-  background-color: #3d569c;
+  background-color: #1fa173;
   color: #fff;
 }
 

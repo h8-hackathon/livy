@@ -160,6 +160,7 @@ module.exports = class UserController {
                 "dob": user.dob
             } })
         } catch (err) {
+            console.log(err);
             next(err)
         }
     }

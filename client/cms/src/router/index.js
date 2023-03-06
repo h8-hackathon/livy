@@ -3,8 +3,10 @@ import LoginPage from '../views/LoginPage.vue'
 import HomePage from '../views/HomePage.vue'
 import AdminPage from '../views/AdminPage.vue'
 import AddAdmin from '../views/Add-Admin.vue'
+import EditAdmin from '../views/Edit-Admin.vue'
 import ContentPage from '../views/ContentPage.vue'
 import AddContent from '../views/Add-Content.vue'
+import EditContent from '../views/Edit-Content.vue'
 import ForumReportPage from '../views/ForumReport.vue'
 import AddForumReport from '../views/Add-Report.vue'
 import CounselorPage from '../views/CounselorSubmission.vue'
@@ -34,6 +36,11 @@ const router = createRouter({
       component: AddAdmin
     },
     {
+      path: '/admin-edit/:id',
+      name: 'admin-edit',
+      component: EditAdmin
+    },
+    {
       path: '/content',
       name: 'content',
       component: ContentPage
@@ -42,6 +49,11 @@ const router = createRouter({
       path: '/content-add',
       name: 'content-add',
       component: AddContent
+    },
+    {
+      path: '/content-edit/:id',
+      name: 'content-edit',
+      component: EditContent
     },
     {
       path: '/forum',
