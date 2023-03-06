@@ -8,5 +8,5 @@ router.post('/availability', CounselorController.editAvailability)
 router.get('/availability', CounselorController.getCounselorAvailability)
 
 router.put('/', CounselorController.updateCounselorProfile)
-
+router.get('/chats', CounselorController.getChatList)
 module.exports = router

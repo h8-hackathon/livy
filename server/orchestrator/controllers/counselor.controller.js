@@ -59,7 +59,7 @@ class CounselorController {
       next(error)
     }
   }
-  
+
   static async updateCounselorProfile(req, res, next) {
     try {
       const { access_token } = req.headers
@@ -76,6 +76,19 @@ class CounselorController {
     }
   }
 
+  static async getChatList(req, res, next) {
+    try {
+      const { access_token } = req.headers
+      const {
+        data: { id },
+      } = await userAPI.post('/verify', { access_token })
+      const { data } = await scheduleAPI.get(`/schedules/counselor/${id}`)
+      const filteredData = data.filter((el) => el.status === 'paid')
+      res.status(200).json(filteredData)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = CounselorController
