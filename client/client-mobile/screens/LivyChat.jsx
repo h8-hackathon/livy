@@ -4,107 +4,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Button, Text, useTheme } from 'react-native-paper'
 import { TextInput } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useUser } from '../hooks/useUser'
+import Login from './Login'
+import { useEffect, useState } from 'react'
 
-const me = 123
-
-const messages = [
-  {
-    id: 1,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'Hello',
-    sender: 123,
-  },
-  {
-    id: 2,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'Hi',
-    sender: 456,
-  },
-  {
-    id: 3,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'How are you?',
-    sender: 123,
-  },
-  {
-    id: 4,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'I am fine, thank you',
-    sender: 456,
-  },
-  {
-    id: 5,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'What about you?',
-    sender: 123,
-  },
-  {
-    id: 6,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'I am also fine',
-    sender: 456,
-  },
-  {
-    id: 7,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'Where are you from?',
-    sender: 123,
-  },
-  {
-    id: 8,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'I am from India',
-    sender: 456,
-  },
-  {
-    id: 9,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'How is the weather there?',
-    sender: 123,
-  },
-  {
-    id: 10,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'It is very hot here',
-    sender: 456,
-  },
-  {
-    id: 11,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'Where do you live?',
-    sender: 123,
-  },
-  {
-    id: 12,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'I live in New York',
-    sender: 456,
-  },
-  {
-    id: 13,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'Have you been to India?',
-    sender: 123,
-  },
-  {
-    id: 14,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'No, I have never been to India',
-    sender: 456,
-  },
-  {
-    id: 15,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'Would you like to visit India?',
-    sender: 123,
-  },
-  {
-    id: 16,
-    time: '2021-05-01T12:00:00.000Z',
-    message: 'Yes, I would like to visit India',
-    sender: 456,
-  },
-]
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { api } from '../helpers/axios'
 
 const MeChatBubble = ({ message }) => {
   return (
@@ -125,7 +30,7 @@ const MeChatBubble = ({ message }) => {
             maxWidth: '70%',
           }}
         >
-          <Text style={{ color: '#fff' }}>{message.message}</Text>
+          <Text style={{ color: '#fff' }}>{message.text}</Text>
         </View>
 
         <Text style={{ paddingHorizontal: 5, fontSize: 10 }}>
@@ -158,7 +63,7 @@ const OtherChatBubble = ({ message }) => {
             maxWidth: '70%',
           }}
         >
-          <Text>{message.message}</Text>
+          <Text>{message.text}</Text>
         </View>
 
         <Text style={{ paddingHorizontal: 5, fontSize: 10 }}>
@@ -203,22 +108,83 @@ const Profile = () => {
   )
 }
 export default function LivyChat() {
+  const { user } = useUser()
+  const [messages, setMessages] = useState([])
+  const [text, setText] = useState('')
+
+  const sendMessage = () => {
+    if (text) {
+      AsyncStorage.getItem('access_token').then((access_token) => {
+        setMessages([
+          ...messages,
+          {
+            text,
+            time: new Date().toISOString(),
+            sender: { UserId: user.id, name: user.name },
+          },
+        ])
+        if (access_token) {
+          api
+            .post(
+              '/client/chatLivy',
+              { text },
+              {
+                headers: {
+                  access_token,
+                },
+              }
+            )
+            .then((res) => {
+              const { message } = res.data
+              setMessages([
+                ...messages,
+                { text: message, time: new Date().toISOString() },
+              ])
+              setText('')
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }
+      })
+    }
+  }
+  useEffect(() => {
+    AsyncStorage.getItem('access_token').then((access_token) => {
+      if (access_token) {
+        api
+          .get('/client/chatLivy', {
+            headers: {
+              access_token,
+            },
+          })
+          .then((res) => {
+            console.log(res.data)
+            setMessages(res.data.chats)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+    })
+  }, [])
+  if (!user) return <Login />
   return (
     <View style={{ flex: 1 }}>
-      <SafeAreaView style={{backgroundColor: '#eee'}} />
+      <SafeAreaView style={{ backgroundColor: '#eee' }} />
       <View style={{ flex: 1 }}>
         <Profile />
         <FlatList
           style={{ flex: 1, padding: 10 }}
           data={messages}
           renderItem={({ item }) => {
-            if (item.sender === me) {
+            if (item.sender?.UserId === user.id) {
               return <MeChatBubble message={item} />
             } else {
               return <OtherChatBubble message={item} />
             }
           }}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, i) => i}
         />
       </View>
       <View
@@ -243,6 +209,9 @@ export default function LivyChat() {
             placeholder='Your message...'
             style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 10 }}
             underlineColor='transparent'
+            onChangeText={setText}
+            onSubmitEditing={sendMessage}
+            value={text}
           />
           <TouchableOpacity
             style={{
@@ -252,6 +221,7 @@ export default function LivyChat() {
               alignContent: 'center',
               width: 60,
             }}
+            onPress={sendMessage}
           >
             <Ionicons name='ios-paper-plane-outline' size={20} />
           </TouchableOpacity>
