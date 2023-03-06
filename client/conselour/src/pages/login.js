@@ -1,3 +1,4 @@
+import { useCounselor } from '@/hooks/useCounselor';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import Image from 'next/image';
@@ -6,6 +7,7 @@ import { useEffect } from 'react';
 
 export default function Login() {
   const router = useRouter()
+  const { counselor } = useCounselor()
 
   const login = useGoogleLogin({
     onSuccess: async codeResponse => {
@@ -29,6 +31,8 @@ export default function Login() {
     const token = localStorage?.getItem('access_token')
     if (token) router.replace('/')
   })
+
+  if (counselor) return null
 
   return (
     <div className='flex justify-center text-sm items-center w-screen h-[90vh] '>
