@@ -121,7 +121,7 @@ import { useCounselor } from '@/hooks/useCounselor'
 import MainLayout from '@/layouts/Main'
 
 export default function Home() {
-  const { counselor, setCounselor } = useCounselor()
+  const { counselor } = useCounselor()
 
   if (!counselor) return null
 

@@ -24,7 +24,6 @@ export default function Chats() {
     socket.auth = { access_token: localStorage.access_token }
 
     api.get(`/counselor/chats/${UserId}`).then(({ data }) => {
-      console.log(data)
       setUser(data.user)
       setMessages(data.chats)
     }).catch(() => { })
@@ -50,7 +49,6 @@ export default function Chats() {
       })
     }
 
-    console.log('aku')
     return () => {
       socket.disconnect()
       setSocket(null)

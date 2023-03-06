@@ -4,7 +4,7 @@ import { useCounselor } from '@/hooks/useCounselor'
 import MainLayout from '@/layouts/Main'
 
 export default function Activity() {
-  const { counselor, setCounselor } = useCounselor()
+  const { counselor } = useCounselor()
 
   if (!counselor) return null
 

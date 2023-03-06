@@ -1,6 +1,6 @@
 import { useChat } from "@/hooks/useChat";
 import { useCounselor } from "@/hooks/useCounselor";
-import { createRef, forwardRef, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import ChatItem from "./ChatItem";
 
 export default function Content() {
