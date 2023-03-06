@@ -74,6 +74,7 @@ next(error)    }
     try {
       let { postId } = req.params;
       let postById = await ForumPost.findOne({ _id: new ObjectId(postId) });
+      console.log(postById);
       if (postById) {
         res.status(200).json(postById);
       } else {
