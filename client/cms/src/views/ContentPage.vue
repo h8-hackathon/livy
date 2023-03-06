@@ -56,12 +56,12 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Title</th>
-                <th scope="col">Caption</th>
-                <th scope="col">Type</th>
-                <th scope="col">Link URL</th>
+                <th scope="col" width="200px">Title</th>
+                <th scope="col" width="550px">Caption</th>
+                <th scope="col" width="150px">Type</th>
+                <th scope="col" width="150px">Link URL</th>
                 <th scope="col">Action</th>
-                <th scope="col" width="50px"></th>
+                <th scope="col"></th>
               </tr>
             </thead>
 
@@ -71,18 +71,20 @@ export default {
                 <td>{{ el.title }}</td>
                 <td>{{ el.caption }}</td>
                 <td>{{ el.type }}</td>
-                <td>{{ el.url }}</td>
+                <td>
+                  <a :href="el.url" target="_blank">Link URL</a>
+                </td>
                 <td>
                   <button
                     type="button"
-                    class="btn btn-warning text-light"
+                    class="btn btn-warning text-light m-1"
                     @click.prevent="$router.push(`/content-edit/${el.id}`)"
                   >
                     Edit
                   </button>
                   <button
                     type="button"
-                    class="btn btn-danger m-2"
+                    class="btn btn-danger m-1"
                     @click.prevent="deletePosts(el.id)"
                   >
                     Delete
