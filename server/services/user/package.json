@@ -18,6 +18,7 @@
     "express": "^4.18.2",
     "google-auth-library": "^8.7.0",
     "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.1.0",
     "pg": "^8.9.0",
     "sequelize": "^6.29.0"
   },

@@ -1,6 +1,7 @@
 module.exports = function errorHandler(err, req, res, next) {
     let status;
     let message;
+    console.log(err)
   
     switch (err.name) {
       case "SequelizeValidationError":
