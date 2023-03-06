@@ -6,6 +6,8 @@ import { Text } from 'react-native-paper'
 import MainTab from './MainTab'
 import Login from '../screens/Login'
 import LivyChat from '../screens/LivyChat'
+import StartThread from '../screens/StartThread'
+import ForumPostDetail from '../screens/ForumPostDetail'
 
 const Stack = createStackNavigator()
 
@@ -33,6 +35,20 @@ export default function MainStack() {
           headerShown: false,
         }}
         component={LivyChat}
+      />
+      <Stack.Screen
+        name='StartThread'
+        options={{
+          headerShown: false,
+        }}
+        component={StartThread}
+      />
+      <Stack.Screen
+        name='ForumPostDetail'
+        options={{
+          headerShown: false,
+        }}
+        component={ForumPostDetail}
       />
     </Stack.Navigator>
   )

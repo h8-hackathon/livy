@@ -7,6 +7,7 @@ import { Button } from 'react-native-paper'
 import axios from 'axios'
 import { useUser } from '../hooks/useUser'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { api } from '../helpers/axios'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -24,8 +25,8 @@ export default function Login() {
   useEffect(() => {
     if (response?.type === 'success') {
       console.log(response.authentication.accessToken)
-      axios
-        .post('https://api.livy.chat/login', {
+      api
+        .post('/login', {
           token: response.authentication.accessToken,
           role: 'user',
         })

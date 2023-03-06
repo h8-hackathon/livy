@@ -1,13 +1,16 @@
 import { Ionicons } from '@expo/vector-icons'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { View, Image, ScrollView } from 'react-native'
+import { View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { Button, Divider, Text, TextInput, useTheme } from 'react-native-paper'
 import think from '../assets/pages/Thinking.png'
+import { api } from '../helpers/axios'
+import { useNavigation } from '@react-navigation/native'
 
-const ForumCard = ({ title, description, author, date }) => {
+const ForumCard = ({ title, caption, author, date, helpful, id }) => {
+  const navigation = useNavigation()
   return (
-    <View
+    <TouchableOpacity
       style={{
         backgroundColor: '#fefefe',
         paddingVertical: 12,
@@ -28,20 +31,20 @@ const ForumCard = ({ title, description, author, date }) => {
 
         elevation: 4,
       }}
+      onPress={() => navigation.navigate('ForumPostDetail', { postId: id })}
     >
-      
       <View>
         <Text style={{ color: '#555', fontSize: 18, fontWeight: 'bold' }}>
           {title}
         </Text>
         <Text style={{ color: '#555', fontSize: 10, color: '#444' }}>
-          {date.toLocaleDateString([], {
+          {new Date(date).toLocaleDateString('id-ID', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
           })}
         </Text>
-        <Text style={{ color: '#555', fontSize: 12 }}>{description}</Text>
+        <Text style={{ color: '#555', fontSize: 12 }}>{caption}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <Ionicons
@@ -49,16 +52,16 @@ const ForumCard = ({ title, description, author, date }) => {
               size={10}
               color={useTheme().colors.secondary}
             />
-            <Text style={{ fontSize: 10 }}>20</Text>
+            <Text style={{ fontSize: 10 }}>{helpful}</Text>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+          {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <Ionicons
               name='chatbox-ellipses-outline'
               size={10}
               color={useTheme().colors.primary}
             />
             <Text style={{ fontSize: 10 }}>5</Text>
-          </View>
+          </View> */}
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <Ionicons
               name='person-outline'
@@ -69,41 +72,49 @@ const ForumCard = ({ title, description, author, date }) => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
-const forumList = [
-  {
-    title: 'How to get a job',
-    description: 'I need help getting a job',
-    author: 'Livy',
-    date: new Date(),
-  },
-  {
-    title: 'How to get a job',
-    description: 'I need help getting a job',
-    author: 'Livy',
-    date: new Date(),
-  },
-  {
-    title: 'How to get a job',
-    description: 'I need help getting a job',
-    author: 'Livy',
-    date: new Date(),
-  },
-  {
-    title: 'How to get a job',
-    description: 'I need help getting a job',
-    author: 'Livy',
-    date: new Date(),
-  },
-]
+// const forumList = [
+//   {
+//     title: 'How to get a job',
+//     description: 'I need help getting a job',
+//     author: 'Livy',
+//     date: new Date(),
+//   },
+//   {
+//     title: 'How to get a job',
+//     description: 'I need help getting a job',
+//     author: 'Livy',
+//     date: new Date(),
+//   },
+//   {
+//     title: 'How to get a job',
+//     description: 'I need help getting a job',
+//     author: 'Livy',
+//     date: new Date(),
+//   },
+//   {
+//     title: 'How to get a job',
+//     description: 'I need help getting a job',
+//     author: 'Livy',
+//     date: new Date(),
+//   },
+// ]
 
 export default function Forum() {
+  const [forumList, setForumList] = useState([])
+  const navigate = useNavigation()
+
+  navigate.addListener('focus', () => {
+    api.get('/client/forum/top').then((res) => {
+      setForumList(res.data)
+    })
+  })
   return (
     <View style={{ paddingHorizontal: 20 }}>
-      <SafeAreaView style={{ backgroundColor: '#fff'}} />
+      <SafeAreaView style={{ backgroundColor: '#fff' }} />
       <View style={{ paddingVertical: 10, paddingBottom: 24 }}>
         <View
           style={{
@@ -146,6 +157,9 @@ export default function Forum() {
               icon='book'
               textColor='#444'
               buttonColor={useTheme().colors.secondary}
+              onPress={() => {
+                navigate.navigate('StartThread')
+              }}
             >
               Start a Thread
             </Button>
@@ -173,9 +187,11 @@ export default function Forum() {
             <ForumCard
               key={i}
               title={item.title}
-              description={item.description}
+              caption={item.caption}
               author={item.author}
-              date={item.date}
+              date={item.createdAt}
+              helpful={item.helpful.length}
+              id={item._id}
             />
           ))}
         </View>
