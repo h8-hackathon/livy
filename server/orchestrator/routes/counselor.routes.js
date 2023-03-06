@@ -9,4 +9,5 @@ router.get('/availability', CounselorController.getCounselorAvailability)
 
 router.put('/', CounselorController.updateCounselorProfile)
 router.get('/chats', CounselorController.getChatList)
+router.get('/chats/:userId', CounselorController.getChatByUserId)
 module.exports = router

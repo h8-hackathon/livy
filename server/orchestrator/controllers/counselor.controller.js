@@ -1,4 +1,4 @@
-const { userAPI, scheduleAPI } = require('../helpers/axios')
+const { userAPI, scheduleAPI, chatAPI } = require('../helpers/axios')
 
 class CounselorController {
   static async getStatusCounselor(req, res, next) {
@@ -86,6 +86,38 @@ class CounselorController {
       const filteredData = data.filter((el) => el.status === 'paid')
       res.status(200).json(filteredData)
     } catch (error) {
+      next(error)
+    }
+  }
+
+  static async getChat(req, res, next) {
+    try {
+      const { access_token } = req.headers
+      const {
+        data: { id },
+      } = await userAPI.post('/verify', { access_token })
+      const { data } = await scheduleAPI.get(`/schedules/counselor/${id}`)
+      const filteredData = data.filter((el) => el.status === 'paid')
+      res.status(200).json(filteredData)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async getChatByUserId(req, res, next) {
+    try {
+      const { access_token } = req.headers
+      const { userId } = req.params
+      const {
+        data: { id: counselorId },
+      } = await userAPI.post('/verify', { access_token })
+      const { data } = await chatAPI.get(
+        `/history/${userId}/${counselorId}`
+      )
+      const { data: user } = await userAPI.get(`/users/${userId}`)
+      res.status(200).json({ ...data, user })
+    } catch (error) {
+      console.log(error)
       next(error)
     }
   }
