@@ -6,6 +6,19 @@ import { useState } from "react";
 export default function ProfileActivity() {
   const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
   const [available, setAvailable] = useState([])
+
+  const addDays = () => {
+    setAvailable(
+      ...available,
+      {
+        dayOfWeek: 'senin',
+        slots: {
+          startTime: '',
+          endTime: '',
+        }
+      }
+    )
+  }
   return (
     <div className="px-8 p-10 overflow-auto h-full">
       <div className="flex gap-8 items-center">
@@ -25,17 +38,19 @@ export default function ProfileActivity() {
         </div>
         <div className="space-y-2 w-3/4 mx-auto">
           <p className="text-primary">Availibity</p>
-          <div className="space-x-2 w-full">
-            <select name="gender" className="capitalize px-3 py-2 text-xs outline-none" type="text" >
-              {days.map((day) =>
-                <option value={day}>{day}</option>
-              )}
-            </select>
-            <input type="time" className="px-3 py-2 text-xs  outline-none" />
-            <span>to</span>
-            <input type="time" className="px-3 py-2 text-xs  outline-none" />
-          </div>
-          <button type="button" className="bg-slate-200 px-3 py-2 rounded text-xs">
+          {available.map(() => {
+            <div className="space-x-2 w-full">
+              <select name="gender" className="capitalize px-3 py-2 text-xs outline-none" type="text" >
+                {days.map((day) =>
+                  <option value={day}>{day}</option>
+                )}
+              </select>
+              <input type="time" className="px-3 py-2 text-xs  outline-none" />
+              <span>to</span>
+              <input type="time" className="px-3 py-2 text-xs  outline-none" />
+            </div>
+          })}
+          <button onClick={addDays} type="button" className="bg-slate-200 px-3 py-2 rounded text-xs">
             + Add Days
           </button>
         </div>

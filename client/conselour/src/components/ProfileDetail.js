@@ -68,7 +68,7 @@ export default function ProfileDetail() {
             {
               edit ?
                 <select name="gender" onChange={inputHandler} value={form.gender} className="px-3 py-2 text-xs w-3/4 outline-none" type="text" >
-                  <option value="" disabled>Not set</option>
+                  <option value={null} disabled>Not set</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
