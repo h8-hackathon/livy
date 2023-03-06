@@ -2,7 +2,6 @@ import { api } from "@/helpers";
 import { useCounselor } from "@/hooks/useCounselor";
 import { mdiArrowLeft, mdiPower } from "@mdi/js";
 import Icon from "@mdi/react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -54,7 +53,7 @@ export default function ProfileDetail() {
       </div>
       <div className="mt-10">
         <div className="relative mx-auto w-48 h-48 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-          <Image loader={() => counselor.image} alt="profile-img" src={counselor.image} height={200} width={200} />
+          <img alt="profile-img" src={counselor.image} height={200} width={200} />
         </div>
         <form onSubmit={submit} className="space-y-8 mt-10 text-center">
           <div className="space-x-2">
