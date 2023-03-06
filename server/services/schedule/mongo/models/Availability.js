@@ -22,7 +22,7 @@ const { getDb } = require('../config/db')
 /**
  * @type {import('mongodb').Collection<AvailabilitySchema>}
  */
-const Availability = getDb().collection('Availability')
+const Availability = getDb().collection('Availabilities')
 
 module.exports = Availability
 

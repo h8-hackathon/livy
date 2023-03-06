@@ -206,12 +206,12 @@ const migrateAvailability = async () => {
                     required: ['startTime', 'endTime'],
                     properties: {
                       startTime: {
-                        bsonType: 'date',
-                        description: 'startTime must be a date and is required',
+                        bsonType: 'string',
+                        description: 'startTime must be a string and is required',
                       },
                       endTime: {
-                        bsonType: 'date',
-                        description: 'endTime must be a date and is required',
+                        bsonType: 'string',
+                        description: 'endTime must be a string and is required',
                       },
                     },
                   },

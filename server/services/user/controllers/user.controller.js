@@ -1,5 +1,6 @@
 const { Op } = require('sequelize')
 const { User, CounselorSubmission } = require('../models')
+const { Availability } = require('../mongo')
 const jwt = require('jsonwebtoken')
 const axios = require('axios')
 module.exports = class UserController {
@@ -164,7 +165,7 @@ module.exports = class UserController {
         },
         process.env.JWT_SECRET || 'mamamuda'
       )
-      if (user.role === 'counselor') {
+      if (req.body.role === 'counselor') {
         await CounselorSubmission.findOrCreate({
           where: { UserId: user.id },
           defaults: {
@@ -172,6 +173,21 @@ module.exports = class UserController {
             submission: '',
           },
         })
+
+        const isExist = await Availability.findOne({
+          UserId: user.id,
+        })
+
+        console.log(isExist)
+
+        if (!isExist) {
+          const response = await Availability.insertOne({
+            UserId: user.id,
+            availability: [],
+          })
+
+          console.log(response)
+        }
       }
 
       res.status(status).json({
@@ -256,14 +272,16 @@ module.exports = class UserController {
     }
   }
   static async putCounselorIdSubmissions(req, res, next) {
+    console.log(req.params.counselorId)
     try {
       await CounselorSubmission.update(
         { ...req.body },
-        { where: { id: req.params.id } }
+        { where: { UserId: req.params.counselorId } }
       )
 
       res.status(200).json({ message: 'successfuly updated' })
     } catch (error) {
+        console.log(error)
       next(error)
     }
   }
