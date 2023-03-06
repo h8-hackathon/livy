@@ -27,8 +27,8 @@ export default function Sidebar() {
         </div>
       </div>
       <div className="overflow-auto scroll-smooth">
-        {schedules && schedules.map((item) =>
-          <Card item={item} />
+        {schedules && schedules.map((item, index) =>
+          <Card key={index} item={item} />
         )}
       </div>
     </>
