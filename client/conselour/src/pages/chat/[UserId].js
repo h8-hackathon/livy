@@ -126,6 +126,9 @@ export default function Home() {
   if (!counselor) return null
 
   return (
-    <MainLayout children={<Chats />} side={<Sidebar />} />
+    <MainLayout >
+      <Sidebar />
+      <Chats />
+    </MainLayout>
   )
 }

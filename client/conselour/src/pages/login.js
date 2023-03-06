@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 export default function Login() {
   const router = useRouter()
-  const { counselor } = useCounselor()
+  const { counselor, setCounselor } = useCounselor()
 
   const login = useGoogleLogin({
     onSuccess: async codeResponse => {
@@ -20,11 +20,10 @@ export default function Login() {
         )
 
         localStorage.setItem('access_token', res.data.access_token)
-        
+
         const submission = await api.get('/counselor/status')
-        
-        console.log(submission)
-        if (res.status === 201) return router.push('/profile')
+        setCounselor(res.data.user)
+        if (submission.data.status === 'pending') return router.push('/pending')
         router.push('/')
       } catch (error) {
         console.log(error)
@@ -34,8 +33,8 @@ export default function Login() {
 
   useEffect(() => {
     const token = localStorage?.getItem('access_token')
-    if (token) router.replace('/')
-  })
+    if (token) router.push('/')
+  }, [])
 
   if (counselor) return null
 

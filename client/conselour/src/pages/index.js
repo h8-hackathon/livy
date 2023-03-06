@@ -9,6 +9,9 @@ export default function Home() {
   if (!counselor) return null
 
   return (
-    <MainLayout children={<EmptyChat />} side={<Sidebar />} />
+    <MainLayout>
+      <Sidebar />
+      <EmptyChat />
+    </MainLayout>
   )
 }

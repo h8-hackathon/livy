@@ -9,6 +9,9 @@ export default function Activity() {
   if (!counselor) return null
 
   return (
-    <MainLayout side={<ProfileActivity />} children={<EmptyChat />} />
+    <MainLayout >
+      <ProfileActivity />
+      <EmptyChat />
+    </MainLayout>
   )
 }

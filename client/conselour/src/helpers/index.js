@@ -33,8 +33,9 @@ const verifyUser = async () => {
   if (access_token) {
     const response = await api.post('/verify', { access_token })
     const submission = await api.get('/counselor/status')
-    if(submission.data.status === 'pending') return null
-    return response.data
+    if (submission.data.status === 'pending') return null
+    const user = { ...response.data, submission: submission.data }
+    return user
   }
 
   throw new Error()

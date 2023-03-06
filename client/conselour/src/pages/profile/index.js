@@ -12,6 +12,9 @@ export default function Profile() {
   if (!counselor) return null
 
   return (
-    <MainLayout side={<ProfileDetail />} children={<EmptyChat />} />
+    <MainLayout >
+      <ProfileDetail />
+      <EmptyChat />
+    </MainLayout>
   )
 }
