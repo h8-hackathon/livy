@@ -12,10 +12,10 @@ export default function MainLayout({ children, side }) {
       <main>
         <div className='flex max-h-screen h-screen w-full text-sm overflow-hidden '>
           <div className='w-2/6 flex flex-col bg-green-50 h-screen  '>
-            {side}
+            {children[0]}
           </div>
           <div className="w-4/6 flex flex-col h-screen">
-            {children}
+            {children[1]}
           </div>
         </div>
       </main>
