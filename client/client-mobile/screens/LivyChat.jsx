@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { api } from '../helpers/axios'
+import { useNavigation } from '@react-navigation/native'
 
 const MeChatBubble = ({ message }) => {
   return (
@@ -111,6 +112,7 @@ export default function LivyChat() {
   const { user } = useUser()
   const [messages, setMessages] = useState([])
   const [text, setText] = useState('')
+  const navigation = useNavigation()
 
   const sendMessage = () => {
     if (text) {
@@ -155,7 +157,9 @@ export default function LivyChat() {
       })
     }
   }
-  useEffect(() => {
+
+ 
+  const fetchMessages = () => {
     AsyncStorage.getItem('access_token').then((access_token) => {
       if (access_token) {
         api
@@ -173,7 +177,13 @@ export default function LivyChat() {
           })
       }
     })
-  }, [])
+  }
+
+  navigation.addListener('focus', () => {
+    fetchMessages()
+  })
+
+  
   if (!user) return <Login />
   return (
     <View style={{ flex: 1 }}>
