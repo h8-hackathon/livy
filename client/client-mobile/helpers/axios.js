@@ -1,7 +1,7 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 export const api = axios.create({
-  baseURL: 'https://api.livy.chat',
+  baseURL: 'https://dev-api.livy.chat',
 })
 
 api.interceptors.request.use(async (config) => {

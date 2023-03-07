@@ -14,10 +14,13 @@ import { useNavigation } from '@react-navigation/native'
 import { api } from '../helpers/axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const ScheduleCard = () => {
+const ScheduleCard = ({ Counselor, session, status }) => {
+  const navigation = useNavigation()
   return (
     <TouchableOpacity
-      onPress={() => {}}
+      onPress={() => {
+        navigation.navigate('LivyChat', { Counselor })
+      }}
       style={{
         padding: 15,
         backgroundColor: 'white',
@@ -29,7 +32,7 @@ const ScheduleCard = () => {
       }}
     >
       <Image
-        source={{ uri: 'https://picsum.photos/800/450' }}
+        source={{ uri: Counselor.image || 'https://picsum.photos/800/450' }}
         style={{
           flex: 2,
           borderRadius: 10,
@@ -38,12 +41,19 @@ const ScheduleCard = () => {
       <View style={{ flex: 5, justifyContent: 'space-around' }}>
         <View>
           <Text style={{ fontWeight: '800', fontSize: 12.5 }}>
-            Rabu 7 Agustus 2022 || Pukul 19.00 WIB
+            {new Date(session).toLocaleString('id-ID', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+            })}
           </Text>
-          <Text style={{ fontSize: 11.5, color: 'gray' }}>Nama Konselor</Text>
-          <Text style={{ fontSize: 11, color: 'red' }}>
-            Menunggu pembayaran
+          <Text style={{ fontSize: 11.5, color: 'gray' }}>
+            {Counselor.name}
           </Text>
+          <Text style={{ fontSize: 11, color: 'red' }}>{status}</Text>
         </View>
 
         <View style={{ alignItems: 'flex-end' }}>
@@ -106,6 +116,10 @@ export default function Schedule() {
       fetchSchedule()
       fetchCounselors()
     }
+    return () => {
+      setSchedule([])
+      setcounselors([])
+    }
   }, [focus])
   return (
     <ScrollView
@@ -116,9 +130,10 @@ export default function Schedule() {
       }}
     >
       <SafeAreaView />
-      <ScheduleCard />
-      <ScheduleCard />
-      <ScheduleCard />
+      {schedule.map((item, i) => {
+        return <ScheduleCard key={i} {...item} />
+      })}
+
       {counselors.map((counselor) => {
         return (
           <TouchableOpacity

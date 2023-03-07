@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useUser } from '../hooks/useUser'
 import Login from './Login'
 import { useEffect, useState } from 'react'
-
+import socketClient from 'socket.io-client'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { api } from '../helpers/axios'
 import { useNavigation } from '@react-navigation/native'
@@ -78,7 +78,7 @@ const OtherChatBubble = ({ message }) => {
   )
 }
 
-const Profile = () => {
+const Profile = ({ name }) => {
   return (
     <View
       style={{
@@ -98,7 +98,7 @@ const Profile = () => {
         }}
       ></View>
       <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-        <Text>Livy</Text>
+        <Text>{name}</Text>
         {/* <Ionicons
           name='ios-checkmark-circle'
           size={15}
@@ -108,14 +108,17 @@ const Profile = () => {
     </View>
   )
 }
-export default function LivyChat() {
+export default function LivyChat(props) {
   const { user } = useUser()
+  const [socket, setSocket] = useState(null)
   const [messages, setMessages] = useState([])
   const [text, setText] = useState('')
+  const [focus, setFocus] = useState(false)
+  const counselor = props.route.params?.Counselor
   const navigation = useNavigation()
 
   const sendMessage = () => {
-    if (text) {
+    if (text && !counselor?.id) {
       AsyncStorage.getItem('access_token').then((access_token) => {
         setMessages([
           ...messages,
@@ -156,40 +159,83 @@ export default function LivyChat() {
         }
       })
     }
+
+    if (socket && text) {
+      socket.emit('message', `${counselor?.id}-${user.id}`, {
+        text,
+        sender: {
+          UserId: user.id,
+          name: user.name,
+        },
+      })
+      setText('')
+    }
   }
 
- 
   const fetchMessages = () => {
-    AsyncStorage.getItem('access_token').then((access_token) => {
-      if (access_token) {
-        api
-          .get('/client/chatLivy', {
-            headers: {
-              access_token,
-            },
-          })
-          .then((res) => {
-            console.log(res.data)
-            setMessages(res.data.chats)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      }
-    })
+    api
+      .get('/client/chatLivy')
+      .then((res) => {
+        console.log(res.data)
+        setMessages(res.data.chats)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   navigation.addListener('focus', () => {
-    fetchMessages()
+    setFocus(true)
   })
 
-  
+  navigation.addListener('blur', () => {
+    setFocus(false)
+  })
+
+  useEffect(() => {
+    console.log(user, counselor?.id, focus)
+    if (user && counselor?.id && focus) {
+      const socket = socketClient('https://dev-api.livy.chat')
+      socket.auth = { access_token: user.access_token }
+      setSocket(socket)
+
+      socket.on('connect', () => {
+        console.log('connected')
+        socket.emit('join', `${counselor?.id}-${user.id}`, (error) => {
+          if (!error) {
+            // ini kalo roomnya ada / sesuai schedule
+            // setJoined(true)
+            return
+          }
+
+          // error bentuknya string
+          console.error(error)
+        })
+        socket.on('message', (data) => {
+          console.log(data)
+          data.time = new Date()
+          setMessages((messages) => [...messages, data])
+          // setLastIndex(messages.length)
+        })
+      })
+    } else {
+      fetchMessages()
+    }
+
+    return () => {
+      if (socket) {
+        socket.disconnect()
+        setSocket(null)
+      }
+    }
+  }, [user, counselor, focus])
+
   if (!user) return <Login />
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={{ backgroundColor: '#eee' }} />
       <View style={{ flex: 1 }}>
-        <Profile />
+        <Profile name={counselor?.name || 'Livy'} />
         <FlatList
           style={{ flex: 1, padding: 10 }}
           data={messages}
