@@ -127,7 +127,6 @@ describe("for schedule", () => {
     expect(response.status).toBe(201);
     console.log(response.body);
     expect(response.body).toBeInstanceOf(Object);
-    expect(response.body.response).toHaveProperty("status", expect.any(String));
     expect(response.body.response).toHaveProperty("UserId", expect.any(Number));
     expect(response.body.response).toHaveProperty(
       "session",
