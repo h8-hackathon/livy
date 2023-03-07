@@ -70,7 +70,9 @@ export default {
             <tbody>
               <tr v-for="(el, index) in counselors" :key="index">
                 <td>{{ ++index }}</td>
-                <td>{{ el.User.image }}</td>
+                <td>
+                  <img :src="el.User.image" alt="Counselor's Image" width="150" height="150" />
+                </td>
                 <td>{{ el.status }}</td>
                 <td>{{ el.submissions }}</td>
                 <td>{{ el.User.name }}</td>
@@ -80,14 +82,14 @@ export default {
                 <td>
                   <button
                     type="button"
-                    class="btn btn-success text-light"
-                    @click.prevent="handleAcceptCounselor(el.id)"
+                    class="btn btn-success text-light m-1"
+                    @click.prevent="handleAcceptCounselor(el.UserId)"
                   >
                     Accept
                   </button>
                   <button
                     type="button"
-                    class="btn btn-danger m-2"
+                    class="btn btn-danger m-1"
                     @click.prevent="handleRejectCounselor(el.id)"
                   >
                     Delete/Reject

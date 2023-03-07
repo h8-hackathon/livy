@@ -5,7 +5,8 @@ import Swal from 'sweetalert2'
 export const useCounterStore = defineStore('counter', {
   state: () => ({
     // baseUrl: 'http://localhost:4002/',
-    baseUrl: 'https://api.livy.chat/',
+    baseUrl: 'https://f34f-114-124-247-157.ngrok.io/',
+    // baseUrl: 'https://api.livy.chat/',
     admins: [],
     adminByID: {},
     reports: [],
@@ -233,13 +234,13 @@ export const useCounterStore = defineStore('counter', {
 
     async updateStatusCounselor(status, id) {
       try {
-        const { data } = await axios({
+        await axios({
           method: 'PATCH',
           url: this.baseUrl + `cms/counselor/${id}`,
           headers: {
             access_token: localStorage.access_token
           },
-          body: { status }
+          data: {status}
         })
         this.fetchCounselors()
 
