@@ -12,6 +12,6 @@ router.put('/counselor/:counselorId/availability', SchedulesController.updateCou
 router.delete('/counselor/:counselorId/availability', SchedulesController.deleteCounselorAvailability)
 
 router.get('/user/:userId', SchedulesController.getSchedulesByUserId) // pg
-router.patch('/paid/:external_id', SchedulesController.paid)
+router.patch('/paid/:scheduleId', SchedulesController.paid)
 
 module.exports = router

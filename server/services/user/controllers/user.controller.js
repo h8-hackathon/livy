@@ -61,6 +61,7 @@ module.exports = class UserController {
         try {
             const response = await User.findAll(options)
             if (response.length < 1) throw { name: 'NotFound' }
+            console.log(response)
             res.status(200).json(response)
         } catch (error) {
             next(error)
@@ -119,7 +120,7 @@ module.exports = class UserController {
                         role: req.body.role,
                     },
                 })
-                if (!user) throw { name: 'InvalidCredentials' }
+                if(!user && (user.role !== 'admin' || user.role  !== 'superadmin')) throw { name: 'InvalidCredentials' }
                 else {
                     const access_token = jwt.sign(
                         {
@@ -265,17 +266,24 @@ module.exports = class UserController {
         }
     }
     static async putCounselorIdSubmissions(req, res, next) {
-        console.log(req.params.counselorId)
-
-            await CounselorSubmission.update(
-                { ...req.body },
-                { where: { UserId: req.params.counselorId } }
-            )
-
-            res.status(200).json({ message: 'successfuly updated' })
+        console.log(req.body)
+        console.log(req.params)
+            try {
+                // await User.update({ ...req.body }, { where: { id: req.params.id } })
+                await CounselorSubmission.update(
+                    { ...req.body },
+                    { where: { UserId: req.params.counselorId } }
+                )
+                    
+                res.status(200).json({ message: 'successfuly updated' })
+            } catch (error) {
+                console.log(err)
+                next(error)
+            }
 
     }
     static async postUsersAdmin(req, res, next) {
+        console.log(req.body)
         try {
             const response = await User.create({
                 ...req.body,

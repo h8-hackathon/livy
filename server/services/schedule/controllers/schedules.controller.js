@@ -68,26 +68,31 @@ class SchedulesController {
         where: { UserId: CounselorId },
       })
 
-      // GET PAYMENT INVOICE
-      const invoice = await Xendit.getXenditInvoice({
-        external_id: `invoice_${user.id}_${CounselorId}_${time}`,
-        amount: cs?.rate || 50000,
-        payer_email: user.email,
-        description: `invoice for ${user.name}`,
-      })
-
-      console.log(invoice)
-      const response = await Schedule.create({
+      const schedule = await Schedule.create({
         status: 'unpaid',
         UserId: userId,
         session: time,
         CounselorId,
         note,
-        paymentUrl: invoice.invoice_url,
-        expPaymentUrl: invoice.expiry_date,
+       /*  paymentUrl: invoice.invoice_url,
+        expPaymentUrl: invoice.expiry_date, */
       })
 
-      res.status(201).json({ response })
+      // GET PAYMENT INVOICE
+      const invoice = await Xendit.getXenditInvoice({
+        external_id: 'invoice-'+schedule.id+"-"+Math.random(),
+        amount: cs?.rate || 50000,
+        payer_email: user.email,
+        description: `invoice for ${user.name}`,
+      })
+      // console.log(invoice, '=============================================================')
+      const response = await Schedule.update({
+         paymentUrl: invoice.invoice_url,
+        expPaymentUrl: invoice.expiry_date,
+      },{
+        where: {id:schedule.id}
+      })
+      res.status(201).json({ paymentUrl:invoice.invoice_url })
     } catch (error) {
       console.log(error, '<<<<<<<<<<<<<')
       next(error)
@@ -95,12 +100,12 @@ class SchedulesController {
   }
 
   static async paid(req, res, next) {
-    const { external_id } = req.params
+    const { scheduleId } = req.params
+    console.log(scheduleId, '========================================================')
     try {
-      const [, UserId, CounselorId, session] = external_id.split('_')
       await Schedule.update(
         { status: 'paid' },
-        { where: { UserId, CounselorId, session } }
+        { where: { id:scheduleId } }
       )
       res.status(200).json({ message: 'update successfully' })
     } catch (err) {
