@@ -56,6 +56,23 @@ Query:
 }
 ```
 
+### `POST /verify`
+- Mendapatkan info user
+
+#### Response:
+200 OK:
+```json
+{
+  "name": "string",
+  "email": "string",
+  "gender": "string",
+  "dob": "Date",
+  "image": "string",
+  "role": "string", // (superadmin | admin | user | counselor)
+  "helpfull": "number",
+}
+```
+
 
 
 ### `POST /users`

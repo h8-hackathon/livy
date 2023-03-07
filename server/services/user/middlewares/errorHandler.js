@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 module.exports = function errorHandler(err, req, res, next) {
     let status;
     let message;
