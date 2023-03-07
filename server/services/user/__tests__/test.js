@@ -8,7 +8,7 @@ beforeAll(async () => {
     await User.create({
       id:999,
       name: 'ilias',
-      email: 'ilias@mail.com',
+      email: 'ilias@test.com',
       gender: 'M',
       dob:'2023-03-07T01:19:32.622Z',
       image: 'string image url testing purpose',
@@ -77,7 +77,7 @@ describe('Succes Case For Users Service', () => {
     const response = await request(app).post('/users/test').send({
       payload:{
         id: '114434339297979854205',
-        email: 'gilang@test.com',
+        email: 'ilias@test.com',
         verified_email: true,
         name: 'testing purpose',
         given_name: 'Gilang',
