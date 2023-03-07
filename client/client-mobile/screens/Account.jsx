@@ -120,24 +120,18 @@ export default function Account(props) {
           </View>
         </View>
         <View style={styles.tile}>
-          <View style={styles.ratingContainer}>
-            <Ionicons
-              style={{ padding: 10 }}
-              name="location"
-              size={15}
-              color="#FFD700"
-            />
                <Button
                 onPress={() => {
                   AsyncStorage.removeItem("access_token");
-                  setUser(null);
+                  setUser(null)
                 }}
+                style={styles.logoutPart}
                 mode="outlined"
-                style={{marginVertical:15}}
+                icon="power-standby"
               >
                 Logout
+              
               </Button>
-          </View>
         </View>
         
       </View>
@@ -170,6 +164,18 @@ const styles = StyleSheet.create({
     marginVertical: 1,
     elevation: .3,
     flexDirection: "row",
+  },
+  logoutPart: {
+    borderRadius: 15,
+    backgroundColor: "#fff",
+    marginHorizontal: 10,
+    marginVertical: 1,
+    elevation: .3,
+    flexDirection: "row",
+    // marginHorizontal : 20,
+    display:'flex',
+    justifyContent : 'center',
+    alignItems : 'center'
   },
   imageContainer: {
     padding: 20,
