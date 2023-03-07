@@ -115,7 +115,7 @@ describe("for schedule", () => {
   });
 
   // post schedule by user id 200
-  it.only("Successfully post schedule by user id", async () => {
+  it("Successfully post schedule by user id", async () => {
     let userId = 1;
     let CounselorId = 2;
     let time = new Date();
@@ -134,10 +134,40 @@ describe("for schedule", () => {
     expect(response.body.response).toHaveProperty(
       "paymentUrl",
       expect.any(String)
-    );
+      );
     expect(response.body.response).toHaveProperty(
       "expPaymentUrl",
       expect.any(String)
     );
   });
+
+  // post schedule by user id 500
+  it("Failed post schedule by user id because invalid user id", async () => {
+    let userId = 1000; //!
+    let CounselorId = 2;
+    let time = new Date();
+    let note = 'add schedule'
+    const response = await request(app)
+    .post("/schedules/user/" + userId)
+    .send({ CounselorId, time, note });
+    expect(response.status).toBe(500);
+    // console.log(response.body);
+    expect(response.body).toHaveProperty("message", 'Internal Server Error');
+  });
+
+  // post schedule by user id 500
+  it("Failed post schedule by user id because invalid counselor id", async () => {
+    let userId = 1; //!
+    let CounselorId = 'abc';
+    let time = new Date();
+    let note = 'add schedule'
+    const response = await request(app)
+    .post("/schedules/user/" + userId)
+    .send({ CounselorId, time, note });
+    expect(response.status).toBe(500);
+    // console.log(response.body);
+    expect(response.body).toHaveProperty("message", 'Internal Server Error');
+  });
+
+
 });
