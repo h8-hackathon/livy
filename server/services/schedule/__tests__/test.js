@@ -10,6 +10,7 @@ const request = require("supertest");
 const app = require("../app");
 const { connect, Chat } = require("../mongo");
 
+let counselorToBeDeleted
 beforeAll(async () => {
   try {
     await User.create({
@@ -220,9 +221,10 @@ describe("for schedule", () => {
   it("Suceess get availability", async () => {
     let counselorId = 1
     const response = await request(app)
-      .get("/schedules/counselor/" + counselorId + "/availability")
+    .get("/schedules/counselor/" + counselorId + "/availability")
     expect(response.status).toBe(200);
     // console.log(response.body);
+    counselorToBeDeleted = response.body._id.toString();
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("_id", expect.any(String));
     expect(response.body).toHaveProperty("UserId", expect.any(Number));
@@ -254,7 +256,7 @@ describe("for schedule", () => {
   });
 
 // success update availability
-it.only("Suceess update availability", async () => {
+it("Suceess update availability", async () => {
   let counselorId = 2;
   let userId = 1;
   const response = await request(app)
@@ -276,6 +278,25 @@ it.only("Suceess update availability", async () => {
   expect(response.status).toBe(200);
   // console.log(response.body);
   expect(response.body).toHaveProperty("message", "successfully updated");
+});
+
+// success delete availability
+it("Suceess delete availability", async () => {
+  let counselorId = counselorToBeDeleted
+  const response = await request(app)
+    .delete("/schedules/counselor/" + counselorId + "/availability")
+  expect(response.status).toBe(200);
+  // console.log(response.body);
+  expect(response.body).toHaveProperty("message", "successfully deleted");
+});
+
+// failed delete availability
+it("failed delete availability", async () => {
+  let counselorId = 'abcd'
+  const response = await request(app)
+    .delete("/schedules/counselor/" + counselorId + "/availability")
+  expect(response.status).toBe(500);
+
 });
 
 
