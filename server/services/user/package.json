@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./bin/www",
     "start": "node bin/www",
-    "test": "jest --forceExit --detectOpenHandles",
+    "test": "jest --forceExit --detectOpenHandles --coverage",
     "reset-test": "sequelize db:drop --env test && sequelize db:create --env test && sequelize db:migrate --env test"
   },
   "keywords": [],

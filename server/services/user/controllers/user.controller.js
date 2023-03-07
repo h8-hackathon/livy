@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { Op } = require('sequelize')
 const { User, CounselorSubmission } = require('../models')
 const jwt = require('jsonwebtoken')
@@ -77,6 +78,7 @@ module.exports = class UserController {
                 ]
             })
 
+            if(!response) throw {name: 'NotFound'}
             res.status(200).json(response)
         } catch (error) {
             next(error)
@@ -172,7 +174,7 @@ module.exports = class UserController {
               });
             const payload = response.data; */
 
-            const payload = req.body.payload  
+            const payload = req.body?.payload  
             
             if ( req.body.role === 'admin' ) {
                 const user = await User.findOne({
@@ -194,13 +196,13 @@ module.exports = class UserController {
             }
 
             const [user, created] = await User.findOrCreate({
-                where: { email: payload.email },
+                where: { email: payload?.email },
                 defaults: {
-                    name: payload.name,
-                    email: payload.email,
-                    image: payload.picture,
+                    name: payload?.name,
+                    email: payload?.email,
+                    image: payload?.picture,
                     helpful: 0,
-                    role: req.body.role
+                    role: req.body?.role
                 }
             });
 

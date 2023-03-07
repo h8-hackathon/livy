@@ -165,96 +165,24 @@ describe('Succes Case For Users Service', () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('message','successfuly deleted');
   });
-
 });
-/* 
+
 describe('Failed Case For Users Service', () => {
-  // counselors 200
-  it('Successfully read counselors', async () => {
-    const response = await request(app).get('/counselors');
-    expect(response.status).toBe(200);
-    expect(response.body[0]).toHaveProperty('id', expect.any(Number));
-    expect(response.body[0]).toHaveProperty('status', expect.any(String));
-  });
-
-  // patch counselors 200
-  it('Successfully patch counselor by id', async () => {
-    const response = await request(app).patch(`/counselors/2`);
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Success updated status counselor');
-  });
-
-  // patch counselors id 404
-  it('id not found', async () => {
-    const response = await request(app).patch(`/counselors/1000`);
+  it('Failed Get User By Id (because Id is Not Found)', async () => {
+    const response = await request(app).get('/users/999999');
     expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('error', 'not found');
+    expect(response.body).toHaveProperty('message','Data not found')
   });
-
-  // delete counselors id 200
-  it('Successfully delete counselors by id', async () => {
-    const response = await request(app).delete(`/counselors/2`);
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Success deleted status counselor');
+  it('Failed Post user (because body is empty)', async () => {
+    const response = await request(app).post('/users/test').send(null);
+    access_token = response.body.access_token
+    expect(response.status).toBe(500);
+    expect(response.body).toHaveProperty('message', "Internal Server Error");
   });
-
-  // delete counselors id 404
-  it('Unsuccess delete counselors by id, because id not found', async () => {
-    const response = await request(app).delete(`/counselors/10`);
-    console.log(response);
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('error', 'not found');
+  it('Failed Delete User (because id is not found)', async () => {
+    const response = await request(app).delete('/users/test');
+    access_token = response.body.access_token
+    expect(response.status).toBe(500);
+    expect(response.body).toHaveProperty('message', "Internal Server Error");
   });
 });
-
-describe('for report', () => {
-  // reports 200
-  it('Successfully read reports', async () => {
-    const response = await request(app).get('/reports');
-    expect(response.status).toBe(200);
-    expect(response.body[0]).toHaveProperty('id', expect.any(Number));
-    expect(response.body[0]).toHaveProperty('postId', expect.any(String));
-    expect(response.body[0]).toHaveProperty('commentId', expect.any(String));
-    expect(response.body[0]).toHaveProperty('ReporterId', expect.any(Number));
-  });
-
-  // post report 201
-  it('Successfully post reports', async () => {
-    const response = await request(app).post('/reports').send({
-      id: 6,
-      postId: 'string',
-      commentId: 'string',
-      ReporterId: 1,
-      note: 'uneducated',
-    });
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('message', 'Success report');
-  });
-
-  // post 400 ReportedId is required
-  it('ReportedId is required', async () => {
-    const response = await request(app).post('/reports').send({
-      id: 6,
-      postId: 'string',
-      commentId: 'string',
-      note: 'uneducated',
-    });
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error', 'ReportedId is required');
-  });
-
-  // delete reports id 200
-  it('Successfully delete reports by id', async () => {
-    const response = await request(app).delete(`/reports/1`);
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Success deleted');
-  });
-
-  // delete reports id 404
-  it('Unsuccess delete reports by id, because id not found', async () => {
-    const response = await request(app).delete(`/reports/10`);
-    console.log(response);
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('error', 'not found');
-  });
-}); */
