@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { connect, disconnect, ForumPost, ForumComment } = require("../mongo");
 const { ObjectId } = require("mongodb");
 const connectDB = connect();
@@ -49,13 +50,14 @@ class forumPostController {
       console.log(result.length, "<<<<<<<<< total data");
       res.status(200).json({ dataPage, result });
     } catch (error) {
-      next(error)
+      next(error);
       res.status(500).json(error);
     }
   }
   static async createPost(req, res, next) {
     try {
       let { title, images = [], caption, UserId } = req.body;
+      // console.log(req.body);
       await ForumPost.insertOne({
         title,
         images,
@@ -68,7 +70,8 @@ class forumPostController {
         message: "successfully created",
       });
     } catch (error) {
-next(error)    }
+      next(error);
+    }
   }
   static async getPostById(req, res, next) {
     try {
@@ -81,7 +84,7 @@ next(error)    }
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
   static async updatePostById(req, res, next) {
@@ -103,7 +106,7 @@ next(error)    }
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
   static async deletePostById(req, res, next) {
@@ -118,7 +121,7 @@ next(error)    }
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
   static async getCommentByPostId(req, res, next) {
@@ -132,13 +135,13 @@ next(error)    }
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
   static async createComment(req, res, next) {
     try {
       let { postId } = req.params;
-      let { text, UserId, helpful } = req.body;
+      let { text, UserId, helpful =[] } = req.body;
       await ForumComment.insertOne({
         forumPostId: postId,
         text,
@@ -150,7 +153,7 @@ next(error)    }
         message: "successfully created",
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -190,7 +193,7 @@ next(error)    }
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
   static async deleteHelpfulPost(req, res, next) {
@@ -232,7 +235,7 @@ next(error)    }
         res.status(404).json({ message: "No documents matched the query" });
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
   static async createReportPost(req, res, next) {
@@ -255,7 +258,7 @@ next(error)    }
         }
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }

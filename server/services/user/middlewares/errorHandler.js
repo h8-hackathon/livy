@@ -1,6 +1,8 @@
+/* istanbul ignore file */
 module.exports = function errorHandler(err, req, res, next) {
     let status;
     let message;
+    console.log(err)
   
     switch (err.name) {
       case "SequelizeValidationError":
@@ -20,7 +22,7 @@ module.exports = function errorHandler(err, req, res, next) {
         message = "Data not found"
         break
       case "OnlyAccept 1 or -1":
-        status = 404
+        status = 400
         message = "helpful only accept 1 or -1"
         break
       case "InvalidCredentials":

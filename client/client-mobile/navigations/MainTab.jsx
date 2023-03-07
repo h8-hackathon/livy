@@ -9,14 +9,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
 import Login from '../screens/Login'
 import Forum from '../screens/Forum'
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Chat!</Text>
-    </View>
-  )
-}
+import ScheduleScreen from '../screens/Schedule'
+import LivyChat from '../screens/LivyChat'
+import AccountScreen from '../screens/Account'
 
 const Tab = createBottomTabNavigator()
 
@@ -32,6 +27,7 @@ export default function MainTab() {
         },
         tabBarItemStyle: { paddingVertical: 8 },
         tabBarHideOnKeyboard: true,
+        headerShown: false,
       }}
     >
       <Tab.Screen
@@ -46,6 +42,7 @@ export default function MainTab() {
           ),
           tabBarShowLabel: true,
           tabBarHideOnKeyboard: true,
+          // headerShown: false,
         }}
         component={HomeScreen}
       />
@@ -61,7 +58,7 @@ export default function MainTab() {
           ),
           tabBarShowLabel: true,
         }}
-        component={HomeScreen}
+        component={ScheduleScreen}
       />
       <Tab.Screen
         name='Chat'
@@ -108,7 +105,7 @@ export default function MainTab() {
             )
           },
         }}
-        component={SettingsScreen}
+        component={LivyChat}
       />
       <Tab.Screen
         name='Forum'
@@ -133,12 +130,11 @@ export default function MainTab() {
               name={focused ? `ios-person-circle` : `ios-person-circle-outline`}
               size={size}
               color={color}
-              onPress={() => navigation.navigate('Login')}
             />
           ),
           tabBarShowLabel: true,
         }}
-        component={HomeScreen}
+        component={AccountScreen}
       />
     </Tab.Navigator>
   )

@@ -5,10 +5,14 @@ import { useEffect, useState } from 'react'
 import talk from '../assets/pages/talk.png'
 import { Button } from 'react-native-paper'
 import axios from 'axios'
+import { useUser } from '../hooks/useUser'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { api } from '../helpers/axios'
 
 WebBrowser.maybeCompleteAuthSession()
 
 export default function Login() {
+  const { setUser } = useUser()
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId:
       '662974395385-up045riubc0lga2i5f8mpg086tv3kmh1.apps.googleusercontent.com',
@@ -21,13 +25,15 @@ export default function Login() {
   useEffect(() => {
     if (response?.type === 'success') {
       console.log(response.authentication.accessToken)
-      axios
-        .post('https://api.livy.chat/login', {
+      api
+        .post('/login', {
           token: response.authentication.accessToken,
           role: 'user',
         })
-        .then(({ data }) => {
+        .then(async ({ data }) => {
           console.log(data)
+          setUser(data.user)
+          await AsyncStorage.setItem('access_token', data.access_token)
         })
         .catch((err) => {
           console.log(err)
