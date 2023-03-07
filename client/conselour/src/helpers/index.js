@@ -1,6 +1,6 @@
 const axios = require("axios")
 
-const api = axios.create({ baseURL: 'https://dev-api.livy.chat' })
+const api = axios.create({ baseURL: 'https://f34f-114-124-247-157.ngrok.io/' })
 
 api.interceptors.request.use(
   (config) => {
