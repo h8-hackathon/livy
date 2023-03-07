@@ -8,7 +8,7 @@ class Controller {
       const { userId } = req.params
 
       let chat = await Chat.findOne({
-        UserId: +userId
+        UserId: +userId,
       })
 
       if (!chat) throw { message: 'Not Found' }
@@ -26,10 +26,11 @@ class Controller {
 
       let chats = await Chat.findOne({
         UserId: +userId,
-        CounselorId: +counselorId
+        CounselorId: +counselorId,
       })
 
-      if (!chats) chats = { UserId: +userId, chats: [], CounselorId: counselorId }
+      if (!chats)
+        chats = { UserId: +userId, chats: [], CounselorId: counselorId }
 
       chats.chats.push({ ...chat, time: new Date() })
 
@@ -39,7 +40,7 @@ class Controller {
         { upsert: true }
       )
 
-      res.status(200).json({ message: "successfully created" })
+      res.status(200).json(chats)
     } catch (error) {
       next(error)
     }
@@ -52,7 +53,7 @@ class Controller {
 
       let chats = await Chat.findOne({
         UserId: +userId,
-        CounselorId: null
+        CounselorId: null,
       })
 
       if (!chats) {
@@ -70,7 +71,26 @@ class Controller {
         { upsert: true }
       )
 
-      res.status(200).json({ message: response.choices[0].text, })
+      res.status(200).json({ message: response.choices[0].text })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async getChatWithLivy(req, res, next) {
+    try {
+      const { userId } = req.params
+
+      let chats = await Chat.findOne({
+        UserId: +userId,
+        CounselorId: null,
+      })
+
+      if (!chats) {
+        chats = { UserId: +userId, chats: [], CounselorId: null }
+      }
+
+      res.status(200).json(chats)
     } catch (error) {
       next(error)
     }
@@ -79,12 +99,32 @@ class Controller {
   static async listChatByCounselor(req, res, next) {
     try {
       const { counselorId } = req.params
-      
+
       let chat = await Chat.find({
-        CounselorId: +counselorId
+        CounselorId: +counselorId,
       }).toArray()
 
       if (!chat) throw { message: 'Not Found' }
+
+      res.status(200).json(chat)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async listChatByUserAndCounselor(req, res, next) {
+    try {
+      const { counselorId, userId } = req.params
+
+      let chat = await Chat.findOne({
+        CounselorId: +counselorId,
+        UserId: +userId,
+      })
+
+      if (!chat) {
+        res.json({ UserId: +userId, chats: [], CounselorId: +counselorId })
+        return
+      }
 
       res.status(200).json(chat)
     } catch (error) {

@@ -5,7 +5,8 @@ class AuthController {
     try {
       console.log(req.body)
       const response = await userAPI.post('/users', req.body)
-      res.status(200).json(response.data)
+
+      res.status(response.status).json(response.data)
     } catch (error) {
       // console.log(error)
       next(error)

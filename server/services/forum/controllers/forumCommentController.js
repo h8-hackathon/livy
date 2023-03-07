@@ -1,8 +1,8 @@
 const { connect, disconnect, ForumPost, ForumComment } = require('../mongo')
 const { ObjectId } = require('mongodb')
 const connectDB = connect()
-const { User, Report } = require('../models')
 const { sequelize } = require('../models')
+const { User, Report } = require('../models')
 class forumCommentController {
   static async updateComment(req, res) {
     try {
