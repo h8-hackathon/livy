@@ -132,7 +132,7 @@ export default function Account(props) {
                   AsyncStorage.removeItem("access_token");
                   setUser(null);
                 }}
-                mode="contained"
+                mode="outlined"
                 style={{marginVertical:15}}
               >
                 Logout
@@ -146,7 +146,7 @@ export default function Account(props) {
 }
 const styles = StyleSheet.create({
   card: {
-    paddingBottom: 15,
+    // paddingBottom: 10,
     borderRadius: 15,
     backgroundColor: "#fff",
     marginHorizontal: 10,
@@ -169,10 +169,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 1,
     elevation: .3,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     flexDirection: "row",
   },
   imageContainer: {
@@ -184,9 +180,11 @@ const styles = StyleSheet.create({
     borderRadius: 75,
   },
   textContainer: {
-    // paddingVertical: 10,
+    display:'flex',
+    paddingVertical: 10,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 20,
   },
   name: {
     fontSize: 16,
@@ -195,10 +193,7 @@ const styles = StyleSheet.create({
     maxWidth: Dimensions.get("window").width - 200,
     // flex: 1,
   },
-  rating: {
-    fontSize: 14,
-    color: "#aaa",
-  },
+ 
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
