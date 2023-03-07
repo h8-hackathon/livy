@@ -42,7 +42,19 @@ export default function Account(props) {
     <>
       <SafeAreaView />
       <View style={{ padding: 10 }}>
-        <Text>Account</Text>
+        <View style={styles.tile}>
+          <View style={styles.ratingContainer}>
+            <Ionicons
+              style={{ padding: 10 }}
+              name="person"
+              size={20}
+              color="#FFD700"
+            />
+            <Text style={{ padding: 10, fontSize:18, fontWeight:'600' }}>
+             {' '}Account
+            </Text>
+          </View>
+        </View>
         <View style={styles.card}>
           <View style={styles.imageContainer}>
             <Image
@@ -70,8 +82,8 @@ export default function Account(props) {
           <View style={styles.ratingContainer}>
             <Ionicons
               style={{ padding: 10 }}
-              name="location"
-              size={15}
+              name="person-add"
+              size={20}
               color="#FFD700"
             />
             <Text style={{ padding: 10 }}>
@@ -89,9 +101,10 @@ export default function Account(props) {
           <View style={styles.ratingContainer}>
             <Ionicons
               style={{ padding: 10 }}
-              name="location"
-              size={15}
+              name="heart"
+              size={20}
               color="#FFD700"
+              
             />
             <Text style={{ padding: 10 }}>
             {" "}
@@ -103,8 +116,8 @@ export default function Account(props) {
           <View style={styles.ratingContainer}>
             <Ionicons
               style={{ padding: 10 }}
-              name="location"
-              size={15}
+              name="calendar"
+              size={20}
               color="#FFD700"
             />
             <Text style={{ padding: 10 }}>
@@ -168,7 +181,7 @@ const styles = StyleSheet.create({
   logoutPart: {
     borderRadius: 15,
     backgroundColor: "#fff",
-    marginHorizontal: 10,
+    marginHorizontal: 5,
     marginVertical: 1,
     elevation: .3,
     flexDirection: "row",
