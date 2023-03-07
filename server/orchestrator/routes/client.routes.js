@@ -5,6 +5,7 @@ const router = Router()
 
 router.get('/home', ClientController.getHome)
 router.get('/counselors', ClientController.getAllCounselor)
+router.get('/counselors/:counselorId', ClientController.getCounselorByid)
 
 router.get('/schedule', ClientController.getSchedule) //!
 router.post('/schedule', ClientController.createSchedule) //!
