@@ -243,7 +243,7 @@ describe("for schedule", () => {
   });
 
   // failed get availability because invalid counselor id 
-  it.only("failed get availability", async () => {
+  it("failed get availability", async () => {
     let counselorId = 1000
     const response = await request(app)
       .get("/schedules/counselor/" + counselorId + "/availability")
@@ -252,6 +252,31 @@ describe("for schedule", () => {
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("message","No documents matched the query");
   });
+
+// success update availability
+it.only("Suceess update availability", async () => {
+  let counselorId = 2;
+  let userId = 1;
+  const response = await request(app)
+    .put("/schedules/counselor/" + counselorId + "/availability")
+    .send({
+      UserId: userId,
+      availability: [
+        {
+          dayOfWeek: "sunday",
+          slots: [
+            {
+              startTime: "20:00",
+              endTime: "23:00",
+            },
+          ],
+        },
+      ],
+    });
+  expect(response.status).toBe(200);
+  // console.log(response.body);
+  expect(response.body).toHaveProperty("message", "successfully updated");
+});
 
 
 });
