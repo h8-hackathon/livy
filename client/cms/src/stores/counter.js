@@ -9,6 +9,7 @@ export const useCounterStore = defineStore('counter', {
     // baseUrl: 'https://api.livy.chat/',
     admins: [],
     adminByID: {},
+    user: {},
     reports: [],
     posts: [],
     postByID: {},
@@ -47,11 +48,12 @@ export const useCounterStore = defineStore('counter', {
           }
         })
 
-        console.log(signinWithGoogle.data)
+        this.user = signinWithGoogle.data.user
         const access_token = signinWithGoogle.data.access_token
         console.log(access_token, '<- Ini access_token')
 
-        await localStorage.setItem('access_token', access_token)
+        localStorage.setItem('role', signinWithGoogle.data.user?.role)
+        localStorage.setItem('access_token', access_token)
 
         await this.router.push('/')
 
@@ -240,7 +242,7 @@ export const useCounterStore = defineStore('counter', {
           headers: {
             access_token: localStorage.access_token
           },
-          data: {status}
+          data: { status }
         })
         this.fetchCounselors()
 
@@ -427,7 +429,7 @@ export const useCounterStore = defineStore('counter', {
       console.log('Fetch data - report page')
       try {
         const { data } = await axios({
-          url: this.baseUrl + 'cms/forumreport', 
+          url: this.baseUrl + 'cms/forumreport',
           method: 'GET',
           headers: {
             access_token: localStorage.access_token
