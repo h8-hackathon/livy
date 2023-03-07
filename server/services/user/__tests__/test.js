@@ -198,6 +198,27 @@ describe('Succes Case For Users Service', () => {
     const response = await request(app).get('/submissions/'+counselorId);
     expect(response.status).toBe(200);
   });
+  it('Successfully Update Counselor Submission', async () => {
+    const response = await request(app).put('/counselor/'+counselorId+'/submissions').send({
+      status:'pending'
+    });
+    expect(response.status).toBe(200);
+  });
+  it('Successfully Add Admin', async () => {
+    const response = await request(app).post('/users/admin').send(
+      {
+        name: 'iliasadmin',
+        email: 'iliasadmin@test.com',
+        gender: 'M',
+        dob:'2023-03-07T01:19:32.622Z',
+        image: 'string image url testing purpose',
+        role: 'superadmin',
+        helpful: 20,
+      }
+    );
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('email', 'iliasadmin@test.com')
+  });
 });
 
 describe('Failed Case For Users Service', () => {
@@ -255,5 +276,20 @@ describe('Failed Case For Users Service', () => {
     });
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty('message', 'Invalid Token');
+  });
+  it('Failed Add admin', async () => {
+    const response = await request(app).post('/users/admin').send(
+      {
+        name: 'iliasadmin',
+        email: '',
+        gender: 'M',
+        dob:'2023-03-07T01:19:32.622Z',
+        image: 'string image url testing purpose',
+        role: 'superadmin',
+        helpful: 20,
+      }
+    );
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'input must be email')
   });
 });

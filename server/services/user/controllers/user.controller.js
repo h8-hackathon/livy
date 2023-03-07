@@ -266,17 +266,14 @@ module.exports = class UserController {
     }
     static async putCounselorIdSubmissions(req, res, next) {
         console.log(req.params.counselorId)
-        try {
+
             await CounselorSubmission.update(
                 { ...req.body },
                 { where: { UserId: req.params.counselorId } }
             )
 
             res.status(200).json({ message: 'successfuly updated' })
-        } catch (error) {
-            console.log(error)
-            next(error)
-        }
+
     }
     static async postUsersAdmin(req, res, next) {
         try {
