@@ -117,13 +117,20 @@
 
 import Chats from '@/components/Chats'
 import Sidebar from '@/components/Sidebar'
+import Spinner from '@/components/spinner'
 import { useCounselor } from '@/hooks/useCounselor'
 import MainLayout from '@/layouts/Main'
 
 export default function Home() {
   const { counselor } = useCounselor()
 
-  if (!counselor) return null
+  if (!counselor) {
+    return (
+      <div className="animate-ping flex h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    )
+  }
 
   return (
     <MainLayout >

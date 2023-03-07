@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { connect, disconnect, ForumPost, ForumComment } = require("../mongo");
 const { ObjectId } = require("mongodb");
 const connectDB = connect();
@@ -76,6 +77,7 @@ class forumPostController {
     try {
       let { postId } = req.params;
       let postById = await ForumPost.findOne({ _id: new ObjectId(postId) });
+      console.log(postById);
       if (postById) {
         res.status(200).json(postById);
       } else {

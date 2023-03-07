@@ -2,10 +2,15 @@
 import Swal from 'sweetalert2'
 
 export default {
+  data() {
+    return {
+      role: ''
+    }
+  },
   methods: {
     async logoutHandler() {
       console.log('Test handle log out')
-      await localStorage.clear()
+      localStorage.clear()
 
       await this.$router.push('/login')
 
@@ -17,6 +22,9 @@ export default {
         timer: 1800
       })
     }
+  },
+  created() {
+    this.role = localStorage.role
   }
 }
 </script>
@@ -24,76 +32,42 @@ export default {
 <template>
   <nav class="navbar navbar-expand-lg navbar-red navbar-dark">
     <div class="wrapper"></div>
-    <div class="container-fluid all-show">
-      <img src="../assets/Logo.png" style="height: 60px; margin-right: 30px;"/>
-      <a class="navbar-brand" href="#" @click.prevent="$router.push(`/`)">LIVY Admin <i class="fa fa-codepen"></i></a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+    <div class="container-md all-show d-flex ">
+      <img src="../assets/Logo.png" style="height: 60px; margin-right: 30px" />
+      <a class="navbar-brand" href="#" @click.prevent="$router.push(`/`)">Livy Admin</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="container-fluid d-flex justify-content-between">
+      <div class="container-fluid d-flex align-items-center  justify-content-between">
         <div>
-          <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6">
-        <img src="../image/Link-Link.png" width="75" class="d-inline-block me-2" alt="Link-Link"
-      /></a> -->
-          <div class="collapse navbar-collapse" id="navbarNav">
+          <div class=" collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a
-                  class="nav-link active"
-                  aria-current="page"
-                  href=""
-                  @click.prevent="$router.push(`/content`)"
-                  >Content</a
-                >
+                <a class="nav-link active" aria-current="page" href=""
+                  @click.prevent="$router.push(`/content`)"><b>Content</b></a>
               </li>
 
               <li class="nav-item">
-                <a
-                  class="nav-link active"
-                  aria-current="page"
-                  href=""
-                  @click.prevent="$router.push(`/counselor`)"
-                  >Counselor</a
-                >
+                <a class="nav-link active" aria-current="page" href=""
+                  @click.prevent="$router.push(`/counselor`)"><b>Counselor</b></a>
               </li>
 
               <li class="nav-item">
-                <a
-                  class="nav-link active"
-                  aria-current="page"
-                  href=""
-                  @click.prevent="$router.push(`/forum`)"
-                  >Forum Reports</a
-                >
+                <a class="nav-link active" aria-current="page" href="" @click.prevent="$router.push(`/forum`)"><b>Forum
+                    Reports</b></a>
               </li>
 
-              <li class="nav-item">
-                <a
-                  class="nav-link active"
-                  aria-current="page"
-                  href=""
-                  @click.prevent="$router.push(`/admin-list`)"
-                  >Admin List</a
-                >
+              <li v-if="role === 'superadmin'" class="nav-item">
+                <a class="nav-link active" aria-current="page" href=""
+                  @click.prevent="$router.push(`/admin-list`)"><b>Admin List</b></a>
               </li>
             </ul>
           </div>
         </div>
-        <div class="d-flex align-items-center">
-          <div class="px-4">
-            <h5>Hi, <span>Admin!</span></h5>
-          </div>
-          <div id="logout">
-            <button type="button" class="btn btn-danger" @click="logoutHandler">Log Out</button>
-          </div>
+        <div class="  d-flex align-items-center">
+          <h5 class="greet px-4">Hi, <span>Admin!</span></h5>
+          <button type="button" class="btn btn-danger btn-sm" @click="logoutHandler">Log Out</button>
         </div>
       </div>
     </div>
@@ -105,11 +79,20 @@ body {
   background-color: #eee;
 }
 
-.navbar-nav > li > a {
-  text-transform: uppercase;
-  font-size: 18px;
+.navbar-nav>li>a {
+  text-transform: capitalize;
+  font-size: 1rem;
+  font-weight: 300 !important;
   margin-right: 20px;
   color: #fff;
+}
+
+.greet {
+  text-transform: capitalize;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  color: #fff;
+  margin-top: 5px;
 }
 
 .navbar-toggler {
@@ -122,6 +105,7 @@ body {
 
 .nav-link {
   color: #fff !important;
+  font-size: 1rem !important;
 }
 
 .wrapper {
@@ -135,9 +119,8 @@ body {
 
 .navbar-brand {
   color: #fff;
-  font-family: 'Allerta Stencil', sans-serif;
-  margin-bottom: 4px;
-  font-size: 27px;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 .navbar-red:hover .wrapper {

@@ -281,6 +281,20 @@ class ClientController {
       next(error);
     }
   }
+  static async callback(req, res,next){
+    const {external_id} = req.body
+    const token = req.headers['x-callback-token']
+    console.log(req.body)
+    try {
+      if(process.env.NODE_ENV === 'production' && token !== process.env.CALLBACK_TOKEN ){  
+      throw {name: "InvalidToken"}
+      }
+      const response = await scheduleAPI.patch('/schedules/paid/'+external_id.split('-')[1])
+      res.status(200).json({'message':'Paid Succesfully'})
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = ClientController;
