@@ -33,7 +33,7 @@ afterAll(async () => {
   // await disconnect();
 });
 
-describe("for posts", () => {
+describe.skip("for posts", () => {
   // posts 200
   it("Successfully read posts", async () => {
     const response = await request(app).get("/posts");

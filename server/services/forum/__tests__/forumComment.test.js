@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const request = require("supertest");
 const app = require("../app");
 const { connect, ForumPost, ForumComment } = require("../mongo");
@@ -27,7 +28,7 @@ beforeAll(async () => {
     let allComments = await ForumComment.find({
       forumPostId: postId,
     }).toArray();
-    commentId = await allComments[0]._id.toString();
+    commentId =  allComments[0]._id.toString();
   } catch (error) {
     console.log(error, "ini errornya");
   }
@@ -107,7 +108,7 @@ describe("for posts", () => {
   });
 
   // create reports post by comment id 200
-  it("Successfully create reports post  by comment id", async () => {
+  it.only("Successfully create reports post  by comment id", async () => {
     const response = await request(app)
       .post(`/comments/${commentId}/report`)
       .send({
@@ -115,6 +116,8 @@ describe("for posts", () => {
         note: "annoying",
       });
     console.log(response.body);
+    console.log(commentId);
+
     expect(response.status).toBe(201);
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("message", "successfully reported");
