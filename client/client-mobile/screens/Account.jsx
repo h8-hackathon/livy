@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import {
   View,
+  Linking,
   Image,
   StyleSheet,
   TouchableOpacity,
@@ -147,6 +148,21 @@ export default function Account(props) {
             <Text style={{ padding: 10 }}>
             {" "}
             Version 1.0.0
+            </Text>
+          </View>
+        </View>
+        <View style={styles.tile}>
+          <View style={styles.ratingContainer}>
+            <Ionicons
+              style={{ padding: 10 }}
+              name="globe"
+              size={20}
+              color="#FFD700"
+              
+            />
+            <Text style={{ padding: 10 }}>
+            {" "}
+            More Info :  https://livy.chat
             </Text>
           </View>
         </View>
