@@ -195,7 +195,7 @@ export default function LivyChat(props) {
   useEffect(() => {
     console.log(user, counselor?.id, focus)
     if (user && counselor?.id && focus) {
-      const socket = socketClient('https://f34f-114-124-247-157.ngrok.io')
+      const socket = socketClient('https://api.livy.chat')
       socket.auth = { access_token: user.access_token }
       setSocket(socket)
 

@@ -6,6 +6,7 @@ import { Text, useTheme } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CounselorCard from '../components/CounselorCard'
 import { api } from '../helpers/axios'
+import getGreeting from '../helpers/greeting'
 import { useUser } from '../hooks/useUser'
 
 const ArticleCard = ({ title, date, image }) => {
@@ -275,7 +276,7 @@ export default function Home() {
                 color: '#fff',
               }}
             >
-              Selamat Pagi{user ? ` ${user.name}` : ''}!
+              {getGreeting()}{user ? ` ${user.name}` : ''}!
             </Text>
             <View
               style={{

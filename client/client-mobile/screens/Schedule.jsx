@@ -9,84 +9,147 @@ import {
   ScrollView,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, useTheme } from 'react-native-paper'
+import { Button, Divider, Text, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { api } from '../helpers/axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import CounselorCard from '../components/CounselorCard'
+import { Ionicons } from '@expo/vector-icons'
+import * as WebBrowser from 'expo-web-browser'
+import { useUser } from '../hooks/useUser'
 
-const ScheduleCard = ({ Counselor, session, status }) => {
+const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
   const navigation = useNavigation()
+  const pay = async () => {
+    try {
+      await WebBrowser.openAuthSessionAsync(paymentUrl)
+      navigation.navigate('Schedule')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate('LivyChat', { Counselor })
-      }}
+    <View
       style={{
-        padding: 15,
         backgroundColor: 'white',
         borderRadius: 20,
-        flexDirection: 'row',
-        height: 130,
         gap: 10,
         marginVertical: 5,
       }}
     >
-      <Image
-        source={{ uri: Counselor.image || 'https://picsum.photos/800/450' }}
+      <View
+        // onPress={() => {
+        //   navigation.navigate('LivyChat', { Counselor })
+        // }}
         style={{
-          flex: 2,
-          borderRadius: 10,
+          padding: 15,
+          backgroundColor: 'white',
+          borderRadius: 20,
+          flexDirection: 'row',
+          height: 130,
+          gap: 10,
+          marginVertical: 5,
         }}
-      />
-      <View style={{ flex: 5, justifyContent: 'space-around' }}>
-        <View>
-          <Text style={{ fontWeight: '800', fontSize: 12.5 }}>
+      >
+        <Image
+          source={{ uri: Counselor.image || 'https://picsum.photos/800/450' }}
+          style={{
+            flex: 2,
+            borderRadius: 10,
+          }}
+        />
+
+        <View style={{ flex: 5, justifyContent: 'flex-start', gap: 4 }}>
+          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
             {new Date(session).toLocaleString('id-ID', {
-              weekday: 'long',
-              year: 'numeric',
               month: 'long',
               day: 'numeric',
+              weekday: 'long',
+              year: 'numeric',
+            })}
+          </Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+            {new Date(session).toLocaleString('id-ID', {
               hour: 'numeric',
               minute: 'numeric',
+              timeStyle: 'full',
             })}
           </Text>
           <Text style={{ fontSize: 11.5, color: 'gray' }}>
             {Counselor.name}
           </Text>
-          <Text style={{ fontSize: 11, color: 'red' }}>{status}</Text>
-        </View>
 
-        <View style={{ alignItems: 'flex-end' }}>
-          <Pressable
+          <View
             style={{
+              backgroundColor:
+                status === 'unpaid'
+                  ? useTheme().colors.secondary
+                  : useTheme().colors.primary,
+
+              width: 60,
               alignItems: 'center',
               justifyContent: 'center',
-              paddingHorizontal: 16,
               borderRadius: 4,
-              elevation: 3,
-              backgroundColor: useTheme().colors.secondary,
             }}
-            onPress={() => {}}
           >
             <Text
               style={{
-                fontSize: 10,
-                lineHeight: 21,
-                color: 'white',
+                fontSize: 11,
+                color: '#fff',
+                fontWeight: 'bold',
               }}
             >
-              Beri Penilaian
+              {status.toUpperCase()}
             </Text>
-          </Pressable>
+          </View>
+
+          {/* <View style={{ alignItems: 'flex-end' }}>
+          <Pressable
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingHorizontal: 16,
+            borderRadius: 4,
+            elevation: 3,
+            backgroundColor: useTheme().colors.secondary,
+          }}
+            onPress={() => {}}
+            >
+            <Text
+            style={{
+              fontSize: 10,
+              lineHeight: 21,
+              color: 'white',
+            }}
+            >
+            Beri Penilaian
+            </Text>
+            </Pressable>
+          </View> */}
         </View>
       </View>
-    </TouchableOpacity>
+      {status === 'unpaid' && (
+        <View
+          style={{
+            paddingBottom: 15,
+            paddingHorizontal: 15,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <Button onPress={pay} mode='contained' textColor='#fff'>
+            Pay Now
+          </Button>
+        </View>
+      )}
+    </View>
   )
 }
 
 export default function Schedule() {
   const navigation = useNavigation()
+  const user = useUser()
   const [schedule, setSchedule] = useState([])
   const [counselors, setcounselors] = useState([])
   const [focus, setFocus] = useState(false)
@@ -97,6 +160,7 @@ export default function Schedule() {
   }
   const fetchSchedule = async () => {
     try {
+      if(!user) return
       const response = await api.get('/client/schedule')
       console.log(response.data)
       setSchedule(response.data)
@@ -117,30 +181,40 @@ export default function Schedule() {
       fetchSchedule()
       fetchCounselors()
     }
-    return () => {
-      setSchedule([])
-      setcounselors([])
-    }
   }, [focus])
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{
-        flex: 1,
-        // backgroundColor: useTheme().colors.primary,
-        padding: 10,
-      }}
-    >
+    <>
       <SafeAreaView />
-      {schedule.map((item, i) => {
-        return <ScheduleCard key={i} {...item} />
-      })}
-
-      {counselors.map((counselor) => {
-        return (
-          <CounselorCard {...counselor.User} key={counselor.id}/>
-        )
-      })}
-    </ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{
+          flex: 1,
+          backgroundColor: '#eee',
+          padding: 10,
+        }}
+      >
+        {schedule.map((item, i) => {
+          return <ScheduleCard key={i} {...item} />
+        })}
+        {counselors.length > 0 && (
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: useTheme().colors.primary,
+              marginVertical: 10,
+              paddingTop: 10,
+              paddingLeft: 10,
+            }}
+          >
+            Konselor yang bisa kamu temui
+          </Text>
+        )}
+        {counselors.map((counselor) => {
+          return <CounselorCard {...counselor.User} key={counselor.id} />
+        })}
+        <Divider style={{marginVertical: 20}}/>
+      </ScrollView>
+    </>
   )
 }

@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   image: {
     width: 75,
     height: 75,
-    borderRadius: 20,
+    borderRadius: 75,
   },
   textContainer: {
     paddingVertical: 20,
