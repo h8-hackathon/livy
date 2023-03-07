@@ -129,7 +129,7 @@ describe('Succes Case For Users Service', () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('access_token', expect.any(String));
   });
-  it('Successfully Post User (Reject When User Role Is Admin if try to register)', async () => {
+  it('Successfully Post User (succes login as admin)', async () => {
     const response = await request(app).post('/users/test').send({
       payload:{
         id:888,
