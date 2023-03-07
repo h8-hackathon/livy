@@ -64,15 +64,14 @@ class SchedulesController {
       const user = await User.findByPk(userId)
 
       // CHECK COUNSELOR RATE
-      const cs = await CounselorSubmission.findByPk(CounselorId)
-      if (!cs['rate']) {
-        console.log('rate not found')
-        cs['rate'] = 50000
-      }
+      const cs = await CounselorSubmission.findOne({
+        where: { UserId: CounselorId },
+      })
+
       // GET PAYMENT INVOICE
       const invoice = await Xendit.getXenditInvoice({
         external_id: `invoice_${user.id}_${CounselorId}_${time}`,
-        amount: cs.rate,
+        amount: cs?.rate || 50000,
         payer_email: user.email,
         description: `invoice for ${user.name}`,
       })
@@ -168,7 +167,7 @@ class SchedulesController {
   static async updateCounselorAvailability(req, res, next) {
     try {
       const { counselorId } = req.params
-  
+
       let result = await Availability.updateOne(
         { UserId: +counselorId },
         {

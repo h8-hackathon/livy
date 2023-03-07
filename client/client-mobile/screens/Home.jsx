@@ -211,14 +211,23 @@ const PodcastCard = ({
 
 export default function Home() {
   const [home, setHome] = useState(null)
+  const [counselors, setcounselors] = useState([])
   const { user } = useUser()
 
+  const fetchData = async () => {
+    const res = await api.get('/client/home')
+    setHome(res.data)
+    console.log(res.data)
+  }
+
+  const fetchCounselors = async () => {
+    const res = await api.get('/client/counselors')
+    console.log(res.data)
+    setcounselors(res.data)
+  }
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.get('/client/home')
-      setHome(res.data)
-    }
     fetchData()
+    fetchCounselors()
   }, [])
   return (
     <>
@@ -342,6 +351,7 @@ export default function Home() {
             />
           </View>
           <ScrollView horizontal>
+            {counselors.map((counselor, i) => <CounselorCard {...counselor.User} key={i} />)}
             <CounselorCard
               name='Husin'
               image={'https://picsum.photos/100/100'}
