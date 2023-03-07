@@ -57,8 +57,9 @@ export default {
 
             <div class="mb-3">
               <label for="product-name">Caption <span class="text-danger fw-bold">*</span></label>
-              <input
+              <textarea
                 type="text"
+                rows="10"
                 class="form-control"
                 autocomplete="off"
                 required

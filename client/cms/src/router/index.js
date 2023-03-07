@@ -84,7 +84,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (localStorage.access_token && (to.name == "login")) {
+  if (localStorage.role != 'superadmin' && to.name == 'admin-list') {
+    next('/')
+  } else if (localStorage.access_token && (to.name == "login")) {
     next('/');
   } else if (!localStorage.access_token && (to.name != "login")) {
     next('/login');

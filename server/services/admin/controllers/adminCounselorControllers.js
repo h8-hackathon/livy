@@ -9,7 +9,7 @@ class adminCounselorControllers {
 
       res.status(200).json(counselors);
     } catch (error) {
-      next(error);
+      next(error); // Cek ini untuk test gagal
     }
   }
 

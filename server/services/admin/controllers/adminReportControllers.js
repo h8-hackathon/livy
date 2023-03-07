@@ -8,7 +8,7 @@ class adminReportControllers {
 
       res.status(200).json(reports);
     } catch (error) {
-      next(error);
+      next(error); // Cek ini untuk buat test
     }
   }
 
