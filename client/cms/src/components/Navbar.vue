@@ -25,8 +25,10 @@ export default {
   <nav class="navbar navbar-expand-lg navbar-red navbar-dark">
     <div class="wrapper"></div>
     <div class="container-fluid all-show">
-      <img src="../assets/Logo.png" style="height: 60px; margin-right: 30px;"/>
-      <a class="navbar-brand" href="#" @click.prevent="$router.push(`/`)">LIVY Admin <i class="fa fa-codepen"></i></a>
+      <img src="../assets/Logo.png" style="height: 60px; margin-right: 30px" />
+      <a class="navbar-brand" href="#" @click.prevent="$router.push(`/`)"
+        >LIVY Admin <i class="fa fa-codepen"></i
+      ></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -51,7 +53,7 @@ export default {
                   aria-current="page"
                   href=""
                   @click.prevent="$router.push(`/content`)"
-                  >Content</a
+                  ><b>Content</b></a
                 >
               </li>
 
@@ -61,7 +63,7 @@ export default {
                   aria-current="page"
                   href=""
                   @click.prevent="$router.push(`/counselor`)"
-                  >Counselor</a
+                  ><b>Counselor</b></a
                 >
               </li>
 
@@ -71,7 +73,7 @@ export default {
                   aria-current="page"
                   href=""
                   @click.prevent="$router.push(`/forum`)"
-                  >Forum Reports</a
+                  ><b>Forum Reports</b></a
                 >
               </li>
 
@@ -81,7 +83,7 @@ export default {
                   aria-current="page"
                   href=""
                   @click.prevent="$router.push(`/admin-list`)"
-                  >Admin List</a
+                  ><b>Admin List</b></a
                 >
               </li>
             </ul>

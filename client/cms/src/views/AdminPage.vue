@@ -44,11 +44,11 @@ export default {
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Admin ID</th>
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Gender</th>
+                <th scope="col" width="100px">Admin ID</th>
+                <th scope="col" width="100px">Image</th>
+                <th scope="col" width="150px">Name</th>
+                <th scope="col" width="300px">Email</th>
+                <th scope="col" width="100px">Gender</th>
                 <th scope="col">Date of Birth</th>
                 <th scope="col">Role</th>
                 <th scope="col">Action</th>
@@ -60,7 +60,9 @@ export default {
               <tr v-for="(el, index) in admins" :key="index">
                 <td>{{ ++index }}</td>
                 <td>{{ el.id }}</td>
-                <td>{{ el.image }}</td>
+                <td>
+                  <img :src="el.image" alt="Admin's Image" width="150" height="150" />
+                </td>
                 <td>{{ el.name }}</td>
                 <td>{{ el.email }}</td>
                 <td>{{ el.gender }}</td>
@@ -69,14 +71,14 @@ export default {
                 <td>
                   <button
                     type="button"
-                    class="btn btn-warning text-light"
+                    class="btn btn-warning text-light m-1"
                     @click.prevent="$router.push(`/admin-edit/${el.id}`)"
                   >
                     Edit
                   </button>
                   <button
                     type="button"
-                    class="btn btn-danger m-2"
+                    class="btn btn-danger m-1"
                     @click.prevent="deleteAdmin(el.id)"
                   >
                     Delete

@@ -69,7 +69,11 @@ export default {
               <tr v-for="(el, index) in posts" :key="index">
                 <td>{{ ++index }}</td>
                 <td>{{ el.title }}</td>
-                <td>{{ el.caption }}</td>
+                <td>
+                  <p style="height: 350px; overflow-y: scroll">
+                    {{ el.caption }}
+                  </p>
+                </td>
                 <td>{{ el.type }}</td>
                 <td>
                   <a :href="el.url" target="_blank">Link URL</a>
@@ -98,3 +102,11 @@ export default {
     </section>
   </div>
 </template>
+
+<style scoped>
+.scrollable {
+  overflow-y: scroll;
+  height: 50px;
+  width: 80px;
+}
+</style>
