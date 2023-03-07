@@ -13,6 +13,7 @@ import { Button, Text, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import { api } from '../helpers/axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import CounselorCard from '../components/CounselorCard'
 
 const ScheduleCard = ({ Counselor, session, status }) => {
   const navigation = useNavigation()
@@ -123,9 +124,10 @@ export default function Schedule() {
   }, [focus])
   return (
     <ScrollView
+      showsVerticalScrollIndicator={false}
       style={{
         flex: 1,
-        backgroundColor: useTheme().colors.primary,
+        // backgroundColor: useTheme().colors.primary,
         padding: 10,
       }}
     >
@@ -136,32 +138,7 @@ export default function Schedule() {
 
       {counselors.map((counselor) => {
         return (
-          <TouchableOpacity
-            style={{
-              padding: 15,
-              borderRadius: 20,
-              flexDirection: 'row',
-              height: 130,
-              gap: 10,
-              marginVertical: 5,
-              width: '50%',
-            }}
-            onPress={() => {
-              navigation.navigate('CounselorProfile', {
-                counselorId: counselor.User.id,
-              })
-            }}
-          >
-            <View
-              style={{
-                borderRadius: 10,
-                backgroundColor: '#eee',
-                padding: 5,
-              }}
-            >
-              <Text>{counselor.User.name}</Text>
-            </View>
-          </TouchableOpacity>
+          <CounselorCard {...counselor.User} key={counselor.id}/>
         )
       })}
     </ScrollView>

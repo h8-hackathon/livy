@@ -8,11 +8,7 @@ import CounselorCard from '../components/CounselorCard'
 import { api } from '../helpers/axios'
 import { useUser } from '../hooks/useUser'
 
-const ArticleCard = ({
-  title,
-  date,
-  image,
-}) => {
+const ArticleCard = ({ title, date, image }) => {
   return (
     <View
       style={{
@@ -117,11 +113,7 @@ const VideoCard = () => {
     </View>
   )
 }
-const PodcastCard = ({
-  title,
-  date,
-  description
-}) => {
+const PodcastCard = ({ title, date, description }) => {
   return (
     <View
       style={{
@@ -232,7 +224,7 @@ export default function Home() {
   return (
     <>
       <SafeAreaView />
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {/* <View
         style={{
           backgroundColor: '#408775',
@@ -321,7 +313,7 @@ export default function Home() {
               color={useTheme().colors.primary}
             />
           </View>
-          <ScrollView horizontal>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: 'row' }}>
               {home?.articles.map((article) => (
                 <ArticleCard
@@ -350,28 +342,10 @@ export default function Home() {
               color={useTheme().colors.primary}
             />
           </View>
-          <ScrollView horizontal>
-            {counselors.map((counselor, i) => <CounselorCard {...counselor.User} key={i} />)}
-            <CounselorCard
-              name='Husin'
-              image={'https://picsum.photos/100/100'}
-              rating={5}
-            />
-            <CounselorCard
-              name='Husin'
-              image={'https://picsum.photos/100/100'}
-              rating={5}
-            />
-            <CounselorCard
-              name='Husin'
-              image={'https://picsum.photos/100/100'}
-              rating={5}
-            />
-            <CounselorCard
-              name='Husin'
-              image={'https://picsum.photos/100/100'}
-              rating={5}
-            />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {counselors.map((counselor, i) => (
+              <CounselorCard {...counselor.User} key={i} />
+            ))}
           </ScrollView>
           <View
             style={{
@@ -390,7 +364,7 @@ export default function Home() {
               color={useTheme().colors.primary}
             />
           </View>
-          <ScrollView horizontal>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: 'row' }}>
               <VideoCard />
               <VideoCard />
@@ -416,9 +390,8 @@ export default function Home() {
               color={useTheme().colors.primary}
             />
           </View>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{ flexDirection: 'column' }}>
-
               {home?.podcasts.map((podcast) => (
                 <PodcastCard
                   key={podcast.id}

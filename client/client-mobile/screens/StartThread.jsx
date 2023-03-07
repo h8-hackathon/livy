@@ -54,7 +54,10 @@ export default function StartThread() {
   return (
     <>
       <SafeAreaView />
-      <ScrollView style={{ padding: 10, gap: 10 }}>
+      <ScrollView
+        style={{ padding: 10, gap: 10 }}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={{ width: '100%', alignItems: 'center' }}>
           <Image
             source={require('../assets/pages/Thinking.png')}

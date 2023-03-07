@@ -294,7 +294,7 @@ export default function CounselorPorfile(props) {
                   >
                     Appointment
                   </Text>
-                  <ScrollView horizontal>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {counselor.availability.availability.map((item, index) => {
                       return (
                         <TouchableOpacity
@@ -366,7 +366,7 @@ export default function CounselorPorfile(props) {
                       Schedule
                     </Text>
                   </View>
-                  <ScrollView horizontal>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {/* {slots && (getAllHours(slots.slots))} */}
                     {slots &&
                       getAllHours(slots.slots).map((item, index) => {

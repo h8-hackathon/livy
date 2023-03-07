@@ -135,7 +135,7 @@ export default function Forum() {
           <Ionicons name='search' />
         </View>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             width: '100%',
