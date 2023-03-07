@@ -15,6 +15,15 @@ beforeAll(async () => {
       image: 'string image url testing purpose',
       role: 'superadmin',
       helpful: 20,
+    },{
+      id:888,
+      name: 'admin',
+      email: 'admin@test.com',
+      gender: 'M',
+      dob:'2023-03-07T01:19:32.622Z',
+      image: 'string image url testing purpose',
+      role: 'admin',
+      helpful: 20,
     }]);
     await CounselorSubmission.bulkCreate([{
       id: 2,
@@ -123,8 +132,25 @@ describe('Succes Case For Users Service', () => {
   it('Successfully Post User (Reject When User Role Is Admin if try to register)', async () => {
     const response = await request(app).post('/users/test').send({
       payload:{
-        id: '114434339297979854205',
+        id:888,
+        name: 'admin',
         email: 'admin@test.com',
+        gender: 'M',
+        dob:'2023-03-07T01:19:32.622Z',
+        image: 'string image url testing purpose',
+        role: 'admin',
+        helpful: 20,
+      },
+      role: 'admin'
+    });
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('access_token', expect.any(String));
+  });
+  it('Successfully Post User (Reject When User Role Is Admin if try to register)', async () => {
+    const response = await request(app).post('/users/test').send({
+      payload:{
+        id: '114434339297979854205',
+        email: 'adminnone@test.com',
         verified_email: true,
         name: 'admin testing purpose',
         given_name: 'Gilang',
