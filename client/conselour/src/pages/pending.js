@@ -7,7 +7,7 @@ import React from 'react'
 export default function Pending() {
   const { counselor } = useCounselor()
 
-  if (!counselor) return null
+  // if (!counselor) return null
   
   return (
     <MainLayout >

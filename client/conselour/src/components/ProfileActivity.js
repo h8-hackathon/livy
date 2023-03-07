@@ -1,7 +1,9 @@
 import { api } from "@/helpers";
+import { useCounselor } from "@/hooks/useCounselor";
 import { mdiArrowLeft, mdiDelete, mdiPower } from "@mdi/js";
 import Icon from "@mdi/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -11,6 +13,8 @@ export default function ProfileActivity({ pending }) {
   const [available, setAvailable] = useState([])
   const [rate, setRate] = useState(0)
   const [submissions, setSubmissions] = useState("")
+  const { setCounselor } = useCounselor()
+  const router = useRouter()
 
   const addDays = () => {
     setAvailable((available) => {
@@ -59,7 +63,7 @@ export default function ProfileActivity({ pending }) {
         });
       })
       setAvailable(result)
-      setRate(counselor.rate)
+      setRate(counselor.rate || 0)
       setSubmissions(counselor.submissions || '')
     }).catch(error => toast.error(error.response.data.message))
   }, [])
@@ -89,7 +93,7 @@ export default function ProfileActivity({ pending }) {
   }
 
   const deleteAvailable = (index) => {
-    var array = [...available]; 
+    var array = [...available];
 
     array.splice(index, 1);
     setAvailable(array);
