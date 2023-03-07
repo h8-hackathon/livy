@@ -239,7 +239,7 @@ describe('Failed Case For Users Service', () => {
     gender: 'F',
     image: 'updated',
   });
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'successfuly updated');
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty('message', 'Data Not Found');
   });
 });
