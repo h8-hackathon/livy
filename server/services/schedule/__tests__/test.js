@@ -217,9 +217,8 @@ describe("for schedule", () => {
   });
 
   // success get availability 
-  it.only("Suceess get availability", async () => {
+  it("Suceess get availability", async () => {
     let counselorId = 1
-    let userId = 1;
     const response = await request(app)
       .get("/schedules/counselor/" + counselorId + "/availability")
     expect(response.status).toBe(200);
@@ -231,4 +230,28 @@ describe("for schedule", () => {
     expect(response.body.availability[0]).toBeInstanceOf(Object);
     expect(response.body.availability[0]).toHaveProperty("dayOfWeek", expect.any(String));
   });
+
+  // failed get availability because invalid counselor id 
+  it("failed get availability", async () => {
+    let counselorId = 'abc'
+    const response = await request(app)
+      .get("/schedules/counselor/" + counselorId + "/availability")
+    expect(response.status).toBe(404);
+    // console.log(response.body);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message","No documents matched the query");
+  });
+
+  // failed get availability because invalid counselor id 
+  it.only("failed get availability", async () => {
+    let counselorId = 1000
+    const response = await request(app)
+      .get("/schedules/counselor/" + counselorId + "/availability")
+    expect(response.status).toBe(404);
+    // console.log(response.body);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message","No documents matched the query");
+  });
+
+
 });
