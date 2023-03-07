@@ -1,6 +1,5 @@
 import EmptyChat from '@/components/EmptyChat'
 import ProfileDetail from '@/components/ProfileDetail'
-import { verifyUser } from '@/helpers'
 import { useCounselor } from '@/hooks/useCounselor'
 import MainLayout from '@/layouts/Main'
 

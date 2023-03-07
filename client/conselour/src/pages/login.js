@@ -29,14 +29,14 @@ export default function Login() {
         if (submission.data.status === 'pending') return router.push('/pending')
         router.push('/')
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || 'Internal Server Error');
       }
     }
   });
 
   useEffect(() => {
     const token = localStorage?.getItem('access_token')
-    if (token) router.push('/')
+    if (token && counselor) router.push('/')
   }, [])
 
   if (counselor) return null
