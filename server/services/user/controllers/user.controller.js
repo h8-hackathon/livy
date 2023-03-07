@@ -1,4 +1,4 @@
-/* istanbul ignore file */
+
 const { Op } = require('sequelize')
 const { User, CounselorSubmission } = require('../models')
 const { Availability } = require('../mongo')
@@ -11,22 +11,11 @@ module.exports = class UserController {
         where: { UserId: req.params.counselorId },
         include: User,
       })
-
+      if(!response) throw {name: 'NotFound'}
       res.status(200).json(response)
     } catch (error) {
       next(error)
     }
-  }
-
-  static async fetchUserInfo(token) {
-    let response = await axios.get(
-      'https://www.googleapis.com/userinfo/v2/me',
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    )
-    const useInfo = await response.data
-    return useInfo
   }
 
   static async getUsers(req, res, next) {
@@ -71,7 +60,7 @@ module.exports = class UserController {
 
     try {
       const response = await User.findAll(options)
-
+        if(response.length < 1)throw {name:'NotFound'}
       res.status(200).json(response)
     } catch (error) {
       next(error)
@@ -92,6 +81,8 @@ module.exports = class UserController {
           'helpful',
         ],
       })
+
+      if(!response)throw {name: 'NotFound'}
 
       res.status(200).json(response)
     } catch (error) {
@@ -210,8 +201,8 @@ module.exports = class UserController {
   }
   static async putUsers(req, res, next) {
     try {
-      await User.update({ ...req.body }, { where: { id: req.params.id } })
-
+      const response = await User.update({ ...req.body }, { where: { id: req.params.id } })
+      if(!response) throw {name: 'NotFound'}  
       res.status(200).json({ message: 'successfuly updated' })
     } catch (error) {
       next(error)
