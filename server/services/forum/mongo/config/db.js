@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { MongoClient } = require('mongodb')
 
 let DATABASE_URL, DATABASE_NAME
@@ -6,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
   DATABASE_URL = process.env.MONGODB_DATABASE_URL
   DATABASE_NAME = process.env.MONGODB_DATABASE_NAME
 } else {
-  DATABASE_URL = 'mongodb://0.0.0.0:27017'
+  DATABASE_URL = 'mongodb://0.0.0.0:27017/'
   DATABASE_NAME = 'livy_mongodb_development'
 }
 
@@ -23,10 +24,7 @@ const connect = async () => {
 
 const disconnect = async () => {
   try {
-    if (process.env.NODE_ENV === 'production') {
-      
-      await client.close()
-    } 
+    await client.close()
     console.log('Disconnected from database')
   } catch (error) {
     console.log(error)

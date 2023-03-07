@@ -1,15 +1,19 @@
 import EmptyChat from '@/components/EmptyChat'
 import ProfileDetail from '@/components/ProfileDetail'
-import { verifyUser } from '@/helpers'
+import Spinner from '@/components/spinner'
 import { useCounselor } from '@/hooks/useCounselor'
 import MainLayout from '@/layouts/Main'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 
 export default function Profile() {
-  const { counselor, setCounselor } = useCounselor()
+  const { counselor } = useCounselor()
 
-  if (!counselor) return null
+  if (!counselor) {
+    return (
+      <div className="animate-ping flex h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    )
+  }
 
   return (
     <MainLayout >

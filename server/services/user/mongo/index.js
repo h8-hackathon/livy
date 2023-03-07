@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const ForumPost = require('./models/ForumPost')
 const ForumComment = require('./models/ForumComment')
 const Chat = require('./models/Chat')

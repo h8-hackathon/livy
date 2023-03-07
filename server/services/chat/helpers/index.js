@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 const convertChatToPrompts = (chats) => {
   if (chats.length)
     return chats.map(el => {

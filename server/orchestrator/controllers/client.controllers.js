@@ -66,6 +66,22 @@ class ClientController {
     }
   }
 
+  static async getCounselorByid(req, res, next) {
+    try {
+      const { counselorId } = req.params
+
+      const { data: user } = await userAPI.get(`users/${counselorId}`)
+      const { data: counselor } = await userAPI.get(`/submissions/${counselorId}`)
+      const { data: availability } = await scheduleAPI.get(
+        `/schedules/counselor/${counselorId}/availability`
+      )
+
+      res.status(200).json({ user, counselor, availability })
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getChatWithLivy(req, res, next) {
     try {
       const { access_token } = req.headers;
@@ -263,6 +279,20 @@ class ClientController {
       res.status(200).json(schedules);
     } catch (error) {
       next(error);
+    }
+  }
+  static async callback(req, res,next){
+    const {external_id} = req.body
+    const token = req.headers['x-callback-token']
+    console.log(req.body)
+    try {
+      if(process.env.NODE_ENV === 'production' && token !== process.env.CALLBACK_TOKEN ){  
+      throw {name: "InvalidToken"}
+      }
+      const response = await scheduleAPI.patch('/schedules/paid/'+external_id.split('-')[1])
+      res.status(200).json({'message':'Paid Succesfully'})
+    } catch (error) {
+      next(error)
     }
   }
 }

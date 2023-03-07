@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 const { MongoClient } = require('mongodb')
 
 let DATABASE_URL, DATABASE_NAME

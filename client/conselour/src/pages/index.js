@@ -1,12 +1,19 @@
 import EmptyChat from '@/components/EmptyChat'
 import Sidebar from '@/components/Sidebar'
+import Spinner from '@/components/spinner'
 import { useCounselor } from '@/hooks/useCounselor'
 import MainLayout from '@/layouts/Main'
 
 export default function Home() {
-  const { counselor, setCounselor } = useCounselor()
+  const { counselor } = useCounselor()
 
-  if (!counselor) return null
+  if (!counselor) {
+    return (
+      <div className="flex h-screen animate-ping items-center justify-center">
+        <Spinner />
+      </div>
+    )
+  }
 
   return (
     <MainLayout>

@@ -104,6 +104,7 @@ class CMSController {
   }
 
   static async acceptCounselor(req, res, next) {
+    console.log(req.body)
     try {
       const { submissionId } = req.params;
       await userAPI.put(`/counselor/${submissionId}/submissions`, { status: "accepted" });
@@ -239,11 +240,11 @@ class CMSController {
 
   // post /users/admin from userAPI
   static async createAdmin(req, res, next) {
+    console.log(req.body)
     try {
-      const { name, email } = req.body;
+      /* const { name, email } = req.body; */
       const { data: admin } = await userAPI.post("/users/admin", {
-        name,
-        email,
+        ...req.body
       });
       res.status(201).json(admin);
     } catch (error) {
@@ -264,6 +265,7 @@ class CMSController {
 
   // put /users/:id from userAPI with type admin
   static async updateAdmin(req, res, next) {
+    console.log(req.body)
     try {
       const { id } = req.params;
       const { data: admin } = await userAPI.put(`/users/${id}`, req.body);

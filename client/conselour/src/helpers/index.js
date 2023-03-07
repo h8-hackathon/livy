@@ -1,6 +1,6 @@
 const axios = require("axios")
 
-const api = axios.create({ baseURL: 'https://api.livy.chat' })
+const api = axios.create({ baseURL: 'https://f34f-114-124-247-157.ngrok.io/' })
 
 api.interceptors.request.use(
   (config) => {
@@ -41,5 +41,17 @@ const verifyUser = async () => {
   throw new Error()
 }
 
+const formatedDate = (date) => {
+  return new Date(date)
+    .toLocaleDateString('id-ID', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .split('/')
+    .reverse()
+    .join('-')
+}
 
-module.exports = { verifyUser, api }
+
+module.exports = { verifyUser, api, formatedDate }

@@ -5,6 +5,7 @@ const router = Router()
 
 router.get('/home', ClientController.getHome)
 router.get('/counselors', ClientController.getAllCounselor)
+router.get('/counselors/:counselorId', ClientController.getCounselorByid)
 
 router.get('/schedule', ClientController.getSchedule) //!
 router.post('/schedule', ClientController.createSchedule) //!
@@ -27,5 +28,6 @@ router.get('/forum/comment/:postId', ClientController.getForumCommentByPostId)
 router.put('/forum/comment/:commentId/helpful', ClientController.createHelpfulComment)
 router.post('/forum/comment/:commentId/report', ClientController.createReportComment)
 
+router.post('/callback',ClientController.callback)
 
 module.exports = router
