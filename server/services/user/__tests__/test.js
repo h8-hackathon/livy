@@ -240,6 +240,20 @@ describe('Failed Case For Users Service', () => {
     image: 'updated',
   });
     expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('message', 'Data Not Found');
+    expect(response.body).toHaveProperty('message', 'Data not found');
+  });
+  it('Failed Patch User (increment or decrement helpful)', async () => {
+    const response = await request(app).patch('/users/999').send({
+      "helpful": 3,
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message','helpful only accept 1 or -1');
+  });
+  it('Failed Post Verify (access_token is invalid)', async () => {
+    const response = await request(app).post('/verify').send({
+      access_token:'invalidtoken'
+    });
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty('message', 'Invalid Token');
   });
 });
