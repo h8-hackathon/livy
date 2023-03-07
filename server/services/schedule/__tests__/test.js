@@ -169,5 +169,13 @@ describe("for schedule", () => {
     expect(response.body).toHaveProperty("message", 'Internal Server Error');
   });
 
+  // patch paid schedule by external_id 404
+  it("Failed patch paid schedule because invalid external_id", async () => {
+    let external_id = 'abc';
+    const response = await request(app)
+    .post("/schedules/paid/" + external_id)
+    expect(response.status).toBe(404);
+  });
+
 
 });
