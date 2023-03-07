@@ -1,7 +1,3 @@
-import { api } from "@/helpers";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-
 export default function Headers({ user }) {
   return (
     <div className="p-4 px-10 flex items-center border-b-2 gap-5">
