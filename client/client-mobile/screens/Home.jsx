@@ -283,7 +283,7 @@ export default function Home() {
                 color: '#fff',
               }}
             >
-              Selamat Pagi{user ? user.name : ''}!
+              Selamat Pagi{user ? ` ${user.name}` : ''}!
             </Text>
             <View
               style={{
