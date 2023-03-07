@@ -13,7 +13,7 @@ export default function MainLayouts({ children }) {
         access_token,
       })
 
-      setUser(response.data)
+      setUser({ ...response.data, access_token })
     }
   }
 
