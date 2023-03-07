@@ -119,7 +119,7 @@ describe("for schedule", () => {
     let userId = 1;
     let CounselorId = 2;
     let time = new Date();
-    let note = 'add schedule'
+    let note = "add schedule";
     const response = await request(app)
       .post("/schedules/user/" + userId)
       .send({ CounselorId, time, note });
@@ -128,13 +128,19 @@ describe("for schedule", () => {
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body.response).toHaveProperty("status", expect.any(String));
     expect(response.body.response).toHaveProperty("UserId", expect.any(Number));
-    expect(response.body.response).toHaveProperty("session", expect.any(String));
+    expect(response.body.response).toHaveProperty(
+      "session",
+      expect.any(String)
+    );
     expect(response.body.response).toHaveProperty("note", expect.any(String));
-    expect(response.body.response).toHaveProperty("CounselorId", expect.any(Number));
+    expect(response.body.response).toHaveProperty(
+      "CounselorId",
+      expect.any(Number)
+    );
     expect(response.body.response).toHaveProperty(
       "paymentUrl",
       expect.any(String)
-      );
+    );
     expect(response.body.response).toHaveProperty(
       "expPaymentUrl",
       expect.any(String)
@@ -146,72 +152,83 @@ describe("for schedule", () => {
     let userId = 1000; //!
     let CounselorId = 2;
     let time = new Date();
-    let note = 'add schedule'
+    let note = "add schedule";
     const response = await request(app)
-    .post("/schedules/user/" + userId)
-    .send({ CounselorId, time, note });
+      .post("/schedules/user/" + userId)
+      .send({ CounselorId, time, note });
     expect(response.status).toBe(500);
     // console.log(response.body);
-    expect(response.body).toHaveProperty("message", 'Internal Server Error');
+    expect(response.body).toHaveProperty("message", "Internal Server Error");
   });
 
   // post schedule by user id 500
   it("Failed post schedule by user id because invalid counselor id", async () => {
     let userId = 1; //!
-    let CounselorId = 'abc';
+    let CounselorId = "abc";
     let time = new Date();
-    let note = 'add schedule'
+    let note = "add schedule";
     const response = await request(app)
-    .post("/schedules/user/" + userId)
-    .send({ CounselorId, time, note });
+      .post("/schedules/user/" + userId)
+      .send({ CounselorId, time, note });
     expect(response.status).toBe(500);
     // console.log(response.body);
-    expect(response.body).toHaveProperty("message", 'Internal Server Error');
+    expect(response.body).toHaveProperty("message", "Internal Server Error");
   });
 
   // patch paid schedule by external_id 404
   it("Failed patch paid schedule because invalid external_id", async () => {
-    let external_id = 'abc';
-    const response = await request(app)
-    .post("/schedules/paid/" + external_id)
+    let external_id = "abc";
+    const response = await request(app).post("/schedules/paid/" + external_id);
     expect(response.status).toBe(404);
   });
 
-  // success create availability 
-  it.only("Suceess creating availability", async () => {
-    let counselorId = 2
-    let userId = 1
+  // success create availability
+  it("Suceess creating availability", async () => {
+    let counselorId = 2;
+    let userId = 1;
     const response = await request(app)
-    .post("/schedules/counselor/" + counselorId + '/availability')
-    .send({
-      UserId : userId,
-      availability: [
-        {
-          dayOfWeek: "thursday",
-          slots: [
-            {
-              startTime: "17:00",
-              endTime: "19:00"
-            }
-          ]
-        },
-        {
-          dayOfWeek: "friday",
-          slots: [
-            {
-              startTime: "20:00",
-              endTime: "23:00"
-            }
-          ]
-        }
-      ]
-    })
+      .post("/schedules/counselor/" + counselorId + "/availability")
+      .send({
+        UserId: userId,
+        availability: [
+          {
+            dayOfWeek: "thursday",
+            slots: [
+              {
+                startTime: "17:00",
+                endTime: "19:00",
+              },
+            ],
+          },
+          {
+            dayOfWeek: "friday",
+            slots: [
+              {
+                startTime: "20:00",
+                endTime: "23:00",
+              },
+            ],
+          },
+        ],
+      });
     expect(response.status).toBe(200);
     // console.log(response.body);
-    expect(response.body).toHaveProperty("message", 'successfully created');
+    expect(response.body).toHaveProperty("message", "successfully created");
   });
 
-
-
-
+  // success get availability 
+  it.only("Suceess get availability", async () => {
+    let counselorId = 1
+    let userId = 1;
+    const response = await request(app)
+      .get("/schedules/counselor/" + counselorId + "/availability")
+    expect(response.status).toBe(200);
+    // console.log(response.body);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("_id", expect.any(String));
+    expect(response.body).toHaveProperty("UserId", expect.any(Number));
+    expect(response.body.availability).toBeInstanceOf(Array);
+    expect(response.body.availability[0]).toBeInstanceOf(Object);
+    expect(response.body.availability[0]).toHaveProperty("dayOfWeek", expect.any(String));
+  });
 });
