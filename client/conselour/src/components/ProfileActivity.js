@@ -3,6 +3,7 @@ import { mdiArrowLeft, mdiDelete, mdiPower } from "@mdi/js";
 import Icon from "@mdi/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ProfileActivity({ pending }) {
   const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
@@ -60,7 +61,7 @@ export default function ProfileActivity({ pending }) {
       setAvailable(result)
       setRate(counselor.rate)
       setSubmissions(counselor.submissions || '')
-    })
+    }).catch(error => toast.error(error.response.data.message))
   }, [])
 
   const logout = () => {
@@ -71,24 +72,26 @@ export default function ProfileActivity({ pending }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    console.log(available)
+    try {
+      const result = available.reduce((a, current) => {
+        if (!a[current.dayOfWeek]) a[current.dayOfWeek] = []
+        a[current.dayOfWeek].push(current.slots)
+        return a
+      }, {})
 
-    const result = available.reduce((a, current) => {
-      if (!a[current.dayOfWeek]) a[current.dayOfWeek] = []
-      a[current.dayOfWeek].push(current.slots)
-      return a
-    }, {})
+      const res = Object.keys(result).map(key => { return { dayOfWeek: key, slots: result[key] } })
 
-    const res = Object.keys(result).map(key => { return { dayOfWeek: key, slots: result[key] } })
-
-    await api.post('/counselor/availability', { availability: res, submission: { rate, submissions } })
+      await api.post('/counselor/availability', { availability: res, submission: { rate, submissions } })
+      toast.success('Successfully updated')
+    } catch (error) {
+      toast.success(error.response.data.message)
+    }
   }
 
   const deleteAvailable = (index) => {
-    var array = [...available]; // make a separate copy of the array
+    var array = [...available]; 
 
     array.splice(index, 1);
-    console.log(array)
     setAvailable(array);
   }
 

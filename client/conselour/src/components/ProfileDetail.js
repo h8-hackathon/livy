@@ -34,9 +34,12 @@ export default function ProfileDetail() {
 
   const submit = async (e) => {
     e.preventDefault();
-
-   const res =  await api.put('/counselor', { ...form, dob: new Date(form.dob).toISOString() })
-    console.log(res.data)
+    try {
+      await api.put('/counselor', { ...form, dob: new Date(form.dob).toISOString() })
+      toast.success('Successfully updated')
+    } catch (error) {
+      toast.success(error.response.data.message)
+    }
   }
   return (
     <div className="px-8 p-10 overflow-auto">
