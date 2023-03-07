@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../app');
 const { User, CounselorSubmission, sequelize } = require('../models');
 
+let access_token;
 beforeAll(async () => {
   try {
     await User.create({
@@ -86,6 +87,7 @@ describe('Succes Case For Users Service', () => {
       },
       role: 'user'
     });
+    access_token = response.body.access_token
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('access_token', expect.any(String));
   });
@@ -127,7 +129,20 @@ describe('Succes Case For Users Service', () => {
     expect(response.body).toHaveProperty('access_token', expect.any(String));
     expect(cs).toHaveProperty('status','pending')
   });
-
+  it('Successfully Post Verify (access_token to user info)', async () => {
+    const response = await request(app).post('/verify').send({
+      access_token
+    });
+    expect(response.status).toBe(200);
+    expect(typeof response.body).toBe('object')
+    expect(response.body).toHaveProperty('id', expect.any(Number));
+    expect(response.body).toHaveProperty('email', 'ilias@mail.com');
+    expect(response.body).toHaveProperty('gender', 'M');
+    expect(response.body).toHaveProperty('dob', '2023-03-07T01:19:32.622Z');
+    expect(response.body).toHaveProperty('image', 'string image url testing purpose');
+    expect(response.body).toHaveProperty('role', 'superadmin');
+    expect(response.body).toHaveProperty('helpful', 20);
+  });
   it('Successfully Update User', async () => {
     const response = await request(app).put('/users/999').send({
     name: 'updated',
