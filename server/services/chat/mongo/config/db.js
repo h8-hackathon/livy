@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 
 const { MongoClient } = require('mongodb')
 
