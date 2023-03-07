@@ -44,12 +44,7 @@ export default function Account(props) {
       <View style={{ padding: 10 }}>
         <View style={styles.tile}>
           <View style={styles.ratingContainer}>
-            <Ionicons
-              style={{ padding: 10 }}
-              name="person"
-              size={20}
-              color="#FFD700"
-            />
+           
             <Text style={{ padding: 10, fontSize:18, fontWeight:'600' }}>
              {' '}Account
             </Text>
@@ -129,6 +124,29 @@ export default function Account(props) {
                 month: "long",
                 day: "numeric",
               })}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.tile}>
+          <View style={styles.ratingContainer}>
+         
+            <Text style={{ padding: 10, fontSize:18, fontWeight:'600' }}>
+             {' '}About
+            </Text>
+          </View>
+        </View>
+        <View style={styles.tile}>
+          <View style={styles.ratingContainer}>
+            <Ionicons
+              style={{ padding: 10 }}
+              name="information-circle"
+              size={20}
+              color="#FFD700"
+              
+            />
+            <Text style={{ padding: 10 }}>
+            {" "}
+            Version 1.0.0
             </Text>
           </View>
         </View>
