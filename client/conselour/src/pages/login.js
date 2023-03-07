@@ -1,3 +1,4 @@
+import Spinner from '@/components/spinner';
 import { api } from '@/helpers';
 import { useCounselor } from '@/hooks/useCounselor';
 import { useGoogleLogin } from '@react-oauth/google';
@@ -23,7 +24,7 @@ export default function Login() {
 
         const submission = await api.get('/counselor/status')
         setCounselor(res.data.user)
-        
+
         toast.success('Login Successfully');
 
         if (submission.data.status === 'pending') return router.push('/pending')
@@ -36,7 +37,10 @@ export default function Login() {
 
   useEffect(() => {
     const token = localStorage?.getItem('access_token')
-    if (token && counselor) router.push('/')
+    if (token){
+      console.log('a')
+      router.push('/')
+    } 
   }, [])
 
   if (counselor) return null
