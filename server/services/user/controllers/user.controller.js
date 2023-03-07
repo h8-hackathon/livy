@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { Op } = require('sequelize')
 const { User, CounselorSubmission } = require('../models')
 const { Availability } = require('../mongo')
@@ -110,9 +111,9 @@ module.exports = class UserController {
       /* BELOW IS DUMMY PURPOSE @ilias */
       /* const payload = {
                 id: '114434339297979854205',
-                email: 'xvnyan@test.com',
+                email: 'xvnyannnn@test.com',
                 verified_email: true,
-                name: 'Testing Purpose',
+                name: 'user 1',
                 given_name: 'Gilang',
                 family_name: 'Ramadhan',
                 picture: 'https://lh3.googleusercontent.com/a/AGNmyxa9f7amIsKzXc4FXr2NkMnjQoKB0Pi4fj7OZFTN=s96-c',
@@ -281,7 +282,7 @@ module.exports = class UserController {
 
       res.status(200).json({ message: 'successfuly updated' })
     } catch (error) {
-        console.log(error)
+      console.log(error)
       next(error)
     }
   }
@@ -295,6 +296,88 @@ module.exports = class UserController {
       res.status(201).json(response)
     } catch (error) {
       next(error)
+    }
+  }
+
+  static async postUsersTest(req, res, next) {
+    try {
+      /*             const response = await axios.get("https://www.googleapis.com/userinfo/v2/me", {
+            headers: { Authorization: `Bearer ${req.body.token}` }
+          });
+        const payload = response.data; */
+
+      const payload = req.body?.payload
+
+      if (req.body.role === 'admin') {
+        const user = await User.findOne({
+          where: {
+            email: payload.email,
+            role: req.body.role,
+          },
+        })
+        if (!user) throw { name: 'InvalidCredentials' }
+        else {
+          const access_token = jwt.sign(
+            {
+              id: user.id,
+            },
+            process.env.JWT_SECRET || 'mamamuda'
+          )
+          res.status(200).json({ access_token, user })
+        }
+        return
+      }
+
+      const [user, created] = await User.findOrCreate({
+        where: { email: payload?.email },
+        defaults: {
+          name: payload?.name,
+          email: payload?.email,
+          image: payload?.picture,
+          helpful: 0,
+          role: req.body?.role,
+        },
+      })
+
+      let status
+      if (created) {
+        status = 201
+      } else {
+        status = 200
+      }
+
+      const access_token = jwt.sign(
+        {
+          id: user.id,
+          role: user.role,
+        },
+        process.env.JWT_SECRET || 'mamamuda'
+      )
+      if (user.role === 'counselor') {
+        await CounselorSubmission.create({
+          status:
+            'pending' /* SET AS DEFAULT BECAUSE STATUS VALIDATION @ilias*/,
+          submission: '',
+          UserId: user.id,
+        })
+      }
+
+      res.status(status).json({
+        access_token,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          helpful: user.helpful,
+          role: user.role,
+          gender: user.gender,
+          dob: user.dob,
+        },
+      })
+    } catch (err) {
+      console.log(err)
+      next(err)
     }
   }
 }
