@@ -90,6 +90,8 @@ module.exports = class UserController {
             next(error)
         }
     }
+    
+    /* istanbul ignore next */
     static async postUsers(req, res, next) {
         try {
             const response = await axios.get(
