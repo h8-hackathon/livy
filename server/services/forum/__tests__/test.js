@@ -1,16 +1,44 @@
+const {
+  User,
+  AdminPost,
+  CounselorSubmission,
+  Report,
+  sequelize,
+} = require("../models");
 const request = require("supertest");
 const app = require("../app");
-const {connect,  ForumPost, ForumComment } = require("../mongo");
+const { connect, ForumPost, ForumComment } = require("../mongo");
 
 let postId;
+let commentId;
 beforeAll(async () => {
-  try {    
+  try {
     connect()
+    await User.create({
+      id: 3,
+      name: "admin1",
+      email: "admin1@gmail.com",
+      gender: "F",
+      image:
+        "https://upload.wikimedia.org/wikipedia/commons/7/7e/Kendall_Jenner_at_Met_Gala_2021_5.jpg",
+      role: "superadmin",
+      helpful: 4,
+    });
+    await User.create({
+      id: 4,
+      name: "conselor",
+      email: "conselor@gmail.com",
+      gender: "F",
+      image:
+        "https://upload.wikimedia.org/wikipedia/commons/7/7e/Kendall_Jenner_at_Met_Gala_2021_5.jpg",
+      role: "counselor",
+      helpful: 4,
+    });
     await ForumPost.insertOne({
       title: "POST TEST",
       images: ["1"],
       caption: "CAPTION TEST",
-      UserId: 1,
+      UserId: 4,
       helpful: [],
       createdAt: new Date(),
     });
@@ -19,11 +47,15 @@ beforeAll(async () => {
     await ForumComment.insertOne({
       forumPostId: postId,
       text : 'comments',
-      UserId : 1,
+      UserId : 2,
       helpful:[],
       createdAt: new Date(),
     });
 
+    let allComments = await ForumComment.find({
+      forumPostId: postId,
+    }).toArray();
+    commentId =  allComments[0]._id.toString();
   } catch (error) {
     console.log(error, "ini errornya");
   }
@@ -31,9 +63,138 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // await disconnect();
+  await sequelize.queryInterface.bulkDelete(
+    "Users",
+    {},
+    {
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    }
+  );
+  await sequelize.queryInterface.bulkDelete(
+    "Reports",
+    {},
+    {
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    }
+  );
 });
 
-describe.skip("for posts", () => {
+describe("for comments", () => {
+    // get comments by posts id 200
+    it("Successfully get comments by posts id", async () => {
+      const response = await request(app).get(`/posts/${postId}/comments`);
+      console.log(postId);
+      console.log(response.body);
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body[0]).toBeInstanceOf(Object);
+      expect(response.body[0]).toHaveProperty("_id", expect.any(String));
+      expect(response.body[0]).toHaveProperty("text", expect.any(String));
+      expect(response.body[0]).toHaveProperty("forumPostId", expect.any(String));
+      expect(response.body[0]).toHaveProperty("UserId", expect.any(Number));
+    });
+  
+  // get comment id 200
+  it("Successfully get comment by id", async () => {
+    const response = await request(app).get("/comments/" + commentId);
+    console.log(commentId);
+    console.log(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("_id", expect.any(String));
+    expect(response.body).toHaveProperty("text", expect.any(String));
+    expect(response.body).toHaveProperty("forumPostId", expect.any(String));
+    expect(response.body).toHaveProperty("UserId", expect.any(Number));
+  });
+
+  //! get post id 500
+  it("failed get comment by id", async () => {
+    const response = await request(app).get("/posts/6405e0b39a609fd6ac9de05p");
+    expect(response.status).toBe(500);
+    expect(response.body).toHaveProperty("message", "Internal Server Error");
+  });
+
+  // put comment id 200
+  it("Successfully put comment by id", async () => {
+    const response = await request(app)
+      .put(`/comments/` + commentId)
+      .send({
+        text: "commentar EDITED",
+      });
+    console.log(response);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message", "successfully updated");
+  });
+
+  //! put post id 500
+  it("id not found", async () => {
+    const response = await request(app).put(`/posts/1000`).send({
+      text: "commentar EDITED",
+    });
+    console.log(response);
+    expect(response.status).toBe(500);
+    expect(response.body).toHaveProperty("message", "Internal Server Error");
+  });
+
+  // create helpful by comment id 200
+  it("Successfully create helpful by comment id", async () => {
+    const response = await request(app)
+      .put(`/comments/${commentId}/helpful`)
+      .send({
+        UserId: 4,
+      });
+    console.log(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message", "successfully updated");
+  });
+
+  // delete helpful by comment id 200
+  it("Successfully delete helpful by comment id", async () => {
+    const response = await request(app)
+      .delete(`/comments/${commentId}/helpful`)
+      .send({
+        UserId: 4,
+      });
+    console.log(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message", "successfully updated");
+  });
+
+  // create reports post by comment id 200
+  it("Successfully create reports post  by comment id", async () => {
+    const response = await request(app)
+      .post(`/comments/${commentId}/report`)
+      .send({
+        UserId: 4,
+        note: "annoying",
+      });
+    console.log(response.body);
+    console.log(commentId);
+    console.log(postId,"<<<<<<<");
+
+    expect(response.status).toBe(201);
+    expect(response.body).toBeInstanceOf(Object);
+    expect(response.body).toHaveProperty("message", "successfully reported");
+  });
+
+  // delete comment id 200
+  it("Successfully delete comment by id", async () => {
+    const response = await request(app).delete(`/comments/` + commentId);
+    console.log(response);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message", "successfully deleted");
+  });
+
+
+});
+
+describe("for posts", () => {
   // posts 200
   it("Successfully read posts", async () => {
     const response = await request(app).get("/posts");
@@ -75,7 +236,7 @@ describe.skip("for posts", () => {
         images: ["1", "2"],
         caption:
           "Combine economic, social and medical data to forecast need and design services to address the growing crisis.",
-        UserId: 1,
+        UserId: 4,
       });
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("message", "successfully created");
@@ -89,7 +250,7 @@ describe.skip("for posts", () => {
         images: ["1", "2"],
         caption:
           "Combine economic, social and medical data to forecast need and design services to address the growing crisis.",
-        UserId: 1,
+        UserId: 3,
       });
       console.log(response.body);
     expect(response.status).toBe(400);
@@ -125,7 +286,7 @@ describe.skip("for posts", () => {
         title: "EDITED",
         images: ["1", "2"],
         caption: "TEST EDIT TEST EDIT",
-        UserId: 1,
+        UserId: 3,
       });
     console.log(response);
     expect(response.status).toBe(200);
@@ -138,7 +299,7 @@ describe.skip("for posts", () => {
       title: "EDITED",
       images: ["1", "2"],
       caption: "TEST EDIT TEST EDIT",
-      UserId: 1,
+      UserId: 3,
     });
     console.log(response);
     expect(response.status).toBe(500);
@@ -146,25 +307,12 @@ describe.skip("for posts", () => {
   });
 
  
-  // get comments by posts id 200
-  it("Successfully get comments by posts id", async () => {
-    const response = await request(app).get(`/posts/${postId}/comments`);
-    console.log(postId);
-    console.log(response.body);
-    expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
-    expect(response.body[0]).toBeInstanceOf(Object);
-    expect(response.body[0]).toHaveProperty("_id", expect.any(String));
-    expect(response.body[0]).toHaveProperty("text", expect.any(String));
-    expect(response.body[0]).toHaveProperty("forumPostId", expect.any(String));
-    expect(response.body[0]).toHaveProperty("UserId", expect.any(Number));
-  });
 
   // post comments by posts id 200
   it("Successfully post comments by posts id", async () => {
     const response = await request(app).post(`/posts/${postId}/comments`).send({
       text: "commentar",
-      UserId: 2,
+      UserId: 4,
       helpful: [],
     });
     console.log(response.body);
@@ -176,7 +324,7 @@ describe.skip("for posts", () => {
   // create helpful by posts id 200
   it("Successfully create helpful by posts id", async () => {
     const response = await request(app).put(`/posts/${postId}/helpful`).send({
-      UserId: 1,
+      UserId: 3,
     });
     console.log(response.body);
     expect(response.status).toBe(200);
@@ -189,7 +337,7 @@ describe.skip("for posts", () => {
     const response = await request(app)
       .delete(`/posts/${postId}/helpful`)
       .send({
-        UserId: 1,
+        UserId: 3,
       });
     console.log(response.body);
     expect(response.status).toBe(200);
@@ -200,7 +348,7 @@ describe.skip("for posts", () => {
   // create reports post by posts id 200
   it("Successfully create reports post  by posts id", async () => {
     const response = await request(app).post(`/posts/${postId}/report`).send({
-      UserId: 2,
+      UserId: 3,
       note: "annoying",
     });
     console.log(response.body);
