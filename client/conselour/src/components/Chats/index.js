@@ -13,19 +13,22 @@ export default function Chats() {
   const { counselor } = useCounselor()
   const [user, setUser] = useState()
   const { setMessages, setJoined, setSocket, setLastIndex, messages } = useChat()
+  const [loading, setLoading] = useState(true)
 
   const router = useRouter()
   const { UserId } = router.query
 
   useEffect(() => {
-    const socket = socketIOClient('https://dev-api.livy.chat/')
+    const socket = socketIOClient('https://f34f-114-124-247-157.ngrok.io/')
 
     socket.auth = { access_token: localStorage.access_token }
 
     api.get(`/counselor/chats/${UserId}`).then(({ data }) => {
       setUser(data.user)
       setMessages(data.chats)
-    }).catch(error => toast.error(error.response.data.message))
+    })
+      .catch(error => toast.error(error.response.data.message))
+      .finally(() => setLoading(false))
 
     if (UserId && counselor && !socket.connected) {
       setSocket(socket)
@@ -43,7 +46,7 @@ export default function Chats() {
       })
 
       socket.on('message', (data) => {
-        setMessages((messages) => [...messages, data])
+        setMessages((messages) => [...messages, { ...data, time: new Date() }])
         setLastIndex(messages.length)
       })
     }
@@ -57,8 +60,8 @@ export default function Chats() {
 
   return (
     <>
-      {user && <Headers user={user} />}
-      <Content />
+      <Headers user={user} loading={loading} />
+      <Content loading={loading} />
       <ChatInput />
     </>
   )
