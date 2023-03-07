@@ -177,5 +177,41 @@ describe("for schedule", () => {
     expect(response.status).toBe(404);
   });
 
+  // success create availability 
+  it.only("Suceess creating availability", async () => {
+    let counselorId = 2
+    let userId = 1
+    const response = await request(app)
+    .post("/schedules/counselor/" + counselorId + '/availability')
+    .send({
+      UserId : userId,
+      availability: [
+        {
+          dayOfWeek: "thursday",
+          slots: [
+            {
+              startTime: "17:00",
+              endTime: "19:00"
+            }
+          ]
+        },
+        {
+          dayOfWeek: "friday",
+          slots: [
+            {
+              startTime: "20:00",
+              endTime: "23:00"
+            }
+          ]
+        }
+      ]
+    })
+    expect(response.status).toBe(200);
+    // console.log(response.body);
+    expect(response.body).toHaveProperty("message", 'successfully created');
+  });
+
+
+
 
 });
