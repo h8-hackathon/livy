@@ -1,3 +1,4 @@
+
 const { connect, getDb, disconnect } = require('../config/db')
 
 const migrateForumPosts = async () => {
