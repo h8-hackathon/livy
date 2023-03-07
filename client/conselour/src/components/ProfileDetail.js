@@ -3,20 +3,14 @@ import { useCounselor } from "@/hooks/useCounselor";
 import { mdiArrowLeft, mdiPower } from "@mdi/js";
 import Icon from "@mdi/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ProfileDetail() {
-  const router = useRouter()
   const [edit, setEdit] = useState(false)
-  const { setCounselor, counselor } = useCounselor()
+  const { counselor, setCounselor } = useCounselor()
   const [form, setForm] = useState({})
-
-  const logout = () => {
-    localStorage.clear()
-    setCounselor(null)
-    router.push('/login')
-  }
+  const [loading, setLoading] = useState(false)
 
   const inputHandler = (e) => {
     const { name, value } = e.target
@@ -34,26 +28,23 @@ export default function ProfileDetail() {
 
   const submit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       await api.put('/counselor', { ...form, dob: new Date(form.dob).toISOString() })
       setEdit(false)
+      setCounselor(form)
       toast.success('Successfully updated')
     } catch (error) {
-      toast.success(error.response.data.message)
-    }
+      toast.error(error?.response?.data?.message || 'Internal Server Errror')
+    } finally { setLoading(false) }
   }
   return (
     <div className="px-8 p-10 overflow-auto">
-      <div className="flex items-center justify-between">
-        <div className="flex gap-8 items-center">
-          <Link href="/" >
-            <Icon path={mdiArrowLeft} size={0.8} />
-          </Link>
-          <h1 className='text-primary text-xl font-semibold'>Profile</h1>
-        </div>
-        <button onClick={logout}>
-          <Icon path={mdiPower} size={1.1} className="text-primary" />
-        </button>
+      <div className="flex gap-8 items-center">
+        <Link href="/" >
+          <Icon path={mdiArrowLeft} size={0.8} />
+        </Link>
+        <h1 className='text-primary text-xl font-semibold'>Profile</h1>
       </div>
       <div className="mt-10">
         <div className="relative mx-auto w-48 h-48 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
@@ -87,10 +78,10 @@ export default function ProfileDetail() {
           </div>
           <div className="space-y-4">
             <p className="text-primary">Date of birthday</p>
-            {edit ? <input name="dob" onChange={inputHandler} value={form.dob} className="px-3 py-2 text-xs w-3/4 outline-none" type="date" /> : <p className="text-base">{counselor.dob || 'Not set'}</p>}
+            {edit ? <input name="dob" onChange={inputHandler} value={form.dob} className="px-3 py-2 text-xs w-3/4 outline-none" type="date" /> : <p className="text-base">{formatedDate(counselor.dob) || 'Not set'}</p>}
           </div>
           {
-            edit && <button type="submit" className="bg-primary text-white px-3 py-2 rounded text-xs w-3/4">Submit</button>
+            edit && <button type="submit" disabled={loading} className={`bg-primary disabled:bg-slate-500 text-white px-3 py-2 rounded text-xs w-3/4`}>Submit</button>
           }
         </form>
       </div>

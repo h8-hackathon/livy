@@ -11,8 +11,8 @@ export default function App({ Component, pageProps }) {
     <Provider>
       <Protected >
         <GoogleOAuthProvider clientId={clientId} >
+          <ToastContainer position="top-right" closeOnClick draggable pauseOnHover />
           <Component {...pageProps} />
-          <ToastContainer autoClose={2000} position="top-right" closeOnClick draggable pauseOnHover />
         </GoogleOAuthProvider>
       </Protected>
     </Provider>

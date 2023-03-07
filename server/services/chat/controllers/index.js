@@ -40,7 +40,7 @@ class Controller {
         { upsert: true }
       )
 
-      res.status(200).json(chats)
+      res.status(201).json(chats)
     } catch (error) {
       next(error)
     }
