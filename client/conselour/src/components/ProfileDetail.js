@@ -1,4 +1,4 @@
-import { api } from "@/helpers";
+import { api, formatedDate } from "@/helpers";
 import { useCounselor } from "@/hooks/useCounselor";
 import { mdiArrowLeft, mdiPower } from "@mdi/js";
 import Icon from "@mdi/react";
@@ -28,15 +28,19 @@ export default function ProfileDetail() {
 
   const handleEdit = () => {
     if (edit) setForm({})
-    else setForm(counselor)
+    else setForm({ ...counselor, dob: formatedDate(counselor.dob) })
     setEdit(!edit)
   }
 
   const submit = async (e) => {
     e.preventDefault();
-
-   const res =  await api.put('/counselor', { ...form, dob: new Date(form.dob).toISOString() })
-    console.log(res.data)
+    try {
+      await api.put('/counselor', { ...form, dob: new Date(form.dob).toISOString() })
+      setEdit(false)
+      toast.success('Successfully updated')
+    } catch (error) {
+      toast.success(error.response.data.message)
+    }
   }
   return (
     <div className="px-8 p-10 overflow-auto">
@@ -75,7 +79,7 @@ export default function ProfileDetail() {
             {
               edit ?
                 <select name="gender" onChange={inputHandler} value={form.gender || ""} className="px-3 py-2 text-xs w-3/4 outline-none" type="text" >
-                  <option  disabled value="" >Not set</option>
+                  <option disabled value="" >Not set</option>
                   <option value="M">Male</option>
                   <option value="F">Female</option>
                 </select>

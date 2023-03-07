@@ -1,16 +1,18 @@
 import Card from "./Card";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api } from "@/helpers";
+import { useCounselor } from "@/hooks/useCounselor";
+import { toast } from 'react-toastify';
 
 export default function Sidebar() {
   const [schedules, setSchedules] = useState()
+  const { counselor } = useCounselor()
 
   useEffect(() => {
     api.get('/counselor/chats').then(({ data }) => {
       setSchedules(data)
-    })
+    }).catch(error => toast.error(error.response.data.message))
   }, [])
 
   return (
@@ -19,7 +21,7 @@ export default function Sidebar() {
         <div className="flex justify-between items-center">
           <h1 className='text-primary text-xl font-semibold'>Chats</h1>
           <Link href="/profile" className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-            <Image src="/Image/thinking.png" height={200} width={200} alt="profile-img" />
+            <img src={counselor.image} height={200} width={200} alt="profile-img" />
           </Link>
         </div>
         <div className="border-1 mt-8 border h-fit bg-white py-2 px-3 text-sm rounded-md">

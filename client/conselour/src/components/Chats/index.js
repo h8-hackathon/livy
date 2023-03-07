@@ -7,6 +7,7 @@ import Content from "./Content";
 import Headers from "./Headers";
 import socketIOClient from 'socket.io-client'
 import { api } from "@/helpers";
+import { toast } from "react-toastify";
 
 export default function Chats() {
   const { counselor } = useCounselor()
@@ -16,18 +17,15 @@ export default function Chats() {
   const router = useRouter()
   const { UserId } = router.query
 
-
-
   useEffect(() => {
     const socket = socketIOClient('https://dev-api.livy.chat/')
 
     socket.auth = { access_token: localStorage.access_token }
 
     api.get(`/counselor/chats/${UserId}`).then(({ data }) => {
-      console.log(data)
       setUser(data.user)
       setMessages(data.chats)
-    }).catch(() => { })
+    }).catch(error => toast.error(error.response.data.message))
 
     if (UserId && counselor && !socket.connected) {
       setSocket(socket)
@@ -40,7 +38,7 @@ export default function Chats() {
           }
 
           // error bentuknya string
-          console.log(error)
+          toast.error(error)
         })
       })
 
@@ -50,7 +48,6 @@ export default function Chats() {
       })
     }
 
-    console.log('aku')
     return () => {
       socket.disconnect()
       setSocket(null)
