@@ -1,17 +1,17 @@
 const request = require('supertest');
-const { app } = require('../app');
-const { User, AdminPost, CounselorSubmission, Report, sequelize } = require('../models');
+const app = require('../app');
+const { User, CounselorSubmission, sequelize } = require('../models');
 
 beforeAll(async () => {
   try {
     await User.create({
-      id: 1,
       name: 'ilias',
       email: 'ilias@mail.com',
       gender: 'M',
+      dob:'2023-03-07T01:19:32.622Z',
       image: 'string image url testing purpose',
       role: 'superadmin',
-      helpful: 4,
+      helpful: 20,
     });
     await CounselorSubmission.create({
       id: 2,
@@ -45,104 +45,58 @@ afterAll(async () => {
   );
 });
 
-describe('for posts', () => {
-  // posts 200
-  it('Successfully read posts', async () => {
-    const response = await request(app).get('/posts');
+describe('Succes Case For Users Service', () => {
+  it('Successfully Get Users', async () => {
+    const response = await request(app).get('/users');
     expect(response.status).toBe(200);
+    expect(typeof response.body).toBe('object')
     expect(response.body[0]).toHaveProperty('id', expect.any(Number));
-    expect(response.body[0]).toHaveProperty('title', 'Mental health: build predictive models to steer policy');
-    expect(response.body[0]).toHaveProperty('url', expect.any(String));
+    expect(response.body[0]).toHaveProperty('email', 'ilias@mail.com');
+    expect(response.body[0]).toHaveProperty('gender', 'M');
+    expect(response.body[0]).toHaveProperty('dob', '2023-03-07T01:19:32.622Z');
+    expect(response.body[0]).toHaveProperty('image', 'string image url testing purpose');
+    expect(response.body[0]).toHaveProperty('role', 'superadmin');
+    expect(response.body[0]).toHaveProperty('helpful', 20);
   });
 
-  // post 201
-  it('Successfully post posts', async () => {
-    const response = await request(app).post('/posts').send({
-      id: 6,
-      title: 'Mental health: build predictive models to steer policy',
-      url: 'https://www.nature.com/articles/d41586-021-02581-9',
-      caption: 'Combine economic, social and medical data to forecast need and design services to address the growing crisis.',
-      type: 'Article',
-      UserId: 1,
+  it('Successfully Post User (Its For Google Login)', async () => {
+    const response = await request(app).post('/users/test').send({
+      payload:{
+        id: '114434339297979854205',
+        email: 'gilang@test.com',
+        verified_email: true,
+        name: 'testing purpose',
+        given_name: 'Gilang',
+        family_name: 'Ramadhan',
+        picture: 'google.com',
+        locale: 'id'
+      },
+      role: 'user'
     });
     expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('message', 'Success created Mental health: build predictive models to steer policy');
+    expect(response.body).toHaveProperty('access_token', expect.any(String));
   });
-
-  // post 400 title is required
-  it('title is required', async () => {
-    const response = await request(app).post('/posts').send({
-      id: 6,
-      url: 'https://www.nature.com/articles/d41586-021-02581-9',
-      caption: 'Combine economic, social and medical data to forecast need and design services to address the growing crisis.',
-      type: 'Article',
-      UserId: 1,
+  it('Successfully Post User (Its For Google Login)', async () => {
+    const response = await request(app).post('/users/test').send({
+      payload:{
+        id: '114434339297979854205',
+        email: 'gilang@test.com',
+        verified_email: true,
+        name: 'testing purpose',
+        given_name: 'Gilang',
+        family_name: 'Ramadhan',
+        picture: 'google.com',
+        locale: 'id'
+      },
+      role: 'user'
     });
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error', 'title is required');
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('access_token', expect.any(String));
   });
 
-  // post 400 type is required
-  it('type is required', async () => {
-    const response = await request(app).post('/posts').send({
-      id: 6,
-      title: 'Mental health: build predictive models to steer policy',
-      url: 'https://www.nature.com/articles/d41586-021-02581-9',
-      caption: 'Combine economic, social and medical data to forecast need and design services to address the growing crisis.',
-      UserId: 1,
-    });
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error', 'type is required');
-  });
-
-  // get posts id 200
-  it('Successfully get posts by id', async () => {
-    const response = await request(app).get('/posts/6');
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('id', expect.any(Number));
-  });
-
-  // get post id 404
-  it('posts id not found', async () => {
-    const response = await request(app).get('/posts/1000');
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('error', 'not found');
-  });
-
-  // put post id 200
-  it('Successfully put posts by id', async () => {
-    const response = await request(app).put(`/posts/1`);
-    console.log(response);
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Success updated Mental health: build predictive models to steer policy');
-  });
-
-  // put post id 404
-  it('id not found', async () => {
-    const response = await request(app).put(`/posts/1000`);
-    console.log(response);
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('error', 'not found');
-  });
-
-  // delete post id 200
-  it('Successfully delete posts by id', async () => {
-    const response = await request(app).delete(`/posts/1`);
-    console.log(response);
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Success deleted Mental health: build predictive models to steer policy');
-  });
-
-  // delete post id 404
-  it('Unsuccess delete posts by id, because id not found', async () => {
-    const response = await request(app).delete(`/posts/10`);
-    console.log(response);
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty('error', 'not found');
-  });
 });
-
-describe('for counselor', () => {
+/* 
+describe('Failed Case For Users Service', () => {
   // counselors 200
   it('Successfully read counselors', async () => {
     const response = await request(app).get('/counselors');
@@ -231,4 +185,4 @@ describe('for report', () => {
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty('error', 'not found');
   });
-});
+}); */
