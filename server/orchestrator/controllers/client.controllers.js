@@ -66,6 +66,22 @@ class ClientController {
     }
   }
 
+  static async getCounselorByid(req, res, next) {
+    try {
+      const { counselorId } = req.params
+
+      const { data: user } = await userAPI.get(`users/${counselorId}`)
+      const { data: counselor } = await userAPI.get(`/submissions/${counselorId}`)
+      const { data: availability } = await scheduleAPI.get(
+        `/schedules/counselor/${counselorId}/availability`
+      )
+
+      res.status(200).json({ user, counselor, availability })
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getChatWithLivy(req, res, next) {
     try {
       const { access_token } = req.headers;
