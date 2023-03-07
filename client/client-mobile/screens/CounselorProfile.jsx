@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { api } from '../helpers/axios'
 import { dayToDate, getAllHours } from '../helpers/dayToDate'
 import { useUser } from '../hooks/useUser'
+import * as WebBrowser from 'expo-web-browser'
 
 export default function CounselorPorfile(props) {
   const { counselorId } = props.route.params
@@ -15,6 +16,7 @@ export default function CounselorPorfile(props) {
   const [slots, setSlots] = useState(null)
   const [selectedHours, setSelectedHours] = useState(null)
   const navigation = useNavigation()
+  const [loading, setLoading] = useState(false)
   const { user } = useUser()
   console.log(props)
   const fetchCounselor = async () => {
@@ -28,6 +30,7 @@ export default function CounselorPorfile(props) {
   }
 
   const createSchedule = async () => {
+    setLoading(true)
     try {
       if (selectedHours === null) return
       if (!user) {
@@ -43,11 +46,28 @@ export default function CounselorPorfile(props) {
         CounselorId: +counselorId,
         time: date,
       })
-      navigation.navigate('Schedule')
 
-      console.log(response.data)
+      const { data } = response
+      console.log(data.paymentUrl)
+      const { paymentUrl } = data
+      const result = await WebBrowser.openAuthSessionAsync(paymentUrl)
+
+      console.log(result)
+      // navigation.navigate('Schedule')
+
+      const { data: schedules } = await api.get('/client/schedule')
+      const schedule = schedules.find((s) => s.paymentUrl === paymentUrl)
+      if (schedule.status === 'unpaid') {
+        navigation.navigate('Schedule')
+      }
+
+      if (schedule.status === 'paid') {
+        navigation.navigate('Success', { schedule })
+      }
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -404,12 +424,15 @@ export default function CounselorPorfile(props) {
           mode='contained'
           textColor='#fff'
           buttonColor={
-            selectedHours === null ? '#aaa' : useTheme().colors.secondary
+            selectedHours === null || loading
+              ? '#aaa'
+              : useTheme().colors.secondary
           }
           style={{
             borderRadius: 10,
           }}
           // disabled={selectedHours === null}
+          loading={loading}
         >
           Make Appointment
         </Button>
