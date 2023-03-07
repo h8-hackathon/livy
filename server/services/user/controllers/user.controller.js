@@ -92,15 +92,15 @@ module.exports = class UserController {
             /* BELOW IS DUMMY PURPOSE @ilias */
             /* const payload = {
                 id: '114434339297979854205',
-                email: 'xvnyan@test.com',
+                email: 'xvnyannnn@test.com',
                 verified_email: true,
-                name: 'Testing Purpose',
+                name: 'user 1',
                 given_name: 'Gilang',
                 family_name: 'Ramadhan',
                 picture: 'https://lh3.googleusercontent.com/a/AGNmyxa9f7amIsKzXc4FXr2NkMnjQoKB0Pi4fj7OZFTN=s96-c',
                 locale: 'id'
               }
-            const role = 'counselor'   */
+            req.body.role = 'user' */  
             
             if ( req.body.role === 'admin' ) {
                 const user = await User.findOne({
@@ -160,6 +160,7 @@ module.exports = class UserController {
                 "dob": user.dob
             } })
         } catch (err) {
+            console.log(err)
             next(err)
         }
     }
