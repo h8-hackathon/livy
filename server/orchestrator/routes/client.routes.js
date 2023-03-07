@@ -28,5 +28,6 @@ router.get('/forum/comment/:postId', ClientController.getForumCommentByPostId)
 router.put('/forum/comment/:commentId/helpful', ClientController.createHelpfulComment)
 router.post('/forum/comment/:commentId/report', ClientController.createReportComment)
 
+router.post('/callback',ClientController.callback)
 
 module.exports = router
