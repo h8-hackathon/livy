@@ -36,7 +36,7 @@ beforeAll(async () => {
       {
         status: "paid",
         CounselorId: 2,
-        UserId: 2,
+        UserId: 1,
         time: new Date(),
         note: "apayaaa",
         session: "2023-03-07 14:59:05.400 +0700",
@@ -75,7 +75,7 @@ afterAll(async () => {
 
 describe("for schedule", () => {
   // schedule read by counselor id 200
-  it.only("Successfully read schedule by counselor id", async () => {
+  it("Successfully read schedule by counselor id", async () => {
     let counselorId = 2
     const response = await request(app).get("/schedules/counselor/"+counselorId);
     expect(response.status).toBe(200);
@@ -88,6 +88,22 @@ describe("for schedule", () => {
     expect(response.body[0]).toHaveProperty("expPaymentUrl", expect.any(String));
     expect(response.body[0].User).toBeInstanceOf(Object);
     expect(response.body[0].User).toHaveProperty("name", expect.any(String));
+  });
+
+  // schedule read by user id 200
+  it.only("Successfully read schedule by user id", async () => {
+    let userId = 1
+    const response = await request(app).get("/schedules/user/"+userId);
+    expect(response.status).toBe(200);
+    console.log(response.body)
+    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body[0]).toHaveProperty("UserId", expect.any(Number));
+    expect(response.body[0]).toHaveProperty("CounselorId", expect.any(Number));
+    expect(response.body[0]).toHaveProperty("status", expect.any(String));
+    expect(response.body[0]).toHaveProperty("paymentUrl", expect.any(String));
+    expect(response.body[0]).toHaveProperty("expPaymentUrl", expect.any(String));
+    expect(response.body[0].Counselor).toBeInstanceOf(Object);
+    expect(response.body[0].Counselor).toHaveProperty("name", expect.any(String));
   });
 
 
