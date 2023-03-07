@@ -5,6 +5,7 @@ const { User, CounselorSubmission, sequelize } = require('../models');
 beforeAll(async () => {
   try {
     await User.create({
+      id:999,
       name: 'ilias',
       email: 'ilias@mail.com',
       gender: 'M',
@@ -17,7 +18,7 @@ beforeAll(async () => {
       id: 2,
       status: 'Pending',
       submissions: 'string submission testing purpose',
-      UserId: 1,
+      UserId: 999,
     });
   } catch (error) {
     console.log(error);
@@ -49,7 +50,7 @@ describe('Succes Case For Users Service', () => {
   it('Successfully Get Users', async () => {
     const response = await request(app).get('/users');
     expect(response.status).toBe(200);
-    expect(typeof response.body).toBe('object')
+    expect(Array.isArray(response.body)).toBe(true)
     expect(response.body[0]).toHaveProperty('id', expect.any(Number));
     expect(response.body[0]).toHaveProperty('email', 'ilias@mail.com');
     expect(response.body[0]).toHaveProperty('gender', 'M');
@@ -57,6 +58,18 @@ describe('Succes Case For Users Service', () => {
     expect(response.body[0]).toHaveProperty('image', 'string image url testing purpose');
     expect(response.body[0]).toHaveProperty('role', 'superadmin');
     expect(response.body[0]).toHaveProperty('helpful', 20);
+  });
+  it('Successfully Get User By Id', async () => {
+    const response = await request(app).get('/users/999');
+    expect(response.status).toBe(200);
+    expect(typeof response.body).toBe('object')
+    expect(response.body).toHaveProperty('id', expect.any(Number));
+    expect(response.body).toHaveProperty('email', 'ilias@mail.com');
+    expect(response.body).toHaveProperty('gender', 'M');
+    expect(response.body).toHaveProperty('dob', '2023-03-07T01:19:32.622Z');
+    expect(response.body).toHaveProperty('image', 'string image url testing purpose');
+    expect(response.body).toHaveProperty('role', 'superadmin');
+    expect(response.body).toHaveProperty('helpful', 20);
   });
 
   it('Successfully Post User (Its For Google Login)', async () => {
@@ -76,22 +89,66 @@ describe('Succes Case For Users Service', () => {
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('access_token', expect.any(String));
   });
-  it('Successfully Post User (Its For Google Login)', async () => {
+  it('Successfully Post User (Reject When User Role Is Admin if try to register)', async () => {
     const response = await request(app).post('/users/test').send({
       payload:{
         id: '114434339297979854205',
-        email: 'gilang@test.com',
+        email: 'admin@test.com',
         verified_email: true,
-        name: 'testing purpose',
+        name: 'admin testing purpose',
         given_name: 'Gilang',
         family_name: 'Ramadhan',
         picture: 'google.com',
         locale: 'id'
       },
-      role: 'user'
+      role: 'admin'
     });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'InvalidCredentials');
+  });
+  it('Successfully Post User (Add To Counselor Submission when role is counselor)', async () => {
+    const response = await request(app).post('/users/test').send({
+      payload:{
+        id: '114434339297979854205',
+        email: 'counselor@test.com',
+        verified_email: true,
+        name: 'counselor testing purpose',
+        given_name: '_',
+        family_name: '_',
+        picture: 'counselor.com',
+        locale: 'id'
+      },
+      role: 'counselor'
+    });
+    const user = await User.findOne({where:{email:'counselor@test.com'}})
+    const cs = await CounselorSubmission.findOne({where:{UserId:user.id}})
+    
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('access_token', expect.any(String));
+    expect(cs).toHaveProperty('status','pending')
+  });
+
+  it('Successfully Update User', async () => {
+    const response = await request(app).put('/users/999').send({
+    name: 'updated',
+    email: 'updated@mail.com',
+    gender: 'F',
+    image: 'updated',
+  });
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'successfuly updated');
+  });
+  it('Successfully Patch User (increment or decrement helpful)', async () => {
+    const response = await request(app).patch('/users/999').send({
+      "helpful": 1,
+    });
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message','successfuly updated');
+  });
+  it('Successfully Delete User', async () => {
+    const response = await request(app).delete('/users/999');
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message','successfuly deleted');
   });
 
 });
