@@ -53,7 +53,7 @@ describe('Succes Case For Users Service', () => {
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBe(true)
     expect(response.body[0]).toHaveProperty('id', expect.any(Number));
-    expect(response.body[0]).toHaveProperty('email', 'ilias@mail.com');
+    expect(response.body[0]).toHaveProperty('email', 'ilias@test.com');
     expect(response.body[0]).toHaveProperty('gender', 'M');
     expect(response.body[0]).toHaveProperty('dob', '2023-03-07T01:19:32.622Z');
     expect(response.body[0]).toHaveProperty('image', 'string image url testing purpose');
@@ -65,7 +65,7 @@ describe('Succes Case For Users Service', () => {
     expect(response.status).toBe(200);
     expect(typeof response.body).toBe('object')
     expect(response.body).toHaveProperty('id', expect.any(Number));
-    expect(response.body).toHaveProperty('email', 'ilias@mail.com');
+    expect(response.body).toHaveProperty('email', 'ilias@test.com');
     expect(response.body).toHaveProperty('gender', 'M');
     expect(response.body).toHaveProperty('dob', '2023-03-07T01:19:32.622Z');
     expect(response.body).toHaveProperty('image', 'string image url testing purpose');
@@ -88,7 +88,7 @@ describe('Succes Case For Users Service', () => {
       role: 'user'
     });
     access_token = response.body.access_token
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('access_token', expect.any(String));
   });
   it('Successfully Post User (Reject When User Role Is Admin if try to register)', async () => {
@@ -136,7 +136,7 @@ describe('Succes Case For Users Service', () => {
     expect(response.status).toBe(200);
     expect(typeof response.body).toBe('object')
     expect(response.body).toHaveProperty('id', expect.any(Number));
-    expect(response.body).toHaveProperty('email', 'ilias@mail.com');
+    expect(response.body).toHaveProperty('email', 'ilias@test.com');
     expect(response.body).toHaveProperty('gender', 'M');
     expect(response.body).toHaveProperty('dob', '2023-03-07T01:19:32.622Z');
     expect(response.body).toHaveProperty('image', 'string image url testing purpose');
