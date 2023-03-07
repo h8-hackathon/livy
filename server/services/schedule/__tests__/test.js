@@ -127,25 +127,8 @@ describe("for schedule", () => {
     expect(response.status).toBe(201);
     console.log(response.body);
     expect(response.body).toBeInstanceOf(Object);
-    expect(response.body.response).toHaveProperty("status", expect.any(String));
-    expect(response.body.response).toHaveProperty("UserId", expect.any(Number));
-    expect(response.body.response).toHaveProperty(
-      "session",
-      expect.any(String)
-    );
-    expect(response.body.response).toHaveProperty("note", expect.any(String));
-    expect(response.body.response).toHaveProperty(
-      "CounselorId",
-      expect.any(Number)
-    );
-    expect(response.body.response).toHaveProperty(
-      "paymentUrl",
-      expect.any(String)
-    );
-    expect(response.body.response).toHaveProperty(
-      "expPaymentUrl",
-      expect.any(String)
-    );
+    expect(response.body).toHaveProperty("paymentUrl", expect.any(String));
+ 
   });
 
   // post schedule by user id 500

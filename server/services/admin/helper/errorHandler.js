@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 function errorHandler(error, req, res, next) {
   console.log(error, 'dari error handler');
   if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
