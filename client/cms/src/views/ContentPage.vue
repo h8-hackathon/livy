@@ -39,7 +39,7 @@ export default {
       </div>
 
       <div class="table-responsive">
-        <table class="table align-middle table-borderless" style="min-width: max-content;">
+        <table class="table align-middle table-borderless" >
           <!-- Untuk Table Jobs -->
           <thead >
             <tr class="thead  ">
@@ -96,7 +96,7 @@ tr th{
 td {
   color: #909090;
   font-size: 0.96rem;
-  font-weight: 400!important;
+  font-weight: 400 !important;
 }
 .header {
   font-size: 1.4rem ;

@@ -108,7 +108,7 @@ export default {
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="post" role="tabpanel" aria-labelledby="post-tab">
           <div class="table-responsive">
-            <table class="table align-middle table-borderless" style="min-width: max-content;">
+            <table class="table align-middle table-borderless">
               <!-- Untuk Table Jobs -->
               <thead>
                 <tr class="thead  ">
@@ -150,7 +150,7 @@ export default {
         </div>
         <div class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
           <div class="table-responsive">
-            <table class="table align-middle table-borderless" style="min-width: max-content;">
+            <table class="table align-middle table-borderless">
               <!-- Untuk Table Jobs -->
               <thead>
                 <tr class="thead  ">
