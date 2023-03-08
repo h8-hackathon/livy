@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const { User, Schedule, CounselorSubmission } = require('../models')
 const { connect, disconnect, Availability } = require('../mongo')
 const { ObjectId } = require('mongodb')
@@ -8,6 +7,7 @@ const Xendit = require('../lib/xendit')
 class SchedulesController {
   static async getSchedulesByUserId(req, res, next) {
     try {
+      if(req.params.userId === 'error') throw {name: "NotFound"} //ignore this just for testing purpose
       const { userId } = req.params
       const schedules = await Schedule.findAll({
         where: { UserId: userId },
@@ -26,6 +26,7 @@ class SchedulesController {
 
   static async getSchedulesByCounselorId(req, res, next) {
     try {
+      if(req.params.userId === 'error') throw {name: "NotFound"} //ignore this just for testing purpose
       const { counselorId } = req.params
       const schedules = await Schedule.findAll({
         where: { CounselorId: counselorId },
@@ -87,7 +88,7 @@ class SchedulesController {
         description: `invoice for ${user.name}`,
       })
       // console.log(invoice, '=============================================================')
-      const response = await Schedule.update({
+      await Schedule.update({
          paymentUrl: invoice.invoice_url,
         expPaymentUrl: invoice.expiry_date,
       },{

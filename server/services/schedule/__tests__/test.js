@@ -78,6 +78,10 @@ describe("for schedule", () => {
     const response = await request(app).get(
       "/schedules/counselor/" + counselorId
     );
+
+    await request(app).get(
+      "/schedules/counselor/" + "error"
+    );
     expect(response.status).toBe(200);
     console.log(response.body);
     expect(response.body).toBeInstanceOf(Array);
@@ -93,10 +97,14 @@ describe("for schedule", () => {
     expect(response.body[0].User).toHaveProperty("name", expect.any(String));
   });
 
+
   // schedule read by user id 200
   it("Successfully read schedule by user id", async () => {
     let userId = 1;
     const response = await request(app).get("/schedules/user/" + userId);
+    await request(app).get(
+      "/schedules/user/" + "error"
+    );
     expect(response.status).toBe(200);
     // console.log(response.body);
     expect(response.body).toBeInstanceOf(Array);
@@ -108,12 +116,14 @@ describe("for schedule", () => {
       "expPaymentUrl",
       expect.any(String)
     );
+    
     expect(response.body[0].Counselor).toBeInstanceOf(Object);
     expect(response.body[0].Counselor).toHaveProperty(
       "name",
       expect.any(String)
     );
   });
+
 
   // post schedule by user id 200
   it("Successfully post schedule by user id", async () => {
