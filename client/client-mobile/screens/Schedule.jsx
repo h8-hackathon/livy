@@ -17,13 +17,16 @@ import CounselorCard from '../components/CounselorCard'
 import { Ionicons } from '@expo/vector-icons'
 import * as WebBrowser from 'expo-web-browser'
 import { useUser } from '../hooks/useUser'
+import { useSchedules } from '../hooks/useSchedule'
 
 const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
   const theme = useTheme()
   const navigation = useNavigation()
+  const { updateSchedule } = useSchedules()
   const pay = async () => {
     try {
       await WebBrowser.openAuthSessionAsync(paymentUrl)
+      await updateSchedule()
       navigation.navigate('Schedule')
     } catch (error) {
       console.log(error)
@@ -152,7 +155,7 @@ export default function Schedule() {
   const navigation = useNavigation()
   const theme = useTheme()
   const user = useUser()
-  const [schedule, setSchedule] = useState([])
+  const { schedule, setSchedule, updateSchedule } = useSchedules()
   const [counselors, setcounselors] = useState([])
   const [focus, setFocus] = useState(false)
   const fetchCounselors = async () => {
