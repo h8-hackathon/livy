@@ -1,0 +1,9 @@
+const { Router } = require('express')
+const CounselorController = require('../controllers/counselor.controller')
+const DailyController = require('../controllers/daily.controllers')
+
+const router = Router()
+
+router.post('/todos',  DailyController.postTodos)
+
+module.exports = router
