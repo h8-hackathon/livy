@@ -9,7 +9,7 @@ export const useTodos = () => {
   const updateTodos = async () => {
     if (!user) return
     try {
-      const { data } = await api.get('/daily/todos/')
+      const { data } = await api.get('/daily/todos/' + user.id)
       setTodos(data)
     } catch (error) {
       console.log(error)

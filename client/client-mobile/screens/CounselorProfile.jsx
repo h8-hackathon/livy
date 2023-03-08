@@ -43,6 +43,8 @@ export default function CounselorPorfile(props) {
       date.setHours(hours)
       date.setMinutes(0)
       date.setSeconds(0)
+      date.setMilliseconds(0)
+      
       const response = await api.post('/client/schedule', {
         CounselorId: +counselorId,
         time: date,
@@ -425,9 +427,7 @@ export default function CounselorPorfile(props) {
           mode='contained'
           textColor='#fff'
           buttonColor={
-            selectedHours === null || loading
-              ? '#aaa'
-              : theme.colors.secondary
+            selectedHours === null || loading ? '#aaa' : theme.colors.secondary
           }
           style={{
             borderRadius: 10,

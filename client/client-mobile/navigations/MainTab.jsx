@@ -13,6 +13,7 @@ import ScheduleScreen from '../screens/Schedule'
 import LivyChat from '../screens/LivyChat'
 import AccountScreen from '../screens/Account'
 import { useSchedules } from '../hooks/useSchedule'
+import { groupingSchedule } from '../helpers/grouping'
 
 const Tab = createBottomTabNavigator()
 
@@ -59,7 +60,7 @@ export default function MainTab() {
                 size={size}
                 color={color}
               />
-              {schedule.length > 0 && (
+              {groupingSchedule(schedule).active.length > 0 && (
                 <Text
                   style={{
                     position: 'absolute',
@@ -75,7 +76,7 @@ export default function MainTab() {
                     color: '#fff',
                   }}
                 >
-                  {schedule.length}
+                  {groupingSchedule(schedule).active.length}
                 </Text>
               )}
             </>

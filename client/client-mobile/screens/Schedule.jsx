@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   View,
   Image,
@@ -18,8 +18,9 @@ import { Ionicons } from '@expo/vector-icons'
 import * as WebBrowser from 'expo-web-browser'
 import { useUser } from '../hooks/useUser'
 import { useSchedules } from '../hooks/useSchedule'
+import { groupingSchedule } from '../helpers/grouping'
 
-const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
+const ScheduleCard = ({ Counselor, session, status, paymentUrl, type }) => {
   const theme = useTheme()
   const navigation = useNavigation()
   const { updateSchedule } = useSchedules()
@@ -44,7 +45,7 @@ const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
     >
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('LivyChat', { Counselor })
+          if (type === 'active') navigation.navigate('LivyChat', { Counselor })
         }}
         style={{
           padding: 15,
@@ -158,6 +159,12 @@ export default function Schedule() {
   const { schedule, setSchedule, updateSchedule } = useSchedules()
   const [counselors, setcounselors] = useState([])
   const [focus, setFocus] = useState(false)
+
+  const grouped = useCallback(() => {
+    return groupingSchedule(schedule)
+  }, [schedule])
+
+  console.log(grouped())
   const fetchCounselors = async () => {
     const res = await api.get('/client/counselors')
     console.log(res.data)
@@ -198,9 +205,77 @@ export default function Schedule() {
           padding: 10,
         }}
       >
-        {schedule.map((item, i) => {
-          return <ScheduleCard key={i} {...item} />
+        {grouped().active.length > 0 && (
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: theme.colors.primary,
+              marginVertical: 10,
+              paddingTop: 10,
+              paddingLeft: 10,
+            }}
+          >
+            Active Session
+          </Text>
+        )}
+        {grouped().active.map((item, i) => {
+          return <ScheduleCard key={i} {...item} type='active' />
         })}
+        {grouped().upcoming.length > 0 && (
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: theme.colors.primary,
+              marginVertical: 10,
+              paddingTop: 10,
+              paddingLeft: 10,
+            }}
+          >
+            Upcoming Session
+          </Text>
+        )}
+        {grouped().upcoming.map((item, i) => {
+          return <ScheduleCard key={i} {...item} type='upcoming' />
+        })}
+        {grouped().past.length > 0 && (
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: theme.colors.primary,
+              marginVertical: 10,
+              paddingTop: 10,
+              paddingLeft: 10,
+            }}
+          >
+            Past Session
+          </Text>
+        )}
+        {grouped().past.map((item, i) => {
+          return <ScheduleCard key={i} {...item} type='past' />
+        })}
+        {grouped().unpaid.length > 0 && (
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: theme.colors.primary,
+              marginVertical: 10,
+              paddingTop: 10,
+              paddingLeft: 10,
+            }}
+          >
+            Unpaid Session
+          </Text>
+        )}
+        {grouped().unpaid.map((item, i) => {
+          return <ScheduleCard key={i} {...item} type='unpaid' />
+        })}
+        {/* {schedule.map((item, i) => {
+          return <ScheduleCard key={i} {...item} />
+        })} */}
         {counselors.length > 0 && (
           <Text
             style={{
