@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb')
-
+/* istanbul ignore file */
 let DATABASE_URL, DATABASE_NAME
 
 if (process.env.NODE_ENV === 'production') {

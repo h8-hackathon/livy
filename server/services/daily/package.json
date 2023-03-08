@@ -4,7 +4,7 @@
   "description": "- `POST /todos`\r - `GET /todos/:userId`\r - `PUT /todos/:userId`",
   "main": "index.js",
   "scripts": {
-    "test": "jest --forceExit --detectOpenHandles",
+    "test": "jest --coverage --forceExit --detectOpenHandles",
     "start": "node bin/www"
   },
   "keywords": [],

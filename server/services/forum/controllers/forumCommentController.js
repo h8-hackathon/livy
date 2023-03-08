@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const { connect, disconnect, ForumPost, ForumComment } = require('../mongo')
 const { ObjectId } = require('mongodb')
 const connectDB = connect()
