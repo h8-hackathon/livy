@@ -18,13 +18,23 @@ export default function Sidebar() {
   const router = useRouter()
 
   useEffect(() => {
+    fetchData()
+
+    const intervalId = setInterval(() => {
+      fetchData()
+    }, 60000)
+
+    return () => clearInterval(intervalId);
+  }, [])
+
+  const fetchData = () => {
     api.get('/counselor/chats').then(({ data }) => {
       setSchedules(data)
       setTemp(data)
     })
       .catch(error => toast.error(error.response?.data?.message || 'Internal Server Error'))
       .finally(() => setLoading(false))
-  }, [])
+  }
 
   useEffect(() => {
     if (search) {
@@ -64,9 +74,10 @@ export default function Sidebar() {
       </div>
       <div className="text-xs font-semibold text-center text-gray-500 border-b border-gray-200 ">
         <ul className="flex overflow-auto  z-0  -mb-px">
-          {stat && stat.map((stat) => <li className="mr-2">
-            <button key={stat} onClick={() => setGroup(stat)} className={`capitalize inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-primary hover:border-primary ${group == stat ? 'text-primary border-primary' : ''}`}>{stat}</button>
-          </li>)}
+          {stat && stat.map((stat) =>
+            <li key={stat} className="mr-2">
+              <button onClick={() => setGroup(stat)} className={`capitalize inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-primary hover:border-primary ${group == stat ? 'text-primary border-primary' : ''}`}>{stat}</button>
+            </li>)}
         </ul>
       </div>
       <div className="overflow-auto scroll-smooth">

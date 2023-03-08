@@ -55,7 +55,6 @@ const formatedDate = (date) => {
 
 
 const groupingSchedule = (group) => {
-  console.log(group)
   let result = group.reduce(
     (value, curr) => {
       const start = new Date(curr.session).getTime()
