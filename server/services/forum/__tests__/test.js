@@ -110,7 +110,7 @@ describe("for comments", () => {
   });
 
   //! get post id 500
-  it("failed get comment by id", async () => {
+  it("Failed get comment by id", async () => {
     const response = await request(app).get("/posts/6405e0b39a609fd6ac9de05p");
     expect(response.status).toBe(500);
     expect(response.body).toHaveProperty("message", "Internal Server Error");
@@ -208,6 +208,12 @@ describe("for comments", () => {
 describe("for posts", () => {
   // posts 200
   it("Successfully read posts", async () => {
+    await request(app).get("/posts?page=999");
+    await request(app).get("/posts?page=0");
+    await request(app).get("/posts?page=1");
+    await request(app).get("/posts?sortBy=createdAt");
+    await request(app).get("/posts?limit=1");
+    await request(app).get("/posts?page=4");
     const response = await request(app).get("/posts");
     console.log(response.body);
     expect(response.status).toBe(200);
