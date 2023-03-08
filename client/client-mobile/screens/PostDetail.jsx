@@ -1,74 +1,59 @@
 import { ProgressBar, Text, useTheme } from "react-native-paper";
 import { Image, Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
-import { Audio } from "expo-av";
-import { pauseAudio, playAudio, resumeAudio } from "../helpers/audioController";
-import { Ionicons } from "@expo/vector-icons";
-import { useIsFocused } from "@react-navigation/core";
+import { WebView } from "react-native-webview";
 
 function Podcast({ item }) {
-  const isFocused = useIsFocused();
-  const [sound, setSound] = useState();
-  const [playback, setPlayback] = useState();
   const { title, description, url } = item;
-  const playSound = async () => {
-    if (!playback) {
-      const playObj = new Audio.Sound();
-      const status = await playAudio(playObj, url);
-      setSound(playObj);
-      setPlayback(status);
-      return;
-    }
-
-    if (playback?.isLoaded && playback?.isPlaying) {
-      const status = await pauseAudio(sound);
-      return setPlayback(status);
-    }
-
-    if (playback?.isLoaded && !playback?.isPlaying) {
-      const status = await resumeAudio(sound);
-      return setPlayback(status);
-    }
-  };
-
-  useEffect(() => {
-    if (!isFocused && sound) {
-      pauseAudio(sound);
-      sound.unloadAsync();
-    }
-  }, [isFocused]);
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={{ flex: 1 }}>
       <SafeAreaView />
-      <Image
-        style={{ width: 200, height: 200, borderRadius: 100 }}
+      <View
+        style={{ flex: 2, alignItems: "center", justifyContent: "flex-end" }}
+      >
+        <Image
+          style={{ width: 200, height: 200, borderRadius: 100 }}
+          source={{
+            uri: "https://www.iconsdb.com/icons/preview/green/audio-wave-xxl.png",
+          }}
+        />
+        <Text
+          style={{
+            textAlign: "center",
+            marginBottom: 20,
+            fontSize: 20,
+            maxWidth: 300,
+          }}
+        >
+          {title}
+        </Text>
+        <Text
+          style={{
+            marginHorizontal: 10,
+            marginBottom: 25,
+            textAlign: "center",
+            fontSize: 12,
+          }}
+        >
+          {description}
+        </Text>
+      </View>
+      {/* <View style={{ flex: 1, justifyContent: "center" }}> */}
+      <WebView
+        scalesPageToFit={false}
         source={{
-          uri: "https://www.iconsdb.com/icons/preview/green/audio-wave-xxl.png",
+          uri: url,
+          html: `
+          <body style="overflow:hidden; height:10px">
+          <div style="text-align:center; width: 100% ">
+          <audio controls style="width:80%;"  src="${url}" allow="autoplay; " ></audio> </div>
+          </body>
+          `,
         }}
       />
-      <Text
-        style={{
-          textAlign: "center",
-          marginBottom: 20,
-          fontSize: 20,
-          maxWidth: 300,
-        }}
-      >
-        {title}
-      </Text>
-      <Text
-        style={{
-          marginHorizontal: 10,
-          marginBottom: 25,
-          textAlign: "center",
-          fontSize: 12,
-        }}
-      >
-        {description}
-      </Text>
-      <ProgressBar
+      {/* </View> */}
+      {/* <ProgressBar
         style={{ backgroundColor: "#dedede", height: 5, width: 200 }}
         visible={true}
         progress={0.7}
@@ -91,7 +76,7 @@ function Podcast({ item }) {
           size={50}
           color="white"
         />
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 }
@@ -106,7 +91,7 @@ function Article({ item }) {
         <Image
           style={{
             width: "100%",
-            height: 320,
+            height: 250,
           }}
           source={{
             uri: url,
@@ -114,6 +99,7 @@ function Article({ item }) {
         />
       </View>
       <ScrollView
+        contentContainerStyle={{ padding: 5 }}
         style={{
           top: -20,
           backgroundColor: "white",
@@ -145,8 +131,26 @@ function Article({ item }) {
   );
 }
 
+function Videos({ item }) {
+  const { title, description, url } = item;
+  return (
+    <View style={{ flex: 1 }}>
+      <SafeAreaView />
+      <WebView
+        source={{
+          html: '<iframe width="100%" height="30%" src="https://www.youtube.com/embed/cqyziA30whE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>',
+        }}
+      />
+      <View>
+        <Text>asdkh</Text>
+      </View>
+    </View>
+  );
+}
+
 export default function PostDetail(props) {
   const item = props.route.params;
+  // return <Videos item={item} />;
   if (item.type === "podcast") return <Podcast item={item} />;
   return <Article item={item} />;
 }
