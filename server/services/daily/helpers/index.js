@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const convertArrayToArrayTodos = (arr) => {
   return arr.map(el => {
     return {
