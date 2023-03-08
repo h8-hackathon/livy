@@ -81,8 +81,8 @@ export default {
               >
               <select id="admin-gender" class="form-select" v-model="gender">
                 <option value="" selected disabled>-- Select Type --</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
               </select>
             </div>
 
