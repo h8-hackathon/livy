@@ -1,28 +1,40 @@
 import Card from "./Card";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { api } from "@/helpers";
+import { useCallback, useEffect, useState } from "react";
+import { api, groupingSchedule } from "@/helpers";
 import { useCounselor } from "@/hooks/useCounselor";
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 
 export default function Sidebar() {
-  const [schedules, setSchedules] = useState()
-  const [temp, setTemp] = useState()
+  const [schedules, setSchedules] = useState([])
+  const [temp, setTemp] = useState([])
   const { counselor, setCounselor } = useCounselor()
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [group, setGroup] = useState('active')
+  const stat = ['active', 'upcoming', 'unpaid', 'past']
 
   const router = useRouter()
 
   useEffect(() => {
+    fetchData()
+
+    const intervalId = setInterval(() => {
+      fetchData()
+    }, 60000)
+
+    return () => clearInterval(intervalId);
+  }, [])
+
+  const fetchData = () => {
     api.get('/counselor/chats').then(({ data }) => {
       setSchedules(data)
       setTemp(data)
     })
       .catch(error => toast.error(error.response?.data?.message || 'Internal Server Error'))
       .finally(() => setLoading(false))
-  }, [])
+  }
 
   useEffect(() => {
     if (search) {
@@ -32,6 +44,8 @@ export default function Sidebar() {
       setTemp(schedules)
     }
   }, [search])
+
+  const groupped = useCallback(() => groupingSchedule(temp), [temp])
 
   const logout = () => {
     localStorage.clear()
@@ -58,10 +72,24 @@ export default function Sidebar() {
           <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" placeholder="Search" className="w-full h-full outline-none text-xs" />
         </div>
       </div>
+      <div className="text-xs font-semibold text-center text-gray-500 border-b border-gray-200 ">
+        <ul className="flex overflow-auto  z-0  -mb-px">
+          {stat && stat.map((stat) =>
+            <li key={stat} className="mr-2">
+              <button onClick={() => setGroup(stat)} className={`capitalize inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-primary hover:border-primary ${group == stat ? 'text-primary border-primary' : ''}`}>{stat}</button>
+            </li>)}
+        </ul>
+      </div>
       <div className="overflow-auto scroll-smooth">
-        {temp && !loading && temp.map((item, index) =>
-          <Card key={index} item={item} />
-        )}
+        {groupped()[group].length !== 0 && !loading &&
+          groupped()[group].map((item, index) =>
+            <Card key={index} item={item} />
+          )}
+
+        {!groupped()[group].length && !loading &&
+          <p className="text-center mt-10">No Data Record</p>
+        }
+
         {loading && Array.from(Array(5), (e, i) => {
           return <div key={i} className="flex border-b-2 w-full  items-center justify-between px-8 py-5 ">
             <div className="flex items-center gap-4">
