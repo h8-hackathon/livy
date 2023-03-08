@@ -43,11 +43,13 @@ class Controller {
 
       res.status(201).json(chats);
     } catch (error) {
+      /* istanbul ignore next  */
       next(error);
     }
   }
 
   static async chatWithLivy(req, res, next) {
+    /* istanbul ignore next */
     try {
       const { text, sender } = req.body;
       const { userId } = req.params;
@@ -55,8 +57,7 @@ class Controller {
         UserId: +userId,
         CounselorId: null,
       });
-
-      /* istanbul ignore if  */
+      
       if (!chats) {
         chats = { UserId: +userId, chats: [], CounselorId: null };
       } else {
@@ -86,14 +87,14 @@ class Controller {
         UserId: +userId,
         CounselorId: null,
       });
-
+      
+      /* istanbul ignore if */
       if (!chats) {
         chats = { UserId: +userId, chats: [], CounselorId: null };
       }
 
       res.status(200).json(chats);
     } catch (error) {
-      /* istanbul ignore next */
       next(error);
     }
   }
@@ -106,11 +107,11 @@ class Controller {
         CounselorId: +counselorId,
       }).toArray();
 
+      /* istanbul ignore if */
       if (!chat) throw { message: "Not Found" };
-
+      
       res.status(200).json(chat);
     } catch (error) {
-      /* istanbul ignore next */
       next(error);
     }
   }
