@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CounselorCard from '../components/CounselorCard'
 import { api } from '../helpers/axios'
 import getGreeting from '../helpers/greeting'
+import { useSchedules } from '../hooks/useSchedule'
 import { useUser } from '../hooks/useUser'
 
 const ArticleCard = ({ title, date, image }) => {
@@ -210,6 +211,7 @@ export default function Home() {
   const theme = useTheme()
   const [home, setHome] = useState(null)
   const [counselors, setcounselors] = useState([])
+  const { updateSchedule } = useSchedules()
   const { user } = useUser()
   const navigation = useNavigation()
   const fetchData = async () => {
@@ -226,6 +228,9 @@ export default function Home() {
   useEffect(() => {
     fetchData()
     fetchCounselors()
+    if (user) {
+      updateSchedule()
+    }
   }, [])
   return (
     <>

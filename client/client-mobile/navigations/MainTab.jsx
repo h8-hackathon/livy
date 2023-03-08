@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { SafeAreaView, Text, Touchable, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Button, TextInput, useTheme } from 'react-native-paper'
+import { Badge, Button, TextInput, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import HomeScreen from '../screens/Home'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -12,12 +12,14 @@ import Forum from '../screens/Forum'
 import ScheduleScreen from '../screens/Schedule'
 import LivyChat from '../screens/LivyChat'
 import AccountScreen from '../screens/Account'
+import { useSchedules } from '../hooks/useSchedule'
 
 const Tab = createBottomTabNavigator()
 
 export default function MainTab() {
   const theme = useTheme()
   const navigation = useNavigation()
+  const { schedule } = useSchedules()
   return (
     <Tab.Navigator
       screenOptions={{
@@ -51,11 +53,29 @@ export default function MainTab() {
         name='Schedule'
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? `ios-calendar` : `ios-calendar-outline`}
-              size={size}
-              color={color}
-            />
+            <>
+              <Ionicons
+                name={focused ? `ios-calendar` : `ios-calendar-outline`}
+                size={size}
+                color={color}
+              />
+              <Text
+                style={{
+                  position: 'absolute',
+                  transform: [{ translateX: 12 }, { translateY: -12 }],
+                  backgroundColor: theme.colors.secondary,
+                  width: 14,
+                  height: 14,
+                  fontSize: 8,
+                  textAlignVertical: 'center',
+                  textAlign: 'center',
+                  borderRadius: 10,
+                  fontWeight: 'bold',
+                }}
+              >
+                {schedule.length}
+              </Text>
+            </>
           ),
           tabBarShowLabel: true,
         }}
