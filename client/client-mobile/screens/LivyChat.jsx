@@ -13,6 +13,7 @@ import { api } from '../helpers/axios'
 import { useNavigation } from '@react-navigation/native'
 
 const MeChatBubble = ({ message }) => {
+  const theme = useTheme()
   return (
     <View
       style={{
@@ -25,7 +26,7 @@ const MeChatBubble = ({ message }) => {
       <View style={{ alignItems: 'flex-end', width: '100%' }}>
         <View
           style={{
-            backgroundColor: useTheme().colors.primary,
+            backgroundColor: theme.colors.primary,
             padding: 10,
             borderRadius: 10,
             maxWidth: '70%',
@@ -46,6 +47,7 @@ const MeChatBubble = ({ message }) => {
 }
 
 const OtherChatBubble = ({ message }) => {
+  const theme = useTheme()
   return (
     <View
       style={{
@@ -79,6 +81,7 @@ const OtherChatBubble = ({ message }) => {
 }
 
 const Profile = ({ name }) => {
+  const theme = useTheme()
   return (
     <View
       style={{
@@ -102,13 +105,14 @@ const Profile = ({ name }) => {
         {/* <Ionicons
           name='ios-checkmark-circle'
           size={15}
-          color={useTheme().colors.primary}
+          color={theme.colors.primary}
         /> */}
       </View>
     </View>
   )
 }
 export default function LivyChat(props) {
+  const theme = useTheme()
   const { user } = useUser()
   const [socket, setSocket] = useState(null)
   const [messages, setMessages] = useState([])

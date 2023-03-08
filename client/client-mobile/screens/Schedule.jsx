@@ -19,6 +19,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { useUser } from '../hooks/useUser'
 
 const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
+  const theme = useTheme()
   const navigation = useNavigation()
   const pay = async () => {
     try {
@@ -38,10 +39,10 @@ const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
         marginVertical: 5,
       }}
     >
-      <View
-        // onPress={() => {
-        //   navigation.navigate('LivyChat', { Counselor })
-        // }}
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('LivyChat', { Counselor })
+        }}
         style={{
           padding: 15,
           backgroundColor: 'white',
@@ -84,8 +85,8 @@ const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
             style={{
               backgroundColor:
                 status === 'unpaid'
-                  ? useTheme().colors.secondary
-                  : useTheme().colors.primary,
+                  ? theme.colors.secondary
+                  : theme.colors.primary,
 
               width: 60,
               alignItems: 'center',
@@ -112,7 +113,7 @@ const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
             paddingHorizontal: 16,
             borderRadius: 4,
             elevation: 3,
-            backgroundColor: useTheme().colors.secondary,
+            backgroundColor: theme.colors.secondary,
           }}
             onPress={() => {}}
             >
@@ -128,7 +129,7 @@ const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
             </Pressable>
           </View> */}
         </View>
-      </View>
+      </TouchableOpacity>
       {status === 'unpaid' && (
         <View
           style={{
@@ -149,6 +150,7 @@ const ScheduleCard = ({ Counselor, session, status, paymentUrl }) => {
 
 export default function Schedule() {
   const navigation = useNavigation()
+  const theme = useTheme()
   const user = useUser()
   const [schedule, setSchedule] = useState([])
   const [counselors, setcounselors] = useState([])
@@ -160,7 +162,7 @@ export default function Schedule() {
   }
   const fetchSchedule = async () => {
     try {
-      if(!user) return
+      if (!user) return
       const response = await api.get('/client/schedule')
       console.log(response.data)
       setSchedule(response.data)
@@ -201,7 +203,7 @@ export default function Schedule() {
             style={{
               fontSize: 20,
               fontWeight: 'bold',
-              color: useTheme().colors.primary,
+              color: theme.colors.primary,
               marginVertical: 10,
               paddingTop: 10,
               paddingLeft: 10,
@@ -213,7 +215,7 @@ export default function Schedule() {
         {counselors.map((counselor) => {
           return <CounselorCard {...counselor.User} key={counselor.id} />
         })}
-        <Divider style={{marginVertical: 20}}/>
+        <Divider style={{ marginVertical: 20 }} />
       </ScrollView>
     </>
   )

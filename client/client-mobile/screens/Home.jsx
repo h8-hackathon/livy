@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { Image } from 'react-native'
 import { Dimensions, ScrollView, View, ImageBackground } from 'react-native'
-import { Text, useTheme } from 'react-native-paper'
+import { Text, useTheme, Button } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CounselorCard from '../components/CounselorCard'
 import { api } from '../helpers/axios'
@@ -10,6 +11,7 @@ import getGreeting from '../helpers/greeting'
 import { useUser } from '../hooks/useUser'
 
 const ArticleCard = ({ title, date, image }) => {
+  const theme = useTheme()
   return (
     <View
       style={{
@@ -58,7 +60,7 @@ const ArticleCard = ({ title, date, image }) => {
           style={{
             fontWeight: 'bold',
             fontSize: 10,
-            color: useTheme().colors.primary,
+            color: theme.colors.primary,
           }}
         >
           Continue Reading
@@ -66,7 +68,7 @@ const ArticleCard = ({ title, date, image }) => {
         <Ionicons
           name='ios-arrow-forward'
           size={15}
-          color={useTheme().colors.primary}
+          color={theme.colors.primary}
         />
       </View>
     </View>
@@ -74,6 +76,7 @@ const ArticleCard = ({ title, date, image }) => {
 }
 
 const VideoCard = () => {
+  const theme = useTheme()
   return (
     <View
       style={{
@@ -115,6 +118,7 @@ const VideoCard = () => {
   )
 }
 const PodcastCard = ({ title, date, description }) => {
+  const theme = useTheme()
   return (
     <View
       style={{
@@ -177,7 +181,7 @@ const PodcastCard = ({ title, date, description }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
             <View
               style={{
-                backgroundColor: useTheme().colors.secondary,
+                backgroundColor: theme.colors.secondary,
                 width: 25,
                 height: 25,
                 borderRadius: 50,
@@ -203,10 +207,11 @@ const PodcastCard = ({ title, date, description }) => {
 }
 
 export default function Home() {
+  const theme = useTheme()
   const [home, setHome] = useState(null)
   const [counselors, setcounselors] = useState([])
   const { user } = useUser()
-
+  const navigation = useNavigation()
   const fetchData = async () => {
     const res = await api.get('/client/home')
     setHome(res.data)
@@ -248,7 +253,7 @@ export default function Home() {
           <View
             style={{
               gap: 10,
-              backgroundColor: useTheme().colors.primary,
+              backgroundColor: theme.colors.primary,
               padding: 20,
               borderRadius: 20,
             }}
@@ -276,7 +281,8 @@ export default function Home() {
                 color: '#fff',
               }}
             >
-              {getGreeting()}{user ? ` ${user.name}` : ''}!
+              {getGreeting()}
+              {user ? ` ${user.name}` : ''}!
             </Text>
             <View
               style={{
@@ -311,7 +317,7 @@ export default function Home() {
             <Ionicons
               name='ios-chevron-forward'
               size={15}
-              color={useTheme().colors.primary}
+              color={theme.colors.primary}
             />
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -340,7 +346,7 @@ export default function Home() {
             <Ionicons
               name='ios-chevron-forward'
               size={15}
-              color={useTheme().colors.primary}
+              color={theme.colors.primary}
             />
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -362,7 +368,7 @@ export default function Home() {
             <Ionicons
               name='ios-chevron-forward'
               size={15}
-              color={useTheme().colors.primary}
+              color={theme.colors.primary}
             />
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -388,7 +394,7 @@ export default function Home() {
             <Ionicons
               name='ios-chevron-forward'
               size={15}
-              color={useTheme().colors.primary}
+              color={theme.colors.primary}
             />
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -404,6 +410,15 @@ export default function Home() {
               ))}
             </View>
           </ScrollView>
+        </View>
+        <View>
+          <Button
+            onPress={() => {
+              navigation.navigate('Todos')
+            }}
+          >
+            Todo
+          </Button>
         </View>
       </ScrollView>
     </>

@@ -11,6 +11,7 @@ import { useUser } from '../hooks/useUser'
 import * as WebBrowser from 'expo-web-browser'
 
 export default function CounselorPorfile(props) {
+  const theme = useTheme()
   const { counselorId } = props.route.params
   const [counselor, setCounselor] = useState(null)
   const [slots, setSlots] = useState(null)
@@ -115,27 +116,27 @@ export default function CounselorPorfile(props) {
                 <Ionicons
                   name='star'
                   size={12}
-                  color={useTheme().colors.secondary}
+                  color={theme.colors.secondary}
                 />
                 <Ionicons
                   name='star'
                   size={12}
-                  color={useTheme().colors.secondary}
+                  color={theme.colors.secondary}
                 />
                 <Ionicons
                   name='star'
                   size={12}
-                  color={useTheme().colors.secondary}
+                  color={theme.colors.secondary}
                 />
                 <Ionicons
                   name='star'
                   size={12}
-                  color={useTheme().colors.secondary}
+                  color={theme.colors.secondary}
                 />
                 <Ionicons
                   name='star-outline'
                   size={12}
-                  color={useTheme().colors.secondary}
+                  color={theme.colors.secondary}
                 />
               </View>
               <Text
@@ -158,7 +159,7 @@ export default function CounselorPorfile(props) {
               </Text>
               <View
                 style={{
-                  backgroundColor: useTheme().colors.primary,
+                  backgroundColor: theme.colors.primary,
                   height: 110,
                   width: '100%',
                   marginTop: 10,
@@ -312,7 +313,7 @@ export default function CounselorPorfile(props) {
                             },
                             slots &&
                               slots.dayOfWeek === item.dayOfWeek && {
-                                backgroundColor: useTheme().colors.primary,
+                                backgroundColor: theme.colors.primary,
                                 shadowColor: '#000',
                                 shadowOffset: {
                                   width: 0,
@@ -384,7 +385,7 @@ export default function CounselorPorfile(props) {
                                 height: 20,
                               },
                               selectedHours === item && {
-                                backgroundColor: useTheme().colors.primary,
+                                backgroundColor: theme.colors.primary,
                                 shadowColor: '#000',
                               },
                             ]}
@@ -426,7 +427,7 @@ export default function CounselorPorfile(props) {
           buttonColor={
             selectedHours === null || loading
               ? '#aaa'
-              : useTheme().colors.secondary
+              : theme.colors.secondary
           }
           style={{
             borderRadius: 10,
