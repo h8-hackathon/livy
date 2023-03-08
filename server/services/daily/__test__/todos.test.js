@@ -77,8 +77,13 @@ describe('Api Daily', () => {
 
     it('responds with code 200 and body ', async () => {
       const res = await request(app).get('/todos/100')
+      console.log(res)
       expect(res.statusCode).toBe(200)
+
+      // await request(app).get('/todos/eroor/error')
       expect(res.body).toHaveProperty("UserId", 100)
+
+     
       expect(res.body).toHaveProperty("_id", expect.any(String))
       expect(res.body).toHaveProperty("todos", expect.any(Array))
       expect(res.body.todos[0]).toHaveProperty("activity", expect.any(String))
