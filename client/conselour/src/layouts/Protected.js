@@ -8,7 +8,6 @@ export default function Protected({ children }) {
   const router = useRouter()
   useEffect(() => {
     verifyUser().then(async user => {
-        console.log(user)
         if (!user) router.push('/pending')
         setCounselor(user)
     }).catch((err) => {

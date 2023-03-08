@@ -218,6 +218,8 @@ describe("for schedule", () => {
     .get("/schedules/counselor/" + counselorId + "/availability")
     expect(response.status).toBe(200);
     // console.log(response.body);
+    // await request(app)
+    // .get("/schedules/counselor/" + 'abcabc' + "/availability")
     counselorToBeDeleted = response.body._id.toString();
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("_id", expect.any(String));

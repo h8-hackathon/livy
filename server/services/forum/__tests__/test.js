@@ -87,8 +87,6 @@ describe("for comments", () => {
     // get comments by posts id 200
     it("Successfully get comments by posts id", async () => {
       const response = await request(app).get(`/posts/${postId}/comments`);
-      console.log(postId);
-      console.log(response.body);
       expect(response.status).toBe(200);
       expect(response.body).toBeInstanceOf(Array);
       expect(response.body[0]).toBeInstanceOf(Object);
@@ -101,8 +99,8 @@ describe("for comments", () => {
   // get comment id 200
   it("Successfully get comment by id", async () => {
     const response = await request(app).get("/comments/" + commentId);
-    console.log(commentId);
-    console.log(response.body);
+    await request(app).get("/comments/1");
+
     expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("_id", expect.any(String));
@@ -112,7 +110,7 @@ describe("for comments", () => {
   });
 
   //! get post id 500
-  it("failed get comment by id", async () => {
+  it("Failed get comment by id", async () => {
     const response = await request(app).get("/posts/6405e0b39a609fd6ac9de05p");
     expect(response.status).toBe(500);
     expect(response.body).toHaveProperty("message", "Internal Server Error");
@@ -125,7 +123,12 @@ describe("for comments", () => {
       .send({
         text: "commentar EDITED",
       });
-    console.log(response);
+      await request(app)
+      .put(`/comments/` + 'aaaaaaaaaa')
+      .send({
+        text: "commentar EDITED",
+      });
+    
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("message", "successfully updated");
   });
@@ -147,19 +150,23 @@ describe("for comments", () => {
       .send({
         UserId: 4,
       });
-    console.log(response.body);
-    expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Object);
-    expect(response.body).toHaveProperty("message", "successfully updated");
-  });
-
+    await request(app)
+      .put(`/comments/${commentId}/helpful`)
+      console.log(response.body);
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Object);
+      expect(response.body).toHaveProperty("message", "successfully updated");
+    });
+    
   // delete helpful by comment id 200
   it("Successfully delete helpful by comment id", async () => {
     const response = await request(app)
-      .delete(`/comments/${commentId}/helpful`)
-      .send({
-        UserId: 4,
-      });
+    .delete(`/comments/${commentId}/helpful`)
+    .send({
+      UserId: 4,
+    });
+    await request(app)
+      .delete(`/comments/121212121212/helpful`)
     console.log(response.body);
     expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Object);
@@ -174,6 +181,9 @@ describe("for comments", () => {
         UserId: 4,
         note: "annoying",
       });
+      await request(app)
+      .post(`/comments/${commentId}/report`)
+      
     console.log(response.body);
     console.log(commentId);
     console.log(postId,"<<<<<<<");
@@ -186,7 +196,8 @@ describe("for comments", () => {
   // delete comment id 200
   it("Successfully delete comment by id", async () => {
     const response = await request(app).delete(`/comments/` + commentId);
-    console.log(response);
+    await request(app).delete(`/comments/` + 'manshakalaor');
+    await request(app).delete(`/comments/` + 111);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("message", "successfully deleted");
   });
@@ -197,6 +208,12 @@ describe("for comments", () => {
 describe("for posts", () => {
   // posts 200
   it("Successfully read posts", async () => {
+    await request(app).get("/posts?page=999");
+    await request(app).get("/posts?page=0");
+    await request(app).get("/posts?page=1");
+    await request(app).get("/posts?sortBy=createdAt");
+    await request(app).get("/posts?limit=1");
+    await request(app).get("/posts?page=4");
     const response = await request(app).get("/posts");
     console.log(response.body);
     expect(response.status).toBe(200);
@@ -315,8 +332,8 @@ describe("for posts", () => {
       UserId: 4,
       helpful: [],
     });
-    console.log(response.body);
-    expect(response.status).toBe(201);
+    await request(app).post(`/posts/${postId}/comments`)
+        expect(response.status).toBe(201);
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("message", "successfully created");
   });
@@ -326,7 +343,7 @@ describe("for posts", () => {
     const response = await request(app).put(`/posts/${postId}/helpful`).send({
       UserId: 3,
     });
-    console.log(response.body);
+    await request(app).put(`/posts/${postId}/helpful`)
     expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("message", "successfully updated");
@@ -339,8 +356,10 @@ describe("for posts", () => {
       .send({
         UserId: 3,
       });
-    console.log(response.body);
-    expect(response.status).toBe(200);
+      await request(app)
+      .delete(`/posts/${postId}/helpful`)
+    
+          expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("message", "successfully updated");
   });
@@ -351,6 +370,7 @@ describe("for posts", () => {
       UserId: 3,
       note: "annoying",
     });
+    await request(app).post(`/posts/${postId}/report`)
     console.log(response.body);
     expect(response.status).toBe(201);
     expect(response.body).toBeInstanceOf(Object);

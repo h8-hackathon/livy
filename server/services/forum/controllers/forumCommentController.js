@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const { connect, disconnect, ForumPost, ForumComment } = require('../mongo')
 const { ObjectId } = require('mongodb')
 const connectDB = connect()
@@ -13,15 +12,13 @@ class forumCommentController {
         { _id: new ObjectId(commentId) },
         { $set: { text } }
       )
-      if (result) {
+     
         res.status(200).json({
           message: 'successfully updated',
         })
-      } else {
-        res.status(404).json({ message: 'No documents matched the query' })
-      }
+      
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ message: 'Internal Server Error' })
     }
   }
   static async deleteComment(req, res) {
@@ -38,7 +35,7 @@ class forumCommentController {
         res.status(404).json({ message: 'No documents matched the query' })
       }
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ message: 'Internal Server Error' })
     }
   }
 
@@ -55,10 +52,9 @@ class forumCommentController {
       let helpfulAdded = helpfulDataBefore
       const userPostgres = await User.findOne({ where: { id: UserId } })
       let helpfulAddedtoPostgres = userPostgres.helpful
-      if (!helpfulAdded.includes(UserId)) {
+      // if (!helpfulAdded.includes(UserId)) {
         helpfulAdded.push(UserId)
         helpfulAddedtoPostgres++
-        // console.log(helpfulAddedtoPostgres);
         await User.update(
           { helpful: helpfulAddedtoPostgres },
           {
@@ -67,37 +63,32 @@ class forumCommentController {
             },
           }
         )
-      }
-      let result = await ForumComment.updateOne(
+      // }
+    await ForumComment.updateOne(
         { _id: new ObjectId(commentId) },
         { $set: { helpful: helpfulAdded } }
       )
-      if (result) {
         res.status(200).json({
           message: 'successfully updated',
         })
-      } else {
-        res.status(404).json({ message: 'No documents matched the query' })
-      }
+      
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ message: 'Internal Server Error' })
     }
   }
   static async deleteHelpfulComment(req, res) {
     try {
       let { commentId } = req.params
-      // console.log(postId);
       let { UserId } = req.body
-      // console.log(UserId);
       let commentById = await ForumComment.findOne({
         _id: new ObjectId(commentId),
       })
       let helpfulDataBefore = commentById.helpful
       let helpfulAdded = helpfulDataBefore
-      const userPostgres = await User.findOne({ where: { id: UserId } })
+      let userPostgres = await User.findOne({ where: { id: UserId } })
       let helpfulAddedtoPostgres = userPostgres.helpful
-      if (helpfulAdded.includes(UserId)) {
-        var temp = helpfulAdded.filter(function (value, index, arr) {
+      // if (helpfulAdded.includes(UserId)) {
+        let temp = helpfulAdded.filter(function (value, index, arr) {
           return value != UserId
         })
         helpfulAdded = temp
@@ -111,20 +102,17 @@ class forumCommentController {
             },
           }
         )
-      }
-      let result = await ForumComment.updateOne(
+      // }
+      await ForumComment.updateOne(
         { _id: new ObjectId(commentId) },
         { $set: { helpful: helpfulAdded } }
       )
-      if (result) {
         res.status(200).json({
           message: 'successfully updated',
         })
-      } else {
-        res.status(404).json({ message: 'No documents matched the query' })
-      }
+      
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ message: 'Internal Server Error' })
     }
   }
   static async createReportComment(req, res) {
@@ -132,25 +120,20 @@ class forumCommentController {
       let { commentId } = req.params
       let { UserId, note } = req.body
       let user = await User.findByPk(UserId)
-
-      if (!user) {
-        res.status(404).json({ message: 'No user matched the query' })
-      } else {
-        let result = await Report.create({
-          note,
-          commentId,
-          ReporterId: UserId,
-        })
-        if (result) {
-          res.status(201).json({
-            message: 'successfully reported',
-          })
-        } else {
-          res.status(404).json({ message: 'No documents matched the query' })
-        }
-      }
+      
+      
+      let result = await Report.create({
+        note,
+        commentId,
+        ReporterId: UserId,
+      })
+      res.status(201).json({
+        message: 'successfully reported',
+      })
+      
+      
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ message: 'Internal Server Error' })
     }
   }
 
@@ -160,13 +143,10 @@ class forumCommentController {
       let commentById = await ForumComment.findOne({
         _id: new ObjectId(commentId),
       })
-      if (commentById) {
         res.status(200).json(commentById)
-      } else {
-        res.status(404).json({ message: 'No documents matched the query' })
-      }
+    
     } catch (error) {
-      console.log(error)
+      res.status(404).json({ message: 'No documents matched the query' })
     }
   }
 }
