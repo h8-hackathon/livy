@@ -1,33 +1,61 @@
 import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  TouchableWithoutFeedback,
+  Dimensions,
+} from 'react-native'
 import { Text } from 'react-native-paper'
 
-export default function CounselorCard({ image, name, rating, onPress }) {
+export default function CounselorCard({ image, name, rating, email, createdAt, id }) {
+  const navigate = useNavigation()
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        navigate.navigate('CounselorProfile', { counselorId: id })
+      }}
+    >
       <View style={styles.card}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: image }} style={styles.image} />
+          <Image
+            source={{ uri: image || 'https://picsum.photos/101/101' }}
+            style={styles.image}
+          />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.name} numberOfLines={1}>
+          <View style={{flex: 1}}>
+
+          <Text style={styles.name} numberOfLines={2} ellipsizeMode='tail'>
             {name}
           </Text>
+          <Text style={styles.rating} numberOfLines={1} ellipsizeMode='tail'>
+            {email}
+          </Text>
+          </View>
           <View style={styles.ratingContainer}>
-            <Ionicons name='star' size={15} color='#FFD700' />
-            <Text style={styles.rating}>{rating} / 5</Text>
+            <Ionicons name='location' size={15} color='#FFD700' />
+            <Text style={styles.rating}>{rating} Joined {new Date(createdAt).toLocaleDateString(
+              'id-ID',
+              {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              }
+            )}</Text>
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   )
 }
 
 const styles = StyleSheet.create({
   card: {
-    width: 150,
-    height: 200,
     borderRadius: 15,
     backgroundColor: '#fff',
     marginHorizontal: 10,
@@ -40,26 +68,26 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    flexDirection: 'row',
   },
   imageContainer: {
-    width: '100%',
-    height: '70%',
     padding: 20,
   },
   image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 150,
-    borderTopRightRadius: 150,
-    borderTopLeftRadius: 150,
+    width: 75,
+    height: 75,
+    borderRadius: 75,
   },
   textContainer: {
-    padding: 10,
-    alignItems: 'center',
+    paddingVertical: 20,
+    alignItems: 'flex-start',
   },
   name: {
     fontSize: 16,
     fontWeight: 'bold',
+    // borderWidth: 1,
+    maxWidth: Dimensions.get('window').width - 200,
+    // flex: 1,
   },
   rating: {
     fontSize: 14,

@@ -16,6 +16,7 @@ import AccountScreen from '../screens/Account'
 const Tab = createBottomTabNavigator()
 
 export default function MainTab() {
+  const theme = useTheme()
   const navigation = useNavigation()
   return (
     <Tab.Navigator
@@ -69,7 +70,7 @@ export default function MainTab() {
           tabBarShowLabel: false,
           // tabBarItemStyle: {
           //   position: 'relative',
-          //   backgroundColor: useTheme().colors.secondary,
+          //   backgroundColor: theme.colors.secondary,
           //   borderRadius: 50,
           // },
           tabBarButton: () => {
@@ -83,7 +84,7 @@ export default function MainTab() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   transform: [{ translateY: -25 }],
-                  backgroundColor: useTheme().colors.secondary,
+                  backgroundColor: theme.colors.secondary,
                   shadowColor: '#000',
                   shadowOffset: {
                     width: 0,

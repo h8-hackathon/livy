@@ -9,6 +9,8 @@ import LivyChat from '../screens/LivyChat'
 import StartThread from '../screens/StartThread'
 import ForumPostDetail from '../screens/ForumPostDetail'
 import CounselorPorfile from '../screens/CounselorProfile'
+import Success from '../screens/Success'
+import Todo from '../screens/Todo'
 
 const Stack = createStackNavigator()
 
@@ -57,6 +59,20 @@ export default function MainStack() {
           headerShown: false,
         }}
         component={CounselorPorfile}
+      />
+      <Stack.Screen
+        name='Success'
+        options={{
+          headerShown: false,
+        }}
+        component={Success}
+      />
+      <Stack.Screen
+        name='Todos'
+        options={{
+          headerShown: false,
+        }}
+        component={Todo}
       />
     </Stack.Navigator>
   )
