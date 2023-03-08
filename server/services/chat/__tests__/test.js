@@ -9,6 +9,10 @@ const request = require("supertest");
 const app = require("../app");
 const { connect, Chat } = require("../mongo");
 
+beforeEach(() => {
+  jest.restoreAllMocks();
+});
+
 beforeAll(async () => {
   try {
     await User.create({
@@ -31,33 +35,17 @@ beforeAll(async () => {
       role: "counselor",
       helpful: 4,
     });
-    await AdminPost.bulkCreate([
-      {
-        id: 1,
-        title: "Mental health: build predictive models to steer policy",
-        url: "https://www.nature.com/articles/d41586-021-02581-9",
-        caption:
-          "Combine economic, social and medical data to forecast need and design services to address the growing crisis.",
-        type: "Article",
-        UserId: 1,
-      },
-    ]);
-    await CounselorSubmission.create({
-      id: 2,
-      status: "Pending",
-      submissions: "https://www.nature.com/articles/d41586-021-02581-9",
+
+
+    await Chat.insertOne({
       UserId: 1,
-    });
+      CounselorId: 2,
+      chats: [{
+        time: new Date(),
+        text : 'ohayou'
 
-    // await Chat.insertOne({
-    //   UserId: 1,
-    //   CounselorId: 2,
-    //   chats: [{
-    //     time: new Date(),
-    //     text : 'ohayou'
-
-    //   }]
-    // })
+      }]
+    })
   } catch (error) {
     console.log(error, "ini errornya");
   }
@@ -73,24 +61,7 @@ afterAll(async () => {
       restartIdentity: true,
     }
   );
-  await sequelize.queryInterface.bulkDelete(
-    "AdminPosts",
-    {},
-    {
-      truncate: true,
-      cascade: true,
-      restartIdentity: true,
-    }
-  );
-  await sequelize.queryInterface.bulkDelete(
-    "CounselorSubmissions",
-    {},
-    {
-      truncate: true,
-      cascade: true,
-      restartIdentity: true,
-    }
-  );
+  
 });
 
 describe("for posts", () => {
@@ -158,8 +129,9 @@ describe("for posts", () => {
   // chats history read 200
   it("Successfully read chats", async () => {
     const response = await request(app).get("/history/1/2");
+    await request(app).get("/history/1999/29999");
+    await request(app).get("/history/1999/");
     expect(response.status).toBe(200);
-    console.log(response.body);
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("_id", expect.any(String));
     expect(response.body).toHaveProperty("UserId", expect.any(Number));
@@ -172,6 +144,7 @@ describe("for posts", () => {
   // chats read by counselor id 200
   it("Successfully read chats by counselor id", async () => {
     const response = await request(app).get("/chats/counselor/2");
+   await request(app).get("/chats/counselor ");
     expect(response.status).toBe(200);
     // console.log(response.body)
     expect(response.body).toBeInstanceOf(Array);

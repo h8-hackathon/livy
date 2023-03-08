@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 const openai = require("./setup");
-
+/* istanbul ignore file */
 const defaultPromts = "5 list aktifitas hari ini untuk seseorang yang berumur 50 tahun dan bergender laki laki dalam menjaga kesehatan mental,"
 
 const askChatGpt = async (prompts, temp) => {

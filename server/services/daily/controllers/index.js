@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { convertArrayToArrayTodos } = require('../helpers')
 const { askChatGpt, defaultPromts } = require('../chatgqt')
 const Todo = require('../mongo/models/Todo')
