@@ -66,7 +66,6 @@ describe('Api Daily', () => {
     })
   })
 
-
   describe('GET /todos/:userId', () => {
 
     it('responds with code 400 and body ', async () => {
@@ -120,5 +119,40 @@ describe('Api Daily', () => {
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty("message", "successfully updated")
     })
+  })
+
+  describe('DELETE /todos/:userId', () => {
+
+    it('responds with code 404 Not Found', async () => {
+      const todos = {
+        userId: 100,
+        updatedAt: new Date(),
+        todos: [
+          {
+            activity: "satu",
+            completed: false
+          },
+        ]
+      }
+      const res = await request(app).delete('/todos/asd')
+      expect(res.statusCode).toBe(404)
+      expect(res.body).toHaveProperty("message", "Document Not Found")
+    })   
+
+    it('responds with code 200', async () => {
+      const todos = {
+        userId: 100,
+        updatedAt: new Date(),
+        todos: [
+          {
+            activity: "satu",
+            completed: false
+          },
+        ]
+      }
+      const res = await request(app).delete('/todos/100')
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty("message", "successfully deleted")
+    })   
   })
 })
