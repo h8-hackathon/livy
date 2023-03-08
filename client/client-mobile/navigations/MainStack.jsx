@@ -11,6 +11,7 @@ import ForumPostDetail from '../screens/ForumPostDetail'
 import CounselorPorfile from '../screens/CounselorProfile'
 import Success from '../screens/Success'
 import Todo from '../screens/Todo'
+import PostDetail from '../screens/PostDetail'
 
 const Stack = createStackNavigator()
 
@@ -59,6 +60,13 @@ export default function MainStack() {
           headerShown: false,
         }}
         component={CounselorPorfile}
+      />
+      <Stack.Screen
+        name='PostDetail'
+        options={{
+          headerShown: false,
+        }}
+        component={PostDetail}
       />
       <Stack.Screen
         name='Success'

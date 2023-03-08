@@ -11,6 +11,7 @@ router.get('/schedule', ClientController.getSchedule) //!
 router.post('/schedule', ClientController.createSchedule) //!
 
 router.get('/chatLivy', ClientController.getChatWithLivy)
+router.get('/chat/:counselorId', ClientController.getChatByCounselorId)
 router.post('/chatLivy', ClientController.chatWithLivy)
 
 router.get('/forum/top', ClientController.getForumTop)

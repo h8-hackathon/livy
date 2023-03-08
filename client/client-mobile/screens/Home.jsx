@@ -1,19 +1,28 @@
 import { Ionicons } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { Image } from 'react-native'
 import { Dimensions, ScrollView, View, ImageBackground } from 'react-native'
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native-gesture-handler'
 import { Text, useTheme, Button } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CounselorCard from '../components/CounselorCard'
 import { api } from '../helpers/axios'
 import getGreeting from '../helpers/greeting'
+import { useSchedules } from '../hooks/useSchedule'
 import { useUser } from '../hooks/useUser'
+import { useTodos } from '../hooks/useTodos'
+import { groupingSchedule } from '../helpers/grouping'
 
-const ArticleCard = ({ title, date, image }) => {
+const ArticleCard = (item) => {
+  const { title, date, image, type } = item
+  const navigate = useNavigation()
   const theme = useTheme()
   return (
-    <View
+    <TouchableOpacity
       style={{
         backgroundColor: '#fff',
         borderRadius: 15,
@@ -24,6 +33,9 @@ const ArticleCard = ({ title, date, image }) => {
         borderColor: '#408775',
         // borderWidth: .5,
         gap: 10,
+      }}
+      onPress={() => {
+        navigate.navigate('PostDetail', item)
       }}
     >
       <Text
@@ -60,7 +72,7 @@ const ArticleCard = ({ title, date, image }) => {
           style={{
             fontWeight: 'bold',
             fontSize: 10,
-            color: theme.colors.primary,
+            color: useTheme().colors.primary,
           }}
         >
           Continue Reading
@@ -68,10 +80,10 @@ const ArticleCard = ({ title, date, image }) => {
         <Ionicons
           name='ios-arrow-forward'
           size={15}
-          color={theme.colors.primary}
+          color={useTheme().colors.primary}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
@@ -117,15 +129,19 @@ const VideoCard = () => {
     </View>
   )
 }
-const PodcastCard = ({ title, date, description }) => {
-  const theme = useTheme()
+const PodcastCard = (item) => {
+  const { title, date, description } = item
+  const navigate = useNavigation()
   return (
-    <View
+    <TouchableOpacity
       style={{
         overflow: 'hidden',
         padding: 15,
         width: '100%',
         height: 110,
+      }}
+      onPress={() => {
+        navigate.navigate('PostDetail', item)
       }}
     >
       <View
@@ -181,7 +197,7 @@ const PodcastCard = ({ title, date, description }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
             <View
               style={{
-                backgroundColor: theme.colors.secondary,
+                backgroundColor: useTheme().colors.secondary,
                 width: 25,
                 height: 25,
                 borderRadius: 50,
@@ -202,6 +218,97 @@ const PodcastCard = ({ title, date, description }) => {
           </View>
         </View>
       </View>
+    </TouchableOpacity>
+  )
+}
+
+const Banner = () => {
+  const { schedule } = useSchedules()
+  const navigate = useNavigation()
+  const { todos, updateTodos } = useTodos()
+  const grouped = useCallback(() => {
+    return groupingSchedule(schedule)
+  }, [schedule])
+  useFocusEffect(() => {
+    updateTodos()
+  })
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        borderTopWidth: 0.5,
+        alignItems: 'center',
+        paddingTop: 15,
+        borderColor: '#fff',
+      }}
+    >
+      <TouchableOpacity
+        onPress={() => {
+          navigate.navigate('Todos')
+        }}
+      >
+        <View
+          style={{
+            width: 100,
+            borderRadius: 15,
+            // alignItems: 'center',
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <Ionicons name='document-text' size={19} color='#fff' />
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#fff' }}>
+              {todos.filter((v) => v.completed).length}/{todos.length}
+            </Text>
+          </View>
+          <View>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: 'bold',
+                color: '#fff',
+                opacity: 0.5,
+              }}
+            >
+              Daily Task
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => {
+          navigate.navigate('Schedule')
+        }}
+      >
+        <View
+          style={{
+            width: 100,
+            borderRadius: 15,
+            // alignItems: 'center',
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <Ionicons name='ios-calendar' size={19} color='#fff' />
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#fff' }}>
+              {grouped().active.length > 0
+                ? grouped().active.length
+                : grouped().upcoming.length}
+            </Text>
+          </View>
+          <View>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: 'bold',
+                color: '#fff',
+                opacity: 0.5,
+              }}
+            >
+              {grouped().active.length > 0 ? 'Active' : 'Up Coming'}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -209,9 +316,10 @@ const PodcastCard = ({ title, date, description }) => {
 export default function Home() {
   const theme = useTheme()
   const [home, setHome] = useState(null)
+  const { updateSchedule } = useSchedules()
   const [counselors, setcounselors] = useState([])
   const { user } = useUser()
-  const navigation = useNavigation()
+  const navigate = useNavigation()
   const fetchData = async () => {
     const res = await api.get('/client/home')
     setHome(res.data)
@@ -226,6 +334,7 @@ export default function Home() {
   useEffect(() => {
     fetchData()
     fetchCounselors()
+    updateSchedule()
   }, [])
   return (
     <>
@@ -254,53 +363,63 @@ export default function Home() {
             style={{
               gap: 10,
               backgroundColor: theme.colors.primary,
-              padding: 20,
-              borderRadius: 20,
+              borderRadius: 20 
             }}
           >
-            <Text
-              style={{
-                fontWeight: 'bold',
-                opacity: 0.7,
-                fontSize: 10,
-                color: '#fff',
-              }}
+            <ImageBackground
+              source={require('../assets/pages/bg.png')}
+              style={{ gap: 10, padding: 20, borderRadius: 20 }}
+              resizeMode='cover'
+              imageStyle={{ borderRadius: 20 }}
             >
-              {new Date().toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </Text>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: 'bold',
-                marginBottom: 15,
-                color: '#fff',
-              }}
-            >
-              {getGreeting()}
-              {user ? ` ${user.name}` : ''}!
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 10,
-                backgroundColor: '#fff',
-                borderRadius: 15,
-                paddingVertical: 10,
-                paddingHorizontal: 15,
-                marginBottom: 25,
-              }}
-            >
-              <Ionicons name='ios-trophy-outline' size={15} color='black' />
-              <Text style={{ fontWeight: 'normal' }}>
-                Focus on managing small things first
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  opacity: 0.7,
+                  fontSize: 10,
+                  color: '#fff',
+                }}
+              >
+                {new Date().toLocaleDateString('id-ID', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
               </Text>
-            </View>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  marginBottom: 15,
+                  color: '#fff',
+                }}
+              >
+                {getGreeting()}
+                {user ? ` ${user.name.split(' ')[0]}` : ''}!
+              </Text>
+              {!user ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 10,
+                    backgroundColor: '#fff',
+                    borderRadius: 15,
+                    paddingVertical: 10,
+                    paddingHorizontal: 15,
+                    marginBottom: 25,
+                  }}
+                >
+                  <Ionicons name='ios-trophy-outline' size={15} color='black' />
+                  <Text style={{ fontWeight: 'normal' }}>
+                    Focus on managing small things first
+                  </Text>
+                </View>
+              ) : (
+                <Banner />
+              )}
+            </ImageBackground>
           </View>
 
           <View
@@ -327,6 +446,8 @@ export default function Home() {
                   key={article.id}
                   title={article.title}
                   image={article.url}
+                  type={article.type}
+                  description={article.caption}
                   date={article.createdAt}
                 />
               ))}
@@ -406,6 +527,7 @@ export default function Home() {
                   url={podcast.url}
                   date={podcast.createdAt}
                   description={podcast.caption}
+                  type={podcast.type}
                 />
               ))}
             </View>
@@ -414,7 +536,7 @@ export default function Home() {
         <View>
           <Button
             onPress={() => {
-              navigation.navigate('Todos')
+              navigate.navigate('Todos')
             }}
           >
             Todo

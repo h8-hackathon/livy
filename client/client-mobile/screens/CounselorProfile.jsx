@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { api } from '../helpers/axios'
-import { dayToDate, getAllHours } from '../helpers/dayToDate'
+import { dayToDate, getAllHours, sortDays } from '../helpers/dayToDate'
 import { useUser } from '../hooks/useUser'
 import * as WebBrowser from 'expo-web-browser'
 
@@ -43,6 +43,8 @@ export default function CounselorPorfile(props) {
       date.setHours(hours)
       date.setMinutes(0)
       date.setSeconds(0)
+      date.setMilliseconds(0)
+      
       const response = await api.post('/client/schedule', {
         CounselorId: +counselorId,
         time: date,
@@ -296,7 +298,7 @@ export default function CounselorPorfile(props) {
                     Appointment
                   </Text>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {counselor.availability.availability.map((item, index) => {
+                    {sortDays(counselor.availability.availability).map((item, index) => {
                       return (
                         <TouchableOpacity
                           key={index}
@@ -425,9 +427,7 @@ export default function CounselorPorfile(props) {
           mode='contained'
           textColor='#fff'
           buttonColor={
-            selectedHours === null || loading
-              ? '#aaa'
-              : theme.colors.secondary
+            selectedHours === null || loading ? '#aaa' : theme.colors.secondary
           }
           style={{
             borderRadius: 10,

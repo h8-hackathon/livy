@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons'
-import { FlatList, Image, View } from 'react-native'
+import { FlatList, Image, ScrollView, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Button, Text, useTheme } from 'react-native-paper'
+import { Button, Text, useTheme, Snackbar } from 'react-native-paper'
 import { TextInput } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useUser } from '../hooks/useUser'
 import Login from './Login'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import socketClient from 'socket.io-client'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { api } from '../helpers/axios'
@@ -112,15 +112,19 @@ const Profile = ({ name }) => {
   )
 }
 export default function LivyChat(props) {
+  const ref = useRef()
   const theme = useTheme()
   const { user } = useUser()
   const [socket, setSocket] = useState(null)
   const [messages, setMessages] = useState([])
   const [text, setText] = useState('')
   const [focus, setFocus] = useState(false)
+  const [waring, setWarning] = useState(false)
+  const [done, setDone] = useState(false)
   const counselor = props.route.params?.Counselor
+  const session = props.route.params?.session
   const navigation = useNavigation()
-
+  const [visible, setVisible] = useState(false)
   const sendMessage = () => {
     if (text && !counselor?.id) {
       AsyncStorage.getItem('access_token').then((access_token) => {
@@ -199,6 +203,15 @@ export default function LivyChat(props) {
   useEffect(() => {
     console.log(user, counselor?.id, focus)
     if (user && counselor?.id && focus) {
+      api.get('/client/chat/' + counselor?.id).then((res) => {
+        console.log(res.data)
+        setMessages(res.data.chats)
+        setTimeout(() => {
+          ref.current.scrollToEnd()
+        }, 100)
+      }).catch((err) => {
+        console.log(err)
+      })
       const socket = socketClient('https://api.livy.chat')
       socket.auth = { access_token: user.access_token }
       setSocket(socket)
@@ -219,15 +232,34 @@ export default function LivyChat(props) {
           console.log(data)
           data.time = new Date()
           setMessages((messages) => [...messages, data])
+          ref.current.scrollToEnd()
           // setLastIndex(messages.length)
         })
       })
-    } 
-    
-    
+    }
+
     if (!counselor) {
       fetchMessages()
     }
+
+    let interval = setInterval(() => {
+      const endTime = new Date(session).setHours(
+        new Date(session).getHours() + 1
+      )
+      const warn = new Date(session).setMinutes(
+        new Date(session).getMinutes() + 55
+      )
+      const now = new Date().getTime()
+      if (now > warn && !waring) {
+        setWarning(true)
+        setVisible(true)
+      }
+      const isDone = now > endTime
+      if (isDone) {
+        setDone(true)
+        setVisible(false)
+      }
+    }, 1000)
 
     return () => {
       if (socket) {
@@ -235,9 +267,11 @@ export default function LivyChat(props) {
         setSocket(null)
         setMessages([])
       }
+      clearInterval(interval)
     }
   }, [user, counselor, focus])
 
+  const onDismissSnackBar = () => setVisible(false)
   if (!user) return <Login />
   return (
     <View style={{ flex: 1 }}>
@@ -245,6 +279,7 @@ export default function LivyChat(props) {
       <View style={{ flex: 1 }}>
         <Profile name={counselor?.name || 'Livy'} />
         <FlatList
+          ref={ref}
           style={{ flex: 1, padding: 10 }}
           data={messages}
           renderItem={({ item }) => {
@@ -257,46 +292,91 @@ export default function LivyChat(props) {
           keyExtractor={(item, i) => i}
         />
       </View>
-      <View
-        style={{
-          width: '100%',
-          height: 70,
-          backgroundColor: '#eee',
-          padding: 10,
-        }}
-      >
+      {done ? (
         <View
           style={{
-            flexDirection: 'row',
+            height: 60,
+            justifyContent: 'center',
             alignItems: 'center',
-            gap: 5,
-            backgroundColor: '#fff',
-            borderRadius: 20,
+            opacity: 0.5,
           }}
         >
-          <TextInput
-            mode=''
-            placeholder='Your message...'
-            style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 10 }}
-            underlineColor='transparent'
-            onChangeText={setText}
-            onSubmitEditing={sendMessage}
-            value={text}
-          />
-          <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              height: 40,
-              justifyContent: 'center',
-              alignContent: 'center',
-              width: 60,
-            }}
-            onPress={sendMessage}
-          >
-            <Ionicons name='ios-paper-plane-outline' size={20} />
-          </TouchableOpacity>
+          <Text>Mohon maaf! Sesi ini telah berakhir</Text>
         </View>
-      </View>
+      ) : (
+        <View
+          style={{
+            width: '100%',
+            height: 70,
+            backgroundColor: '#eee',
+            padding: 10,
+          }}
+        >
+          <Snackbar
+            visible={visible}
+            onDismiss={onDismissSnackBar}
+            action={{
+              label: 'Tutup',
+            }}
+            elevation={10}
+            style={{
+              backgroundColor: '#eee',
+              position: 'absolute',
+              bottom: 0,
+              width: '95%',
+              zIndex: 100,
+              transform: [{ translateY: -70 }],
+            }}
+          >
+            <Text>
+              Sesi berakhir dalam{' '}
+              {Math.max(
+                Math.floor(
+                  (new Date(session).setHours(
+                    new Date(session).getHours() + 1
+                  ) -
+                    new Date().getTime()) /
+                    60000
+                ),
+                1
+              )}{' '}
+              menit!
+            </Text>
+          </Snackbar>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 5,
+              backgroundColor: '#fff',
+              borderRadius: 20,
+            }}
+          >
+            <TextInput
+              mode=''
+              placeholder='Your message...'
+              style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 10 }}
+              underlineColor='transparent'
+              onChangeText={setText}
+              onSubmitEditing={sendMessage}
+              value={text}
+            />
+
+            <TouchableOpacity
+              style={{
+                alignItems: 'center',
+                height: 40,
+                justifyContent: 'center',
+                alignContent: 'center',
+                width: 60,
+              }}
+              onPress={sendMessage}
+            >
+              <Ionicons name='ios-paper-plane-outline' size={20} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </View>
   )
 }

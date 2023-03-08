@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
-import { useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+import { useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -9,34 +10,16 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native'
-import { Badge } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
-const _todos = [
-  {
-    activities: 'Hiking With Friends',
-    completed: false,
-  },
-  {
-    activities: 'Reading Books',
-    completed: false,
-  },
-  {
-    activities: 'Playing Games',
-    completed: false,
-  },
-  {
-    activities: 'Watching Movies',
-    completed: false,
-  },
-  {
-    activities: 'Going to the Gym',
-    completed: false,
-  },
-]
+import { useTodos } from '../hooks/useTodos'
 
 export default function Todo() {
-  const [todos, setTodos] = useState(_todos)
+  const { todos, updateTodos, setTodos } = useTodos()
+
+  useEffect(() => {
+    updateTodos()
+  }, [])
+
   return (
     <>
       <SafeAreaView />
@@ -49,6 +32,17 @@ export default function Todo() {
               aspectRatio: 1.5,
             }}
           />
+        </View>
+        <View style={{ marginVertical: 20 }}>
+          <Text
+            style={{
+              fontSize: 20,
+              textAlign: 'center',
+            }}
+          >
+            Ini ada beberapa daily task yang diberikan oleh Livy untuk kamu agar
+            membantu menaikan mood dan semangatmu!
+          </Text>
         </View>
         <View style={{}}>
           {todos.map((todo, index) => (
@@ -78,7 +72,7 @@ export default function Todo() {
                 ) : (
                   <Ionicons name='square-outline' size={24} color='black' />
                 )}
-                <Text style={{ fontWeight: 'bold' }}>{todo.activities}</Text>
+                <Text style={{ fontWeight: 'bold' }}>{todo.activity}</Text>
               </View>
             </TouchableWithoutFeedback>
           ))}

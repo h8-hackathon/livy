@@ -1,7 +1,7 @@
 import { useChat } from "@/hooks/useChat";
 import { useCounselor } from "@/hooks/useCounselor";
 import { useEffect, useRef } from "react";
-import Spinner from "../spinner";
+import Spinner from "../Spinner";
 import ChatItem from "./ChatItem";
 
 export default function Content({ loading }) {

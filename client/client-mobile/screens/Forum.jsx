@@ -108,12 +108,22 @@ export default function Forum() {
   const theme = useTheme()
   const [forumList, setForumList] = useState([])
   const navigate = useNavigation()
-
+  const [focus, setFocus] = useState(false)
   navigate.addListener('focus', () => {
-    api.get('/client/forum/top').then((res) => {
-      setForumList(res.data)
-    })
+    setFocus(true)
   })
+  navigate.addListener('blur', () => {
+    setFocus(false)
+  })
+
+  useEffect(() => {
+    if (focus) {
+      api.get('/client/forum/top').then((res) => {
+        setForumList(res.data)
+      })
+    }
+  }, [focus])
+
   return (
     <View style={{ paddingHorizontal: 20 }}>
       <SafeAreaView style={{ backgroundColor: '#fff' }} />

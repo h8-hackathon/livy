@@ -56,3 +56,19 @@ export function getAllHours(slots) {
 
   return allHours
 }
+
+export const sortDays = (availableDays) => {
+  const dateNow = new Date().getDate()
+  const mapDays = availableDays.map((day) => {
+    const dayDate = dayToDate(day.dayOfWeek).getDate()
+    return {
+      dayDate,
+      ...day,
+    }
+  })
+  const sortedDays = mapDays.sort((a,b) => a.dayDate > b.dayDate? 1 : a.dayDate < dateNow ? 1:-1 )
+
+  console.log(sortedDays, 'xxx', mapDays)
+
+  return sortedDays
+}

@@ -92,7 +92,23 @@ class ClientController {
       next(error);
     }
   }
-
+  static async getChatByCounselorId(req, res, next) {
+    try {
+      const { access_token } = req.headers
+      const { counselorId } = req.params
+      const {
+        data: { id: userId },
+      } = await userAPI.post('/verify', { access_token })
+      const { data } = await chatAPI.get(
+        `/history/${userId}/${counselorId}`
+      )
+      const { data: user } = await userAPI.get(`/users/${userId}`)
+      res.status(200).json({ ...data, user })
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
   static async chatWithLivy(req, res, next) {
     try {
       const { access_token } = req.headers;
