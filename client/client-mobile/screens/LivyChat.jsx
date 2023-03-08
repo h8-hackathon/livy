@@ -138,6 +138,7 @@ export default function LivyChat(props) {
         ])
         setText('')
         if (access_token) {
+          ref.current?.scrollToEnd()
           api
             .post(
               '/client/chatLivy',
@@ -164,6 +165,9 @@ export default function LivyChat(props) {
             .catch((err) => {
               console.log(err)
             })
+            .finally(() => {
+              ref.current?.scrollToEnd()
+            })
         }
       })
     }
@@ -185,10 +189,13 @@ export default function LivyChat(props) {
       .get('/client/chatLivy')
       .then((res) => {
         console.log(res.data)
-        setMessages(res.data.chats)
+        setMessages(res.data.chats.slice(-10))
       })
       .catch((err) => {
         console.log(err)
+      })
+      .finally(() => {
+        ref.current?.scrollToEnd()
       })
   }
 
