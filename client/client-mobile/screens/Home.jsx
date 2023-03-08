@@ -226,7 +226,7 @@ export default function Home() {
   const [home, setHome] = useState(null)
   const [counselors, setcounselors] = useState([])
   const { user } = useUser()
-
+  const navigate = useNavigation()
   const fetchData = async () => {
     const res = await api.get("/client/home");
     setHome(res.data);
@@ -431,7 +431,7 @@ export default function Home() {
         <View>
           <Button
             onPress={() => {
-              navigation.navigate('Todos')
+              navigate.navigate('Todos')
             }}
           >
             Todo

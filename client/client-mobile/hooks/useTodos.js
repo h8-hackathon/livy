@@ -4,16 +4,23 @@ import { useUser } from './useUser'
 
 const atomtodos = atom([])
 export const useTodos = () => {
-  const [todos, setTodos] = useAtom(atomtodos)
+  const [todos, _setTodos] = useAtom(atomtodos)
   const { user } = useUser()
   const updateTodos = async () => {
     if (!user) return
     try {
       const { data } = await api.get('/daily/todos/' + user.id)
-      setTodos(data)
+      _setTodos(data.todos)
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const setTodos = (todos) => {
+    _setTodos(todos)
+    api.put('/daily/todos/' + user.id, { todos }).catch((error) => {
+      console.log(error)
+    })
   }
   return { todos, setTodos, updateTodos }
 }
