@@ -62,7 +62,7 @@ export default function Sidebar() {
           <input value={search} onChange={(e) => setSearch(e.target.value)} type="search" placeholder="Search" className="w-full h-full outline-none text-xs" />
         </div>
       </div>
-      <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
+      <div className="text-xs font-semibold text-center text-gray-500 border-b border-gray-200 ">
         <ul className="flex overflow-auto  z-0  -mb-px">
           {stat && stat.map((stat) => <li className="mr-2">
             <button key={stat} onClick={() => setGroup(stat)} className={`capitalize inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-primary hover:border-primary ${group == stat ? 'text-primary border-primary' : ''}`}>{stat}</button>
