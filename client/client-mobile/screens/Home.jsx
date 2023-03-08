@@ -1,62 +1,64 @@
-import { Ionicons } from '@expo/vector-icons'
-import { useEffect, useState } from 'react'
-import { Image } from 'react-native'
-import { Dimensions, ScrollView, View, ImageBackground } from 'react-native'
-import { Text, useTheme } from 'react-native-paper'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import CounselorCard from '../components/CounselorCard'
-import { api } from '../helpers/axios'
-import getGreeting from '../helpers/greeting'
-import { useUser } from '../hooks/useUser'
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { Image } from "react-native";
+import { Dimensions, ScrollView, View, ImageBackground } from "react-native";
+import { TouchableHighlight } from "react-native-gesture-handler";
+import { Text, useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+import CounselorCard from "../components/CounselorCard";
+import { api } from "../helpers/axios";
+import getGreeting from "../helpers/greeting";
+import { useUser } from "../hooks/useUser";
 
 const ArticleCard = ({ title, date, image }) => {
   return (
     <View
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
         borderRadius: 15,
         paddingVertical: 10,
         paddingHorizontal: 15,
         marginRight: 10,
-        width: (Dimensions.get('screen').width / 3.2) * 2,
-        borderColor: '#408775',
+        width: (Dimensions.get("screen").width / 3.2) * 2,
+        borderColor: "#408775",
         // borderWidth: .5,
         gap: 10,
       }}
     >
       <Text
-        style={{ fontWeight: 'bold', fontSize: 20, flexWrap: 'nowrap' }}
-        ellipsizeMode='tail'
+        style={{ fontWeight: "bold", fontSize: 20, flexWrap: "nowrap" }}
+        ellipsizeMode="tail"
         numberOfLines={2}
       >
         {title}
       </Text>
       <Text
-        style={{ fontWeight: 'normal', fontSize: 10, flex: 1, opacity: 0.7 }}
-        ellipsizeMode='clip'
+        style={{ fontWeight: "normal", fontSize: 10, flex: 1, opacity: 0.7 }}
+        ellipsizeMode="clip"
       >
-        {new Date(date).toLocaleDateString('id-ID', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
+        {new Date(date).toLocaleDateString("id-ID", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
         })}
       </Text>
       <View>
         <Image
           source={{ uri: image }}
           style={{
-            width: '100%',
+            width: "100%",
             aspectRatio: 16 / 9,
             borderRadius: 10,
             marginVertical: 10,
           }}
         />
       </View>
-      <View style={{ flexDirection: 'row', gap: 5 }}>
+      <View style={{ flexDirection: "row", gap: 5 }}>
         <Text
           style={{
-            fontWeight: 'bold',
+            fontWeight: "bold",
             fontSize: 10,
             color: useTheme().colors.primary,
           }}
@@ -64,35 +66,35 @@ const ArticleCard = ({ title, date, image }) => {
           Continue Reading
         </Text>
         <Ionicons
-          name='ios-arrow-forward'
+          name="ios-arrow-forward"
           size={15}
           color={useTheme().colors.primary}
         />
       </View>
     </View>
-  )
-}
+  );
+};
 
 const VideoCard = () => {
   return (
     <View
       style={{
-        overflow: 'hidden',
+        overflow: "hidden",
         paddingLeft: 15,
       }}
     >
       <ImageBackground
-        source={{ uri: 'https://picsum.photos/800/450' }}
-        resizeMode='cover'
+        source={{ uri: "https://picsum.photos/800/450" }}
+        resizeMode="cover"
         style={{
-          backgroundColor: '#000',
+          backgroundColor: "#000",
           borderRadius: 15,
           paddingVertical: 10,
           paddingHorizontal: 15,
           marginRight: 10,
-          width: (Dimensions.get('screen').width / 3.2) * 2,
+          width: (Dimensions.get("screen").width / 3.2) * 2,
           aspectRatio: 16 / 9,
-          borderColor: '#408775',
+          borderColor: "#408775",
           borderWidth: 1,
         }}
         imageStyle={{ borderRadius: 15, opacity: 0.5 }}
@@ -100,128 +102,138 @@ const VideoCard = () => {
         <View>
           <Text
             style={{
-              fontWeight: 'bold',
+              fontWeight: "bold",
               fontSize: 20,
-              flexWrap: 'nowrap',
-              color: '#fff',
+              flexWrap: "nowrap",
+              color: "#fff",
             }}
-            ellipsizeMode='tail'
+            ellipsizeMode="tail"
           >
             Ini Judul Video Tentang Sesuatu
           </Text>
         </View>
       </ImageBackground>
     </View>
-  )
-}
-const PodcastCard = ({ title, date, description }) => {
+  );
+};
+const PodcastCard = ({ title, date, description, url }) => {
+  const navigate = useNavigation();
   return (
-    <View
-      style={{
-        overflow: 'hidden',
-        padding: 15,
-        width: '100%',
-        height: 110,
-      }}
+    <TouchableHighlight
+      underlayColor={"#EEEEEE"}
+      onPress={() =>
+        navigate.navigate("PostDetail", { title, date, description, url })
+      }
     >
       <View
         style={{
-          flex: 1,
-          borderRadius: 15,
-          // borderWidth: 0.5,
-          // alignItems: 'center',
-          flexDirection: 'row',
-          gap: 10,
+          overflow: "hidden",
+          padding: 15,
+          width: "100%",
+          height: 110,
         }}
       >
         <View
           style={{
-            // justifyContent: 'center',
-            padding: 5,
-            alignItems: 'center',
+            flex: 1,
+            borderRadius: 15,
             // borderWidth: 0.5,
+            // alignItems: 'center',
+            flexDirection: "row",
+            gap: 10,
           }}
         >
-          <Image
-            source={require('../assets/Logo.png')}
-            style={{ width: 50, height: 50 }}
-          />
-        </View>
-        <View style={{ gap: 5 }}>
-          <View>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 15,
-                color: '#000',
-                maxWidth: '90%',
-              }}
-              ellipsizeMode='tail'
-              numberOfLines={1}
-            >
-              {title}
-            </Text>
-            <Text
-              style={{
-                fontWeight: 'normal',
-                fontSize: 10,
-                color: '#000',
-                maxWidth: '90%',
-              }}
-              ellipsizeMode='tail'
-              numberOfLines={2}
-            >
-              {description}
-            </Text>
+          <View
+            style={{
+              // justifyContent: 'center',
+              padding: 5,
+              alignItems: "center",
+              // borderWidth: 0.5,
+            }}
+          >
+            <Image
+              source={require("../assets/Logo.png")}
+              style={{ width: 50, height: 50 }}
+            />
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <View
-              style={{
-                backgroundColor: useTheme().colors.secondary,
-                width: 25,
-                height: 25,
-                borderRadius: 50,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Ionicons name='ios-play' size={10} color='#fff' />
+          <View style={{ gap: 5 }}>
+            <View>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 15,
+                  color: "#000",
+                  maxWidth: "90%",
+                }}
+                ellipsizeMode="tail"
+                numberOfLines={1}
+              >
+                {title}
+              </Text>
+              <Text
+                style={{
+                  fontWeight: "normal",
+                  fontSize: 10,
+                  color: "#000",
+                  maxWidth: "90%",
+                }}
+                ellipsizeMode="tail"
+                numberOfLines={2}
+              >
+                {description}
+              </Text>
             </View>
-            <Text style={{ fontSize: 10 }}>
-              {new Date(date).toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </Text>
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+            >
+              <View
+                style={{
+                  backgroundColor: useTheme().colors.secondary,
+                  width: 25,
+                  height: 25,
+                  borderRadius: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons name="ios-play" size={10} color="#fff" />
+              </View>
+              <Text style={{ fontSize: 10 }}>
+                {new Date(date).toLocaleDateString("id-ID", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
-  )
-}
+    </TouchableHighlight>
+  );
+};
 
 export default function Home() {
-  const [home, setHome] = useState(null)
-  const [counselors, setcounselors] = useState([])
-  const { user } = useUser()
+  const [home, setHome] = useState(null);
+  const [counselors, setcounselors] = useState([]);
+  const { user } = useUser();
 
   const fetchData = async () => {
-    const res = await api.get('/client/home')
-    setHome(res.data)
-    console.log(res.data)
-  }
+    const res = await api.get("/client/home");
+    setHome(res.data);
+    console.log(res.data);
+  };
 
   const fetchCounselors = async () => {
-    const res = await api.get('/client/counselors')
-    console.log(res.data)
-    setcounselors(res.data)
-  }
+    const res = await api.get("/client/counselors");
+    console.log(res.data);
+    setcounselors(res.data);
+  };
   useEffect(() => {
-    fetchData()
-    fetchCounselors()
-  }, [])
+    fetchData();
+    fetchCounselors();
+  }, []);
   return (
     <>
       <SafeAreaView />
@@ -255,43 +267,44 @@ export default function Home() {
           >
             <Text
               style={{
-                fontWeight: 'bold',
+                fontWeight: "bold",
                 opacity: 0.7,
                 fontSize: 10,
-                color: '#fff',
+                color: "#fff",
               }}
             >
-              {new Date().toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
+              {new Date().toLocaleDateString("id-ID", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
               })}
             </Text>
             <Text
               style={{
                 fontSize: 20,
-                fontWeight: 'bold',
+                fontWeight: "bold",
                 marginBottom: 15,
-                color: '#fff',
+                color: "#fff",
               }}
             >
-              {getGreeting()}{user ? ` ${user.name}` : ''}!
+              {getGreeting()}
+              {user ? ` ${user.name}` : ""}!
             </Text>
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
+                flexDirection: "row",
+                alignItems: "center",
                 gap: 10,
-                backgroundColor: '#fff',
+                backgroundColor: "#fff",
                 borderRadius: 15,
                 paddingVertical: 10,
                 paddingHorizontal: 15,
                 marginBottom: 25,
               }}
             >
-              <Ionicons name='ios-trophy-outline' size={15} color='black' />
-              <Text style={{ fontWeight: 'normal' }}>
+              <Ionicons name="ios-trophy-outline" size={15} color="black" />
+              <Text style={{ fontWeight: "normal" }}>
                 Focus on managing small things first
               </Text>
             </View>
@@ -299,23 +312,23 @@ export default function Home() {
 
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               gap: 5,
-              alignItems: 'center',
+              alignItems: "center",
               paddingHorizontal: 15,
               paddingVertical: 10,
             }}
           >
-            <Text style={{ fontWeight: 'bold' }}>Article</Text>
-            <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
+            <Text style={{ fontWeight: "bold" }}>Article</Text>
+            <Text style={{ fontWeight: "normal" }}>Terbaru</Text>
             <Ionicons
-              name='ios-chevron-forward'
+              name="ios-chevron-forward"
               size={15}
               color={useTheme().colors.primary}
             />
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: "row" }}>
               {home?.articles.map((article) => (
                 <ArticleCard
                   key={article.id}
@@ -328,17 +341,17 @@ export default function Home() {
           </ScrollView>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               gap: 5,
-              alignItems: 'center',
+              alignItems: "center",
               paddingHorizontal: 15,
               paddingVertical: 10,
             }}
           >
-            <Text style={{ fontWeight: 'bold' }}>Counselor</Text>
-            <Text style={{ fontWeight: 'normal' }}>Terfavorit</Text>
+            <Text style={{ fontWeight: "bold" }}>Counselor</Text>
+            <Text style={{ fontWeight: "normal" }}>Terfavorit</Text>
             <Ionicons
-              name='ios-chevron-forward'
+              name="ios-chevron-forward"
               size={15}
               color={useTheme().colors.primary}
             />
@@ -350,23 +363,23 @@ export default function Home() {
           </ScrollView>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               gap: 5,
-              alignItems: 'center',
+              alignItems: "center",
               paddingHorizontal: 15,
               paddingVertical: 10,
             }}
           >
-            <Text style={{ fontWeight: 'bold' }}>Video</Text>
-            <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
+            <Text style={{ fontWeight: "bold" }}>Video</Text>
+            <Text style={{ fontWeight: "normal" }}>Terbaru</Text>
             <Ionicons
-              name='ios-chevron-forward'
+              name="ios-chevron-forward"
               size={15}
               color={useTheme().colors.primary}
             />
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: "row" }}>
               <VideoCard />
               <VideoCard />
               <VideoCard />
@@ -376,23 +389,23 @@ export default function Home() {
 
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               gap: 5,
-              alignItems: 'center',
+              alignItems: "center",
               paddingHorizontal: 15,
               paddingVertical: 10,
             }}
           >
-            <Text style={{ fontWeight: 'bold' }}>Podcast</Text>
-            <Text style={{ fontWeight: 'normal' }}>Terbaru</Text>
+            <Text style={{ fontWeight: "bold" }}>Podcast</Text>
+            <Text style={{ fontWeight: "normal" }}>Terbaru</Text>
             <Ionicons
-              name='ios-chevron-forward'
+              name="ios-chevron-forward"
               size={15}
               color={useTheme().colors.primary}
             />
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{ flexDirection: 'column' }}>
+            <View style={{ flexDirection: "column" }}>
               {home?.podcasts.map((podcast) => (
                 <PodcastCard
                   key={podcast.id}
@@ -407,5 +420,5 @@ export default function Home() {
         </View>
       </ScrollView>
     </>
-  )
+  );
 }

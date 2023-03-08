@@ -18,6 +18,7 @@
     "expo": "~48.0.4",
     "expo-application": "~5.1.1",
     "expo-auth-session": "~4.0.3",
+    "expo-av": "~13.2.1",
     "expo-random": "~13.1.1",
     "expo-status-bar": "~1.4.4",
     "expo-updates": "~0.16.3",

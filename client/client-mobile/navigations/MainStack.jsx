@@ -10,6 +10,7 @@ import StartThread from '../screens/StartThread'
 import ForumPostDetail from '../screens/ForumPostDetail'
 import CounselorPorfile from '../screens/CounselorProfile'
 import Success from '../screens/Success'
+import PostDetail from '../screens/PostDetail'
 
 const Stack = createStackNavigator()
 
@@ -58,6 +59,13 @@ export default function MainStack() {
           headerShown: false,
         }}
         component={CounselorPorfile}
+      />
+      <Stack.Screen
+        name='PostDetail'
+        options={{
+          headerShown: false,
+        }}
+        component={PostDetail}
       />
       <Stack.Screen
         name='Success'
