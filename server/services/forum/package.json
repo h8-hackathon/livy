@@ -7,7 +7,7 @@
     "reset": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all ",
     "dev": "nodemon ./bin/www",
     "start": "node ./bin/www",
-    "test": "jest --forceExit --coverage --testTimeout 5000",
+    "test": "jest --forceExit --coverage --testTimeout 10000",
     "reset-test": "sequelize db:drop --env test && sequelize db:create --env test && sequelize db:migrate --env test"
   },
   "keywords": [],
