@@ -251,7 +251,7 @@ describe("for schedule", () => {
 
 // success update availability
 it("Suceess update availability", async () => {
-  let counselorId = 2;
+  let counselorId = 1;
   let userId = 1;
   await request(app).put("/schedules/counselor/" + counselorId + "/availability").send("none")
   const response = await request(app)
@@ -279,7 +279,7 @@ it("Suceess update availability", async () => {
 it("Suceess delete availability", async () => {
   let counselorId = counselorToBeDeleted
   await request(app)
-    .delete("/schedules/counselor/" + "none" + "/availability")
+    .delete("/schedules/counselor/" + "54759eb3c090d83494e2d804" + "/availability")
   const response = await request(app)
     .delete("/schedules/counselor/" + counselorId + "/availability")
   expect(response.status).toBe(200);
