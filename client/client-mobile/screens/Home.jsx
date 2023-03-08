@@ -7,7 +7,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native-gesture-handler";
-import { Text, useTheme } from 'react-native-paper'
+import { Text, useTheme, Button } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CounselorCard from '../components/CounselorCard'
 import { api } from '../helpers/axios'
@@ -15,11 +15,12 @@ import getGreeting from '../helpers/greeting'
 import { useSchedules } from '../hooks/useSchedule'
 import { useUser } from '../hooks/useUser'
 
-const ArticleCard = ({ title, date, image, type }) => {
+const ArticleCard = (item) => {
+  const { title, date, image, type } = item
   const navigate = useNavigation()
   const theme = useTheme()
   return (
-    <View
+    <TouchableOpacity
       style={{
         backgroundColor: '#fff',
         borderRadius: 15,
@@ -30,6 +31,9 @@ const ArticleCard = ({ title, date, image, type }) => {
         borderColor: '#408775',
         // borderWidth: .5,
         gap: 10,
+      }}
+      onPress={() => {
+        navigate.navigate('PostDetail', item)
       }}
     >
       <Text
@@ -77,7 +81,7 @@ const ArticleCard = ({ title, date, image, type }) => {
           color={useTheme().colors.primary}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
@@ -124,14 +128,19 @@ const VideoCard = () => {
   )
 
 }
-const PodcastCard = ({ title, date, description }) => {
+const PodcastCard = (item) => {
+  const { title, date, description } = item
+  const navigate = useNavigation()
   return (
-    <View
+    <TouchableOpacity
       style={{
         overflow: 'hidden',
         padding: 15,
         width: '100%',
         height: 110,
+      }}
+      onPress={() => {
+        navigate.navigate('PostDetail', item)
       }}
     >
       <View
@@ -208,11 +217,12 @@ const PodcastCard = ({ title, date, description }) => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
 export default function Home() {
+  const theme = useTheme()
   const [home, setHome] = useState(null)
   const [counselors, setcounselors] = useState([])
   const { user } = useUser()
