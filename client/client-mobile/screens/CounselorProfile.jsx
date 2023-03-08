@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { api } from '../helpers/axios'
-import { dayToDate, getAllHours } from '../helpers/dayToDate'
+import { dayToDate, getAllHours, sortDays } from '../helpers/dayToDate'
 import { useUser } from '../hooks/useUser'
 import * as WebBrowser from 'expo-web-browser'
 
@@ -298,7 +298,7 @@ export default function CounselorPorfile(props) {
                     Appointment
                   </Text>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {counselor.availability.availability.map((item, index) => {
+                    {sortDays(counselor.availability.availability).map((item, index) => {
                       return (
                         <TouchableOpacity
                           key={index}
