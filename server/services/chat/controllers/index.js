@@ -75,6 +75,7 @@ class Controller {
 
       res.status(200).json({ message: response.choices[0].text })
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }
