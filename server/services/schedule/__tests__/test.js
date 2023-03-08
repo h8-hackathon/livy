@@ -170,10 +170,16 @@ describe("for schedule", () => {
   });
 
   // patch paid schedule by external_id 404
-  it("Failed patch paid schedule because invalid external_id", async () => {
+  it("success patch paid schedule", async () => {
     let external_id = "abc";
     const response = await request(app).post("/schedules/paid/" + external_id);
     expect(response.status).toBe(404);
+  });
+  // patch paid schedule by external_id 404
+  it("Failed patch paid schedule because invalid external_id", async () => {
+    const scheduleId = await Schedule.findOne({where:{UserId:2}})
+    const response = await request(app).post("/schedules/paid/" + scheduleId.id);
+    expect(response.status).toBe(200);
   });
 
   // success create availability
