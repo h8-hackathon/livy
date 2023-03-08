@@ -19,7 +19,7 @@ export default function Chats() {
   const { UserId } = router.query
 
   useEffect(() => {
-    const socket = socketIOClient('https://f34f-114-124-247-157.ngrok.io/')
+    const socket = socketIOClient('https://api.livy.chat')
 
     socket.auth = { access_token: localStorage.access_token }
 
