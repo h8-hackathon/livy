@@ -7,33 +7,36 @@ class forumPostController {
   static async getAllPost(req, res, next) {
     try {
       let { page = 1, sortBy = "_id", limit = 10 } = req.query;
-      console.log(page, sortBy, limit);
+      let limitTemp;
+      let sortByTemp = sortBy;
+      let pageTemp;
       let allPost = await ForumPost.find().toArray();
       let totalPage = Math.ceil(allPost.length / limit);
-      console.log(totalPage, "<<<<<<<<< total page");
-      console.log(allPost.length, "<<<<<<<<< all post length");
       if (page > totalPage) {
-        page = totalPage;
+        pageTemp = totalPage;
+      } else if (page < 1) {
+        pageTemp = 1;
+      } else {
+        pageTemp = page;
       }
-      if (page < 1) {
-        page = 1;
-      }
-      if (sortBy !== "_id" || sortBy !== "title" || sortBy !== "createdAt") {
-        sortBy = "_id";
-      }
-      if (Number(limit) > allPost.length) {
-        limit = allPost.length;
-      }
-      console.log(limit, "<<<<<<<<< limit");
 
-      let sortOption = `{ ${sortBy} : 1}`;
-      let limitOption = Number(limit);
-      console.log(limitOption, "<<<<<<<<< limit option");
-      let skipOption = Number(limit) * (page - 1);
+
+      if (sortBy !== "_id" || sortBy !== "title" || sortBy !== "createdAt") {
+        sortByTemp = "_id";
+      }
+      Number(limit) > Number(allPost.length)
+        ? (limitTemp = allPost.length)
+        : (limitTemp = limit);
+
+      let sortOption = `{ ${sortByTemp} : 1}`;
+      let limitOption = Number(limitTemp);
+      let skipOption = Number(limitTemp) * (pageTemp - 1);
       let nextPage = true;
       let prevPage = false;
-      page == totalPage ? (nextPage = false) : (nextPage = true);
-      page <= totalPage && page > 1 ? (prevPage = true) : (prevPage = false);
+      pageTemp == totalPage ? (nextPage = false) : (nextPage = true);
+      pageTemp <= totalPage && pageTemp > 1
+        ? (prevPage = true)
+        : (prevPage = false);
 
       let dataPage = {
         totalPage,
@@ -48,15 +51,11 @@ class forumPostController {
         .toArray();
       console.log(result.length, "<<<<<<<<< total data");
       res.status(200).json({ dataPage, result });
-    } catch (error) {
-      next(error);
-      res.status(500).json(error);
-    }
+    } catch (error) {}
   }
   static async createPost(req, res, next) {
     try {
-      let { title, images = [], caption, UserId } = req.body;
-      // console.log(req.body);
+      let { title, images, caption, UserId } = req.body;
       await ForumPost.insertOne({
         title,
         images,
@@ -77,11 +76,7 @@ class forumPostController {
       let { postId } = req.params;
       let postById = await ForumPost.findOne({ _id: new ObjectId(postId) });
       console.log(postById);
-      if (postById) {
-        res.status(200).json(postById);
-      } else {
-        res.status(404).json({ message: "No documents matched the query" });
-      }
+      res.status(200).json(postById);
     } catch (error) {
       next(error);
     }
@@ -97,13 +92,9 @@ class forumPostController {
         { _id: new ObjectId(postId) },
         { $set: { title, images, caption, UserId } }
       );
-      if (result) {
-        res.status(200).json({
-          message: "successfully updated",
-        });
-      } else {
-        res.status(404).json({ message: "No documents matched the query" });
-      }
+      res.status(200).json({
+        message: "successfully updated",
+      });
     } catch (error) {
       next(error);
     }
@@ -111,14 +102,10 @@ class forumPostController {
   static async deletePostById(req, res, next) {
     try {
       let { postId } = req.params;
-      let result = await ForumPost.deleteOne({ _id: new ObjectId(postId) });
-      if (result.deletedCount === 1) {
-        res.status(200).json({
-          message: "successfully deleted",
-        });
-      } else {
-        res.status(404).json({ message: "No documents matched the query" });
-      }
+      await ForumPost.deleteOne({ _id: new ObjectId(postId) });
+      res.status(200).json({
+        message: "successfully deleted",
+      });
     } catch (error) {
       next(error);
     }
@@ -127,20 +114,13 @@ class forumPostController {
     try {
       let { postId } = req.params;
       let comments = await ForumComment.find({ forumPostId: postId }).toArray();
-      console.log(comments);
-      if (comments) {
-        res.status(200).json(comments);
-      } else {
-        res.status(404).json({ message: "No documents matched the query" });
-      }
-    } catch (error) {
-      next(error);
-    }
+      res.status(200).json(comments);
+    } catch (error) {}
   }
   static async createComment(req, res, next) {
     try {
       let { postId } = req.params;
-      let { text, UserId, helpful =[] } = req.body;
+      let { text, UserId, helpful = [] } = req.body;
       await ForumComment.insertOne({
         forumPostId: postId,
         text,
@@ -167,30 +147,26 @@ class forumPostController {
       let helpfulAdded = helpfulDataBefore;
       const userPostgres = await User.findOne({ where: { id: UserId } });
       let helpfulAddedtoPostgres = userPostgres.helpful;
-      if (!helpfulAdded.includes(UserId)) {
-        helpfulAdded.push(UserId);
-        helpfulAddedtoPostgres++;
-        // console.log(helpfulAddedtoPostgres);
-        await User.update(
-          { helpful: helpfulAddedtoPostgres },
-          {
-            where: {
-              id: UserId,
-            },
-          }
-        );
-      }
-      let result = await ForumPost.updateOne(
+      // if (!helpfulAdded.includes(UserId)) {
+      helpfulAdded.push(UserId);
+      helpfulAddedtoPostgres++;
+      // console.log(helpfulAddedtoPostgres);
+      await User.update(
+        { helpful: helpfulAddedtoPostgres },
+        {
+          where: {
+            id: UserId,
+          },
+        }
+      );
+      // }
+      await ForumPost.updateOne(
         { _id: new ObjectId(postId) },
         { $set: { helpful: helpfulAdded } }
       );
-      if (result) {
-        res.status(200).json({
-          message: "successfully updated",
-        });
-      } else {
-        res.status(404).json({ message: "No documents matched the query" });
-      }
+      res.status(200).json({
+        message: "successfully updated",
+      });
     } catch (error) {
       next(error);
     }
@@ -206,33 +182,29 @@ class forumPostController {
       let helpfulAdded = helpfulDataBefore;
       const userPostgres = await User.findOne({ where: { id: UserId } });
       let helpfulAddedtoPostgres = userPostgres.helpful;
-      if (helpfulAdded.includes(UserId)) {
-        var temp = helpfulAdded.filter(function (value, index, arr) {
-          return value != UserId;
-        });
-        helpfulAdded = temp;
-        helpfulAddedtoPostgres--;
-        // console.log(helpfulAddedtoPostgres);
-        await User.update(
-          { helpful: helpfulAddedtoPostgres },
-          {
-            where: {
-              id: UserId,
-            },
-          }
-        );
-      }
+      // if (helpfulAdded.includes(UserId)) {
+      var temp = helpfulAdded.filter(function (value, index, arr) {
+        return value != UserId;
+      });
+      helpfulAdded = temp;
+      helpfulAddedtoPostgres--;
+      // console.log(helpfulAddedtoPostgres);
+      await User.update(
+        { helpful: helpfulAddedtoPostgres },
+        {
+          where: {
+            id: UserId,
+          },
+        }
+      );
+      // }
       let result = await ForumPost.updateOne(
         { _id: new ObjectId(postId) },
         { $set: { helpful: helpfulAdded } }
       );
-      if (result) {
-        res.status(200).json({
-          message: "successfully updated",
-        });
-      } else {
-        res.status(404).json({ message: "No documents matched the query" });
-      }
+      res.status(200).json({
+        message: "successfully updated",
+      });
     } catch (error) {
       next(error);
     }
@@ -243,19 +215,10 @@ class forumPostController {
       let { UserId, note } = req.body;
       let user = await User.findByPk(UserId);
 
-      if (!user) {
-        res.status(404).json({ message: "No user matched the query" });
-      } else {
-        let result = await Report.create({ note, postId, ReporterId: UserId });
-        if (result) {
-          res.status(201).json({
-            message: "successfully reported",
-          });
-          console.log(result.dataValues);
-        } else {
-          res.status(404).json({ message: "No documents matched the query" });
-        }
-      }
+      await Report.create({ note, postId, ReporterId: UserId });
+      res.status(201).json({
+        message: "successfully reported",
+      });
     } catch (error) {
       next(error);
     }
