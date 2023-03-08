@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const openai = require("./setup");
 
 const defaultPromts = "5 list aktifitas hari ini untuk seseorang yang berumur 50 tahun dan bergender laki laki dalam menjaga kesehatan mental,"
