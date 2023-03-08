@@ -4,11 +4,12 @@ const Todo = require('../mongo/models/Todo')
 
 class Controller {
   static async createTodo(req, res, next) {
+    console.log(req.body)
     try {
       const { todos, userId } = req.body
 
       await Todo.insertOne({ todos, UserId: userId, updatedAt: new Date() })
-
+      
       res.status(200).json({ message: "successfully created" })
     } catch (error) {
       next(error)
@@ -16,6 +17,7 @@ class Controller {
   }
 
   static async findById(req, res, next) {
+    console.log(req.params)
     try {
       const { userId } = req.params
 
