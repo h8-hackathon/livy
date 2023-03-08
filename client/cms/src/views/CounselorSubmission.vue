@@ -44,7 +44,7 @@ export default {
         <h1 class="header">Counselor Submisson List</h1>
       </div>
       <div class="table-responsive">
-        <table class="table align-middle table-borderless" style="min-width: max-content;">
+        <table class="table align-middle table-borderless">
           <!-- Untuk Table Jobs -->
           <thead>
             <tr class="thead  ">
@@ -74,11 +74,11 @@ export default {
               <td>{{ el.User.dob }}</td>
               <td>{{ el.UserId }}</td>
               <td>
-                <button type="button" class="btn btn-success text-light m-1"
+                <button type="button" class="btn btn-success btn-sm text-light m-1"
                   @click.prevent="handleAcceptCounselor(el.UserId)">
                   Accept
                 </button>
-                <button type="button" class="btn btn-danger m-1" @click.prevent="handleRejectCounselor(el.id)">
+                <button type="button" class="btn btn-sm btn-danger m-1" @click.prevent="handleRejectCounselor(el.id)">
                   Delete/Reject
                 </button>
               </td>
