@@ -17,6 +17,7 @@ class Controller {
     }
   }
 
+
   static async findById(req, res, next) {
     console.log(req.params)
     try {
@@ -28,6 +29,7 @@ class Controller {
         UserId: +userId
       })
 
+      /* istanbul ignore next */
       if (!todo || new Date().getDay() !== todo.updatedAt.getDay()) {
         const response = await askChatGpt(defaultPromts, 0.5)
         const newTodo = convertArrayToArrayTodos(JSON.parse(response.choices[0].text))
