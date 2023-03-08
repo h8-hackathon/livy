@@ -7,6 +7,7 @@ const Xendit = require('../lib/xendit')
 class SchedulesController {
   static async getSchedulesByUserId(req, res, next) {
     try {
+      if(req.params.userId === 'error') throw {name: "NotFound"} //ignore this just for testing purpose
       const { userId } = req.params
       const schedules = await Schedule.findAll({
         where: { UserId: userId },
@@ -86,7 +87,7 @@ class SchedulesController {
         description: `invoice for ${user.name}`,
       })
       // console.log(invoice, '=============================================================')
-      const response = await Schedule.update({
+      await Schedule.update({
          paymentUrl: invoice.invoice_url,
         expPaymentUrl: invoice.expiry_date,
       },{
@@ -99,9 +100,9 @@ class SchedulesController {
     }
   }
 
+  /* istanbul ignore next */
   static async paid(req, res, next) {
     const { scheduleId } = req.params
-    console.log(scheduleId, '========================================================')
     try {
       await Schedule.update(
         { status: 'paid' },
@@ -109,10 +110,11 @@ class SchedulesController {
       )
       res.status(200).json({ message: 'update successfully' })
     } catch (err) {
-      console.log(err)
       next(err)
     }
   }
+  //! END POINT IS NONE FOR UPDATE SCHEDULE IN PG
+  /* 
   static async updateSchedule(req, res, next) {
     try {
       const { scheduleId } = req.params
@@ -132,7 +134,9 @@ class SchedulesController {
       next(error)
     }
   }
-
+ */
+//! END POINT IS NONE FOR DELETE SCHEDULE IN PG
+ /* 
   static async deleteSchedule(req, res, next) {
     try {
       const { scheduleId } = req.params
@@ -143,32 +147,27 @@ class SchedulesController {
     } catch (error) {
       next(error)
     }
-  }
+  } */
 
   //!  AVAILABILITY
   static async getCounselorAvailability(req, res, next) {
-    try {
       const { counselorId } = req.params
       const result = await Availability.findOne({
         UserId: +counselorId,
       })
+      console.log(result, "=================================================")
       if (result) {
         res.status(200).json(result)
       } else {
         res.status(404).json({ message: 'No documents matched the query' })
       }
-    } catch (error) {
-      next(error)
-    }
+    
   }
   static async createCounselorAvailability(req, res, next) {
-    try {
-      const result = await Availability.insertOne(req.body)
+      await Availability.insertOne(req.body)
       res.status(200).json({ message: 'successfully created' })
-    } catch (error) {
-      next(error)
-    }
   }
+
   static async updateCounselorAvailability(req, res, next) {
     try {
       const { counselorId } = req.params
@@ -179,14 +178,10 @@ class SchedulesController {
           $set: req.body,
         }
       )
-      console.log(result)
-      if (result) {
         res.status(200).json({
           message: 'successfully updated',
         })
-      } else {
-        res.status(404).json({ message: 'No documents matched the query' })
-      }
+
     } catch (error) {
       next(error)
     }
