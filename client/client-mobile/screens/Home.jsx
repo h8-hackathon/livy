@@ -3,7 +3,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Image } from "react-native";
 import { Dimensions, ScrollView, View, ImageBackground } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import { Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CounselorCard from "../components/CounselorCard";
@@ -11,67 +14,82 @@ import { api } from "../helpers/axios";
 import getGreeting from "../helpers/greeting";
 import { useUser } from "../hooks/useUser";
 
-const ArticleCard = ({ title, date, image }) => {
+const ArticleCard = ({ title, date, image, description, type }) => {
+  const navigate = useNavigation();
+
   return (
-    <View
-      style={{
-        backgroundColor: "#fff",
-        borderRadius: 15,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        marginRight: 10,
-        width: (Dimensions.get("screen").width / 3.2) * 2,
-        borderColor: "#408775",
-        // borderWidth: .5,
-        gap: 10,
-      }}
+    <TouchableOpacity
+      underlayColor={"#EEEEEE"}
+      onPress={() =>
+        navigate.navigate("PostDetail", {
+          title,
+          date,
+          description,
+          url: image,
+          type,
+        })
+      }
     >
-      <Text
-        style={{ fontWeight: "bold", fontSize: 20, flexWrap: "nowrap" }}
-        ellipsizeMode="tail"
-        numberOfLines={2}
+      <View
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: 15,
+          paddingVertical: 10,
+          paddingHorizontal: 15,
+          marginRight: 10,
+          width: (Dimensions.get("screen").width / 3.2) * 2,
+          borderColor: "#408775",
+          // borderWidth: .5,
+          gap: 10,
+        }}
       >
-        {title}
-      </Text>
-      <Text
-        style={{ fontWeight: "normal", fontSize: 10, flex: 1, opacity: 0.7 }}
-        ellipsizeMode="clip"
-      >
-        {new Date(date).toLocaleDateString("id-ID", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}
-      </Text>
-      <View>
-        <Image
-          source={{ uri: image }}
-          style={{
-            width: "100%",
-            aspectRatio: 16 / 9,
-            borderRadius: 10,
-            marginVertical: 10,
-          }}
-        />
-      </View>
-      <View style={{ flexDirection: "row", gap: 5 }}>
         <Text
-          style={{
-            fontWeight: "bold",
-            fontSize: 10,
-            color: useTheme().colors.primary,
-          }}
+          style={{ fontWeight: "bold", fontSize: 20, flexWrap: "nowrap" }}
+          ellipsizeMode="tail"
+          numberOfLines={2}
         >
-          Continue Reading
+          {title}
         </Text>
-        <Ionicons
-          name="ios-arrow-forward"
-          size={15}
-          color={useTheme().colors.primary}
-        />
+        <Text
+          style={{ fontWeight: "normal", fontSize: 10, flex: 1, opacity: 0.7 }}
+          ellipsizeMode="clip"
+        >
+          {new Date(date).toLocaleDateString("id-ID", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </Text>
+        <View>
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: "100%",
+              aspectRatio: 16 / 9,
+              borderRadius: 10,
+              marginVertical: 10,
+            }}
+          />
+        </View>
+        <View style={{ flexDirection: "row", gap: 5 }}>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 10,
+              color: useTheme().colors.primary,
+            }}
+          >
+            Continue Reading
+          </Text>
+          <Ionicons
+            name="ios-arrow-forward"
+            size={15}
+            color={useTheme().colors.primary}
+          />
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -116,13 +134,13 @@ const VideoCard = () => {
     </View>
   );
 };
-const PodcastCard = ({ title, date, description, url }) => {
+const PodcastCard = ({ title, date, description, url, type }) => {
   const navigate = useNavigation();
   return (
     <TouchableHighlight
       underlayColor={"#EEEEEE"}
       onPress={() =>
-        navigate.navigate("PostDetail", { title, date, description, url })
+        navigate.navigate("PostDetail", { title, date, description, url, type })
       }
     >
       <View
@@ -334,6 +352,8 @@ export default function Home() {
                   key={article.id}
                   title={article.title}
                   image={article.url}
+                  type={article.type}
+                  description={article.caption}
                   date={article.createdAt}
                 />
               ))}
@@ -413,6 +433,7 @@ export default function Home() {
                   url={podcast.url}
                   date={podcast.createdAt}
                   description={podcast.caption}
+                  type={podcast.type}
                 />
               ))}
             </View>

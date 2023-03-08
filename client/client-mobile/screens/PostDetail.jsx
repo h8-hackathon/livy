@@ -1,25 +1,17 @@
-import {
-  Button,
-  MD3Colors,
-  ProgressBar,
-  Text,
-  useTheme,
-} from "react-native-paper";
-import { Image, Pressable, View } from "react-native";
+import { ProgressBar, Text, useTheme } from "react-native-paper";
+import { Image, Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import { pauseAudio, playAudio, resumeAudio } from "../helpers/audioController";
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect, useIsFocused } from "@react-navigation/core";
+import { useIsFocused } from "@react-navigation/core";
 
-export default function PostDetail(props) {
+function Podcast({ item }) {
   const isFocused = useIsFocused();
-  const { title, date, description, url } = props.route.params;
   const [sound, setSound] = useState();
   const [playback, setPlayback] = useState();
-  const [current, setCurrent] = useState(0);
-
+  const { title, description, url } = item;
   const playSound = async () => {
     if (!playback) {
       const playObj = new Audio.Sound();
@@ -102,4 +94,59 @@ export default function PostDetail(props) {
       </Pressable>
     </View>
   );
+}
+
+function Article({ item }) {
+  const { title, description, url, date } = item;
+
+  return (
+    <View style={{ flex: 1 }}>
+      <SafeAreaView />
+      <View style={{ position: "relative" }}>
+        <Image
+          style={{
+            width: "100%",
+            height: 320,
+          }}
+          source={{
+            uri: url,
+          }}
+        />
+      </View>
+      <ScrollView
+        style={{
+          top: -20,
+          backgroundColor: "white",
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          paddingTop: 30,
+        }}
+      >
+        <View
+          style={{
+            margin: 15,
+          }}
+        >
+          <Text style={{ fontWeight: 700, fontSize: 20 }}>{title}</Text>
+          <Text style={{ fontSize: 12, marginTop: 5 }}>
+            {new Date(date).toLocaleString("id-ID", {
+              month: "long",
+              day: "numeric",
+              weekday: "long",
+              year: "numeric",
+            })}
+          </Text>
+          <Text style={{ marginTop: 15, textAlign: "justify" }}>
+            {description}
+          </Text>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
+export default function PostDetail(props) {
+  const item = props.route.params;
+  if (item.type === "podcast") return <Podcast item={item} />;
+  return <Article item={item} />;
 }
