@@ -123,7 +123,7 @@ function Article({ item }) {
                 year: 'numeric',
               })}
             </Text>
-            <Text style={{ marginTop: 15, textAlign: 'justify' }}>
+            <Text style={{ marginTop: 18, textAlign: 'justify', fontSize: 18 }}>
               {description}
             </Text>
           </View>

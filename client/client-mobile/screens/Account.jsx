@@ -15,9 +15,10 @@ import {
 } from 'react-native'
 import Login from './Login'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { Button } from 'react-native-paper'
+import { Button, useTheme } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 export default function Account(props) {
+  const theme = useTheme()
   const { user, setUser } = useUser()
   const navigate = useNavigation()
   console.log(user)
@@ -65,7 +66,7 @@ export default function Account(props) {
               style={{ padding: 10 }}
               name='person-add'
               size={20}
-              color='#FFD700'
+              color={theme.colors.secondary}
             />
             <Text style={{ padding: 10 }}>
               {' '}
@@ -84,7 +85,7 @@ export default function Account(props) {
               style={{ padding: 10 }}
               name='heart'
               size={20}
-              color='#FFD700'
+              color={theme.colors.secondary}
             />
             <Text style={{ padding: 10 }}> Helpful {user.helpful}</Text>
           </View>
@@ -95,7 +96,7 @@ export default function Account(props) {
               style={{ padding: 10 }}
               name='calendar'
               size={20}
-              color='#FFD700'
+              color={theme.colors.secondary}
             />
             <Text style={{ padding: 10 }}>
               {' '}
@@ -122,7 +123,7 @@ export default function Account(props) {
               style={{ padding: 10 }}
               name='information-circle'
               size={20}
-              color='#FFD700'
+              color={theme.colors.secondary}
             />
             <Text style={{ padding: 10 }}> Version 1.0.0</Text>
           </View>
@@ -133,19 +134,21 @@ export default function Account(props) {
               style={{ padding: 10 }}
               name='globe'
               size={20}
-              color='#FFD700'
+              color={theme.colors.secondary}
             />
             <Text style={{ padding: 10 }}> More Info : https://livy.chat</Text>
           </View>
         </View>
-        <View style={styles.tile}>
+
+        <View style={{ marginVertical: 10 }}>
           <Button
             onPress={() => {
               AsyncStorage.removeItem('access_token')
               setUser(null)
             }}
             style={styles.logoutPart}
-            mode='outlined'
+            // mode='outlined'
+            textColor='#000'
             icon='power-standby'
           >
             Logout
