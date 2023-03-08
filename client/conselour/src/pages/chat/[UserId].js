@@ -117,7 +117,7 @@
 
 import Chats from '@/components/Chats'
 import Sidebar from '@/components/Sidebar'
-import Spinner from '@/components/spinner'
+import Spinner from '@/components/Spinner'
 import { useCounselor } from '@/hooks/useCounselor'
 import MainLayout from '@/layouts/Main'
 

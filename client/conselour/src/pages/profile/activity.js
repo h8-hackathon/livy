@@ -1,6 +1,6 @@
 import EmptyChat from '@/components/EmptyChat'
 import ProfileActivity from '@/components/ProfileActivity'
-import Spinner from '@/components/spinner'
+import Spinner from '@/components/Spinner'
 import { useCounselor } from '@/hooks/useCounselor'
 import MainLayout from '@/layouts/Main'
 

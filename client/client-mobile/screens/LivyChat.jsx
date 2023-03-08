@@ -202,6 +202,12 @@ export default function LivyChat(props) {
   useEffect(() => {
     console.log(user, counselor?.id, focus)
     if (user && counselor?.id && focus) {
+      api.get('/client/chat/' + counselor?.id).then((res) => {
+        console.log(res.data)
+        setMessages(res.data.chats)
+      }).catch((err) => {
+        console.log(err)
+      })
       const socket = socketClient('https://api.livy.chat')
       socket.auth = { access_token: user.access_token }
       setSocket(socket)
@@ -235,7 +241,9 @@ export default function LivyChat(props) {
       const endTime = new Date(session).setHours(
         new Date(session).getHours() + 1
       )
-      const warn = new Date(session).setMinutes(55)
+      const warn = new Date(session).setMinutes(
+        new Date(session).getMinutes() + 55
+      )
       const now = new Date().getTime()
       if (now > warn && !waring) {
         setWarning(true)
@@ -244,6 +252,7 @@ export default function LivyChat(props) {
       const isDone = now > endTime
       if (isDone) {
         setDone(true)
+        setVisible(false)
       }
     }, 1000)
 
@@ -261,15 +270,6 @@ export default function LivyChat(props) {
   if (!user) return <Login />
   return (
     <View style={{ flex: 1 }}>
-      <Snackbar
-        visible={visible}
-        onDismiss={onDismissSnackBar}
-        action={{
-          label: 'Tutup',
-        }}
-      >
-        Sesi ini akan berakhir dalam 5 menit!
-      </Snackbar>
       <SafeAreaView style={{ backgroundColor: '#eee' }} />
       <View style={{ flex: 1 }}>
         <Profile name={counselor?.name || 'Livy'} />
@@ -306,6 +306,37 @@ export default function LivyChat(props) {
             padding: 10,
           }}
         >
+          <Snackbar
+            visible={visible}
+            onDismiss={onDismissSnackBar}
+            action={{
+              label: 'Tutup',
+            }}
+            elevation={10}
+            style={{
+              backgroundColor: '#eee',
+              position: 'absolute',
+              bottom: 0,
+              width: '95%',
+              zIndex: 100,
+              transform: [{ translateY: -70 }],
+            }}
+          >
+            <Text>
+              Sesi berakhir dalam{' '}
+              {Math.max(
+                Math.floor(
+                  (new Date(session).setHours(
+                    new Date(session).getHours() + 1
+                  ) -
+                    new Date().getTime()) /
+                    60000
+                ),
+                1
+              )}{' '}
+              menit!
+            </Text>
+          </Snackbar>
           <View
             style={{
               flexDirection: 'row',

@@ -45,7 +45,7 @@ const ScheduleCard = ({ Counselor, session, status, paymentUrl, type }) => {
     >
       <TouchableOpacity
         onPress={() => {
-          if (type === 'active') navigation.navigate('LivyChat', { Counselor })
+          if (type === 'active') navigation.navigate('LivyChat', { Counselor, session })
         }}
         style={{
           padding: 15,

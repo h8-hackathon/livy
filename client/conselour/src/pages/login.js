@@ -1,4 +1,4 @@
-import Spinner from '@/components/spinner';
+import Spinner from '@/components/Spinner';
 import { api } from '@/helpers';
 import { useCounselor } from '@/hooks/useCounselor';
 import { useGoogleLogin } from '@react-oauth/google';
