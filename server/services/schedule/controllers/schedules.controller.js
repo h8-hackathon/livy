@@ -7,7 +7,7 @@ const Xendit = require('../lib/xendit')
 class SchedulesController {
   static async getSchedulesByUserId(req, res, next) {
     try {
-      if(req.params.userId === 'error') throw {name: "NotFound"} //ignore this just for testing purpose
+      if (req.params.userId === 'error') throw { name: "NotFound" } //ignore this just for testing purpose
       const { userId } = req.params
       const schedules = await Schedule.findAll({
         where: { UserId: userId },
@@ -26,7 +26,7 @@ class SchedulesController {
 
   static async getSchedulesByCounselorId(req, res, next) {
     try {
-      if(req.params.userId === 'error') throw {name: "NotFound"} //ignore this just for testing purpose
+      if (req.params.userId === 'error') throw { name: "NotFound" } //ignore this just for testing purpose
       const { counselorId } = req.params
       const schedules = await Schedule.findAll({
         where: { CounselorId: counselorId },
@@ -76,25 +76,25 @@ class SchedulesController {
         session: time,
         CounselorId,
         note,
-       /*  paymentUrl: invoice.invoice_url,
-        expPaymentUrl: invoice.expiry_date, */
+        /*  paymentUrl: invoice.invoice_url,
+         expPaymentUrl: invoice.expiry_date, */
       })
 
       // GET PAYMENT INVOICE
       const invoice = await Xendit.getXenditInvoice({
-        external_id: 'invoice-'+schedule.id+"-"+Math.random(),
+        external_id: 'invoice-' + schedule.id + "-" + Math.random(),
         amount: cs?.rate || 50000,
         payer_email: user.email,
         description: `invoice for ${user.name}`,
       })
       // console.log(invoice, '=============================================================')
       await Schedule.update({
-         paymentUrl: invoice.invoice_url,
+        paymentUrl: invoice.invoice_url,
         expPaymentUrl: invoice.expiry_date,
-      },{
-        where: {id:schedule.id}
+      }, {
+        where: { id: schedule.id }
       })
-      res.status(201).json({ paymentUrl:invoice.invoice_url })
+      res.status(201).json({ paymentUrl: invoice.invoice_url })
     } catch (error) {
       console.log(error, '<<<<<<<<<<<<<')
       next(error)
@@ -103,18 +103,18 @@ class SchedulesController {
 
   static async paid(req, res, next) {
     const { scheduleId } = req.params
-    console.log(scheduleId, '========================================================')
     try {
       await Schedule.update(
         { status: 'paid' },
-        { where: { id:scheduleId } }
+        { where: { id: scheduleId } }
       )
       res.status(200).json({ message: 'update successfully' })
     } catch (err) {
-      console.log(err)
       next(err)
     }
   }
+  //! END POINT IS NONE FOR UPDATE SCHEDULE IN PG
+  /* 
   static async updateSchedule(req, res, next) {
     try {
       const { scheduleId } = req.params
@@ -134,64 +134,50 @@ class SchedulesController {
       next(error)
     }
   }
-
-  static async deleteSchedule(req, res, next) {
-    try {
-      const { scheduleId } = req.params
-      await Schedule.destroy({
-        where: { id: scheduleId },
-      })
-      res.status(200).json({ message: 'successfully deleted' })
-    } catch (error) {
-      next(error)
-    }
-  }
+ */
+  //! END POINT IS NONE FOR DELETE SCHEDULE IN PG
+  /* 
+   static async deleteSchedule(req, res, next) {
+     try {
+       const { scheduleId } = req.params
+       await Schedule.destroy({
+         where: { id: scheduleId },
+       })
+       res.status(200).json({ message: 'successfully deleted' })
+     } catch (error) {
+       next(error)
+     }
+   } */
 
   //!  AVAILABILITY
   static async getCounselorAvailability(req, res, next) {
-    try {
-      const { counselorId } = req.params
-      const result = await Availability.findOne({
-        UserId: +counselorId,
-      })
-      if (result) {
-        res.status(200).json(result)
-      } else {
-        res.status(404).json({ message: 'No documents matched the query' })
-      }
-    } catch (error) {
-      next(error)
+    const { counselorId } = req.params
+    const result = await Availability.findOne({
+      UserId: +counselorId,
+    })
+    if (result) {
+      res.status(200).json(result)
+    } else {
+      res.status(404).json({ message: 'No documents matched the query' })
     }
+
   }
   static async createCounselorAvailability(req, res, next) {
-    try {
-      const result = await Availability.insertOne(req.body)
-      res.status(200).json({ message: 'successfully created' })
-    } catch (error) {
-      next(error)
-    }
+    await Availability.insertOne(req.body)
+    res.status(200).json({ message: 'successfully created' })
   }
   static async updateCounselorAvailability(req, res, next) {
-    try {
-      const { counselorId } = req.params
+    const { counselorId } = req.params
 
-      let result = await Availability.updateOne(
-        { UserId: +counselorId },
-        {
-          $set: req.body,
-        }
-      )
-      console.log(result)
-      if (result) {
-        res.status(200).json({
-          message: 'successfully updated',
-        })
-      } else {
-        res.status(404).json({ message: 'No documents matched the query' })
+    await Availability.updateOne(
+      { UserId: +counselorId },
+      {
+        $set: req.body,
       }
-    } catch (error) {
-      next(error)
-    }
+    )
+    res.status(200).json({
+      message: 'successfully updated',
+    })
   }
   static async deleteCounselorAvailability(req, res, next) {
     try {

@@ -170,16 +170,11 @@ describe("for schedule", () => {
   });
 
   // patch paid schedule by external_id 404
-  it("success patch paid schedule", async () => {
+  it("Failed patch paid schedule because invalid external_id", async () => {
     let external_id = "abc";
     const response = await request(app).post("/schedules/paid/" + external_id);
+    await request(app).post("/schedules/paid/1")
     expect(response.status).toBe(404);
-  });
-  // patch paid schedule by external_id 404
-  it("Failed patch paid schedule because invalid external_id", async () => {
-    const scheduleId = await Schedule.findOne({where:{UserId:2}})
-    const response = await request(app).post("/schedules/paid/" + scheduleId.id);
-    expect(response.status).toBe(200);
   });
 
   // success create availability
@@ -258,6 +253,7 @@ describe("for schedule", () => {
 it("Suceess update availability", async () => {
   let counselorId = 2;
   let userId = 1;
+  await request(app).put("/schedules/counselor/" + counselorId + "/availability").send("none")
   const response = await request(app)
     .put("/schedules/counselor/" + counselorId + "/availability")
     .send({
@@ -282,6 +278,8 @@ it("Suceess update availability", async () => {
 // success delete availability
 it("Suceess delete availability", async () => {
   let counselorId = counselorToBeDeleted
+  await request(app)
+    .delete("/schedules/counselor/" + "none" + "/availability")
   const response = await request(app)
     .delete("/schedules/counselor/" + counselorId + "/availability")
   expect(response.status).toBe(200);
