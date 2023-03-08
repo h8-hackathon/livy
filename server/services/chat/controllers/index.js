@@ -48,7 +48,6 @@ class Controller {
   }
 
   static async chatWithLivy(req, res, next) {
-    
     try {
       const { text, sender } = req.body;
       const { userId } = req.params;
@@ -56,10 +55,9 @@ class Controller {
         UserId: +userId,
         CounselorId: null,
       });
-      
-      if (!chats
-        /* istanbul ignore next  */
-        ) {
+
+      /* istanbul ignore if  */
+      if (!chats) {
         chats = { UserId: +userId, chats: [], CounselorId: null };
       } else {
         chats.chats.push({ text, time: new Date(), sender });
@@ -95,7 +93,7 @@ class Controller {
 
       res.status(200).json(chats);
     } catch (error) {
-      /* istanbul ignore next */ 
+      /* istanbul ignore next */
       next(error);
     }
   }
@@ -112,7 +110,7 @@ class Controller {
 
       res.status(200).json(chat);
     } catch (error) {
-      /* istanbul ignore next */ 
+      /* istanbul ignore next */
       next(error);
     }
   }
@@ -127,12 +125,12 @@ class Controller {
       });
 
       if (!chat) {
-        chat = { UserId: +userId, chats: [], CounselorId: +counselorId }
+        chat = { UserId: +userId, chats: [], CounselorId: +counselorId };
       }
 
       res.status(200).json(chat);
     } catch (error) {
-      /* istanbul ignore next */ 
+      /* istanbul ignore next */
       next(error);
     }
   }
