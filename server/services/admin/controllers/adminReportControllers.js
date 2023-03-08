@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const { Report } = require('../models/index');
 
 class adminReportControllers {

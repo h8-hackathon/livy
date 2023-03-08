@@ -78,6 +78,10 @@ describe("for schedule", () => {
     const response = await request(app).get(
       "/schedules/counselor/" + counselorId
     );
+
+    await request(app).get(
+      "/schedules/counselor/" + "error"
+    );
     expect(response.status).toBe(200);
     console.log(response.body);
     expect(response.body).toBeInstanceOf(Array);
@@ -93,10 +97,14 @@ describe("for schedule", () => {
     expect(response.body[0].User).toHaveProperty("name", expect.any(String));
   });
 
+
   // schedule read by user id 200
   it("Successfully read schedule by user id", async () => {
     let userId = 1;
     const response = await request(app).get("/schedules/user/" + userId);
+    await request(app).get(
+      "/schedules/user/" + "error"
+    );
     expect(response.status).toBe(200);
     // console.log(response.body);
     expect(response.body).toBeInstanceOf(Array);
@@ -108,12 +116,14 @@ describe("for schedule", () => {
       "expPaymentUrl",
       expect.any(String)
     );
+    
     expect(response.body[0].Counselor).toBeInstanceOf(Object);
     expect(response.body[0].Counselor).toHaveProperty(
       "name",
       expect.any(String)
     );
   });
+
 
   // post schedule by user id 200
   it("Successfully post schedule by user id", async () => {
@@ -163,6 +173,7 @@ describe("for schedule", () => {
   it("Failed patch paid schedule because invalid external_id", async () => {
     let external_id = "abc";
     const response = await request(app).post("/schedules/paid/" + external_id);
+    await request(app).post("/schedules/paid/1")
     expect(response.status).toBe(404);
   });
 
@@ -207,6 +218,8 @@ describe("for schedule", () => {
     .get("/schedules/counselor/" + counselorId + "/availability")
     expect(response.status).toBe(200);
     // console.log(response.body);
+    // await request(app)
+    // .get("/schedules/counselor/" + 'abcabc' + "/availability")
     counselorToBeDeleted = response.body._id.toString();
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("_id", expect.any(String));
@@ -240,8 +253,9 @@ describe("for schedule", () => {
 
 // success update availability
 it("Suceess update availability", async () => {
-  let counselorId = 2;
+  let counselorId = 1;
   let userId = 1;
+  await request(app).put("/schedules/counselor/" + counselorId + "/availability").send("none")
   const response = await request(app)
     .put("/schedules/counselor/" + counselorId + "/availability")
     .send({
@@ -266,6 +280,8 @@ it("Suceess update availability", async () => {
 // success delete availability
 it("Suceess delete availability", async () => {
   let counselorId = counselorToBeDeleted
+  await request(app)
+    .delete("/schedules/counselor/" + "54759eb3c090d83494e2d804" + "/availability")
   const response = await request(app)
     .delete("/schedules/counselor/" + counselorId + "/availability")
   expect(response.status).toBe(200);
