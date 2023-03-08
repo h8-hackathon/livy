@@ -26,7 +26,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (search) {
-      const tmp = schedules?.filter(el => el.User?.name.includes(search))
+      const tmp = schedules?.filter(el => el.User?.name.toLowerCase().includes(search.toLowerCase()))
       setTemp(tmp)
     } else {
       setTemp(schedules)
