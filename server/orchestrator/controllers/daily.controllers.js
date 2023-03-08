@@ -14,9 +14,25 @@ class DailyController {
   }
   static async getTodos(req, res, next) {
     try {
-        const response = await dailyAPI.get("/todos/"+req.params.id, {
+        const response = await dailyAPI.get("/todos/"+req.params.userId);
+        res.status(response.status).json(response.data)
+    } catch (error) {
+      next(error)
+    }
+  }
+  static async updateTodos(req, res, next) {
+    try {
+        const response = await dailyAPI.put("/todos/"+req.params.userId, {
             ...req.body
           });
+        res.status(response.status).json(response.data)
+    } catch (error) {
+      next(error)
+    }
+  }
+  static async deleteTodos(req, res, next) {
+    try {
+        const response = await dailyAPI.delete("/todos/"+req.params.userId);
         res.status(response.status).json(response.data)
     } catch (error) {
       next(error)
