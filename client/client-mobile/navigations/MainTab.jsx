@@ -59,22 +59,25 @@ export default function MainTab() {
                 size={size}
                 color={color}
               />
-              <Text
-                style={{
-                  position: 'absolute',
-                  transform: [{ translateX: 12 }, { translateY: -12 }],
-                  backgroundColor: theme.colors.secondary,
-                  width: 14,
-                  height: 14,
-                  fontSize: 8,
-                  textAlignVertical: 'center',
-                  textAlign: 'center',
-                  borderRadius: 10,
-                  fontWeight: 'bold',
-                }}
-              >
-                {schedule.length}
-              </Text>
+              {schedule.length > 0 && (
+                <Text
+                  style={{
+                    position: 'absolute',
+                    transform: [{ translateX: 12 }, { translateY: -10 }],
+                    backgroundColor: theme.colors.secondary,
+                    width: 14,
+                    height: 14,
+                    fontSize: 8,
+                    textAlignVertical: 'center',
+                    textAlign: 'center',
+                    borderRadius: 10,
+                    fontWeight: 'bold',
+                    color: '#fff',
+                  }}
+                >
+                  {schedule.length}
+                </Text>
+              )}
             </>
           ),
           tabBarShowLabel: true,

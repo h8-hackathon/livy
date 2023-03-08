@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
-import { FlatList, Image, View } from 'react-native'
+import { FlatList, Image, ScrollView, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Button, Text, useTheme } from 'react-native-paper'
 import { TextInput } from 'react-native'
@@ -222,9 +222,8 @@ export default function LivyChat(props) {
           // setLastIndex(messages.length)
         })
       })
-    } 
-    
-    
+    }
+
     if (!counselor) {
       fetchMessages()
     }

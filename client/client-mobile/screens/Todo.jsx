@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
+import { useFocusEffect } from '@react-navigation/native'
 import { useState } from 'react'
 import {
   View,
@@ -11,6 +12,7 @@ import {
 } from 'react-native'
 import { Badge } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTodos } from '../hooks/useTodos'
 
 const _todos = [
   {
@@ -37,9 +39,16 @@ const _todos = [
 
 export default function Todo() {
   const [todos, setTodos] = useState(_todos)
+  const { todos: t, updateTodos } = useTodos()
+
+  useFocusEffect(() => {
+    updateTodos()
+  })
+
   return (
     <>
       <SafeAreaView />
+
       <ScrollView style={{ padding: 20 }}>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <Image
@@ -84,6 +93,7 @@ export default function Todo() {
           ))}
         </View>
       </ScrollView>
+      <Text>{JSON.stringify(t)}</Text>
     </>
   )
 }
