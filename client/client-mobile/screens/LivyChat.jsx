@@ -6,7 +6,7 @@ import { TextInput } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useUser } from '../hooks/useUser'
 import Login from './Login'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import socketClient from 'socket.io-client'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { api } from '../helpers/axios'
@@ -112,6 +112,7 @@ const Profile = ({ name }) => {
   )
 }
 export default function LivyChat(props) {
+  const ref = useRef()
   const theme = useTheme()
   const { user } = useUser()
   const [socket, setSocket] = useState(null)
@@ -205,6 +206,9 @@ export default function LivyChat(props) {
       api.get('/client/chat/' + counselor?.id).then((res) => {
         console.log(res.data)
         setMessages(res.data.chats)
+        setTimeout(() => {
+          ref.current.scrollToEnd()
+        }, 100)
       }).catch((err) => {
         console.log(err)
       })
@@ -228,6 +232,7 @@ export default function LivyChat(props) {
           console.log(data)
           data.time = new Date()
           setMessages((messages) => [...messages, data])
+          ref.current.scrollToEnd()
           // setLastIndex(messages.length)
         })
       })
@@ -274,6 +279,7 @@ export default function LivyChat(props) {
       <View style={{ flex: 1 }}>
         <Profile name={counselor?.name || 'Livy'} />
         <FlatList
+          ref={ref}
           style={{ flex: 1, padding: 10 }}
           data={messages}
           renderItem={({ item }) => {
