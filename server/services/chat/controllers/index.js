@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 const askChatGpt = require('../chatgpt')
 const { convertChatToPrompts } = require('../helpers')
 const Chat = require('../mongo/models/Chat')

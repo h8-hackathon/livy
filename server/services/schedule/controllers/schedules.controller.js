@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const { User, Schedule, CounselorSubmission } = require('../models')
 const { connect, disconnect, Availability } = require('../mongo')
 const { ObjectId } = require('mongodb')

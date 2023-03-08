@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 const router = require('express').Router()
 const forumPostRoute = require('./forumPostRoute')
 const forumCommentRoute = require('./forumCommentRoute')

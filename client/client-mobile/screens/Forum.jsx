@@ -8,6 +8,7 @@ import { api } from '../helpers/axios'
 import { useNavigation } from '@react-navigation/native'
 
 const ForumCard = ({ title, caption, author, date, helpful, id }) => {
+  const theme = useTheme()
   const navigation = useNavigation()
   return (
     <TouchableOpacity
@@ -21,7 +22,7 @@ const ForumCard = ({ title, caption, author, date, helpful, id }) => {
         alignItems: 'center',
         borderColor: '#eee',
         borderWidth: 2,
-        shadowColor: useTheme().colors.primary,
+        shadowColor: theme.colors.primary,
         shadowOffset: {
           width: 0,
           height: 0,
@@ -50,7 +51,7 @@ const ForumCard = ({ title, caption, author, date, helpful, id }) => {
             <Ionicons
               name='heart-outline'
               size={10}
-              color={useTheme().colors.secondary}
+              color={theme.colors.secondary}
             />
             <Text style={{ fontSize: 10 }}>{helpful}</Text>
           </View>
@@ -58,7 +59,7 @@ const ForumCard = ({ title, caption, author, date, helpful, id }) => {
             <Ionicons
               name='chatbox-ellipses-outline'
               size={10}
-              color={useTheme().colors.primary}
+              color={theme.colors.primary}
             />
             <Text style={{ fontSize: 10 }}>5</Text>
           </View> */}
@@ -66,7 +67,7 @@ const ForumCard = ({ title, caption, author, date, helpful, id }) => {
             <Ionicons
               name='person-outline'
               size={10}
-              color={useTheme().colors.primary}
+              color={theme.colors.primary}
             />
             <Text style={{ color: '#555', fontSize: 12 }}>{author}</Text>
           </View>
@@ -104,6 +105,7 @@ const ForumCard = ({ title, caption, author, date, helpful, id }) => {
 // ]
 
 export default function Forum() {
+  const theme = useTheme()
   const [forumList, setForumList] = useState([])
   const navigate = useNavigation()
 
@@ -135,7 +137,7 @@ export default function Forum() {
           <Ionicons name='search' />
         </View>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             width: '100%',
@@ -156,7 +158,7 @@ export default function Forum() {
               mode='contained'
               icon='book'
               textColor='#444'
-              buttonColor={useTheme().colors.secondary}
+              buttonColor={theme.colors.secondary}
               onPress={() => {
                 navigate.navigate('StartThread')
               }}
@@ -171,7 +173,7 @@ export default function Forum() {
               style={{
                 fontSize: 20,
                 fontWeight: 'bold',
-                color: useTheme().colors.primary,
+                color: theme.colors.primary,
               }}
             >
               Top Forum

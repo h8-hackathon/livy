@@ -31,7 +31,9 @@ export default {
                       style="padding: 20px; display: flex; justify-content: center"
                     >
                       <GoogleLogin :callback="googleLoginHandler" popup-type="TOKEN"
-                        ><button>Login</button></GoogleLogin
+                        ><button type="button" class="btn btn-lg btn-primary w-200 p-2">
+                          Login
+                        </button></GoogleLogin
                       >
                     </div>
 
