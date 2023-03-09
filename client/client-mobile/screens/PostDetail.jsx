@@ -153,7 +153,7 @@ function Videos({ item }) {
 export default function PostDetail(props) {
   console.log(props.route.params)
   const item = props.route.params
-  // return <Videos item={item} />;
+  if (item.type === 'podcast') return <Videos item={item} />;
   if (item.type === 'podcast') return <Podcast item={item} />
   return <Article item={item} />
 }

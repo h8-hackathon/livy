@@ -16,6 +16,7 @@ import { useSchedules } from '../hooks/useSchedule'
 import { useUser } from '../hooks/useUser'
 import { useTodos } from '../hooks/useTodos'
 import { groupingSchedule } from '../helpers/grouping'
+import { getYTid } from '../helpers/getYTid'
 
 const ArticleCard = (item) => {
   const { title, date, image, type } = item
@@ -87,17 +88,25 @@ const ArticleCard = (item) => {
   )
 }
 
-const VideoCard = () => {
+const VideoCard = (item) => {
   const theme = useTheme()
+  const navigate = useNavigation()
   return (
-    <View
+    <TouchableOpacity
       style={{
         overflow: 'hidden',
         paddingLeft: 15,
       }}
+      onPress={() => {
+        navigate.navigate('PostDetail', item)
+      }}
     >
       <ImageBackground
-        source={{ uri: 'https://picsum.photos/800/450' }}
+        source={{
+          uri: item.url
+            ? `http://img.youtube.com/vi/${getYTid(item.url)}/hqdefault.jpg`
+            : 'https://picsum.photos/800/450',
+        }}
         resizeMode='cover'
         style={{
           backgroundColor: '#000',
@@ -116,17 +125,18 @@ const VideoCard = () => {
           <Text
             style={{
               fontWeight: 'bold',
-              fontSize: 20,
+              fontSize: 16,
               flexWrap: 'nowrap',
               color: '#fff',
             }}
             ellipsizeMode='tail'
+            numberOfLines={2}
           >
-            Ini Judul Video Tentang Sesuatu
+           {item.title}
           </Text>
         </View>
       </ImageBackground>
-    </View>
+    </TouchableOpacity>
   )
 }
 const PodcastCard = (item) => {
@@ -363,7 +373,7 @@ export default function Home() {
             style={{
               gap: 10,
               backgroundColor: theme.colors.primary,
-              borderRadius: 20 
+              borderRadius: 20,
             }}
           >
             <ImageBackground
@@ -494,10 +504,9 @@ export default function Home() {
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: 'row' }}>
-              <VideoCard />
-              <VideoCard />
-              <VideoCard />
-              <VideoCard />
+              {home?.videos.map((video) => (
+                <VideoCard key={video.id} {...video} />
+              ))}
             </View>
           </ScrollView>
 
