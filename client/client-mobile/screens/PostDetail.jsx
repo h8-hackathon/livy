@@ -1,7 +1,9 @@
 import { ProgressBar, Text, useTheme } from 'react-native-paper'
-import { Image, Pressable, ScrollView, View } from 'react-native'
+import { Dimensions, Image, Pressable, ScrollView, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { WebView } from 'react-native-webview'
+import YoutubePlayer from 'react-native-youtube-iframe'
+import { getYTid } from '../helpers/getYTid'
 
 function Podcast({ item }) {
   const { title, description, url } = item
@@ -134,26 +136,43 @@ function Article({ item }) {
 }
 
 function Videos({ item }) {
-  const { title, description, url } = item
+  const { title, caption, url, createdAt } = item
+  console.log(item, '<<<>>>')
   return (
-    <View style={{ flex: 1 }}>
+    <>
       <SafeAreaView />
-      <WebView
-        source={{
-          html: '<iframe width="100%" height="30%" src="https://www.youtube.com/embed/cqyziA30whE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>',
-        }}
-      />
-      <View>
-        <Text>asdkh</Text>
-      </View>
-    </View>
+      <ScrollView>
+        <YoutubePlayer
+          height={(Dimensions.get('screen').width * 9) / 16}
+          videoId={getYTid(url)}
+        />
+        <View
+          style={{
+            margin: 15,
+          }}
+        >
+          <Text style={{ fontWeight: 700, fontSize: 20 }}>{title}</Text>
+          <Text style={{ fontSize: 12, marginTop: 5 }}>
+            {new Date(createdAt).toLocaleString('id-ID', {
+              month: 'long',
+              day: 'numeric',
+              weekday: 'long',
+              year: 'numeric',
+            })}
+          </Text>
+          <Text style={{ marginTop: 18, textAlign: 'justify', fontSize: 18 }}>
+            {caption}
+          </Text>
+        </View>
+      </ScrollView>
+    </>
   )
 }
 
 export default function PostDetail(props) {
   console.log(props.route.params)
   const item = props.route.params
-  if (item.type === 'podcast') return <Videos item={item} />;
+  if (item.type === 'video') return <Videos item={item} />
   if (item.type === 'podcast') return <Podcast item={item} />
   return <Article item={item} />
 }
