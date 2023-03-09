@@ -59,7 +59,7 @@ class Controller {
       });
       
       if (!chats) {
-        chats = { UserId: +userId, chats: [], CounselorId: null };
+        chats = { UserId: +userId, chats: [{ text, time: new Date(), sender }], CounselorId: null };
       } else {
         chats.chats.push({ text, time: new Date(), sender });
       }

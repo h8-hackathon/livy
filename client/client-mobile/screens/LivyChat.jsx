@@ -125,6 +125,7 @@ export default function LivyChat(props) {
   const session = props.route.params?.session
   const navigation = useNavigation()
   const [visible, setVisible] = useState(false)
+
   const sendMessage = () => {
     if (text && !counselor?.id) {
       AsyncStorage.getItem('access_token').then((access_token) => {
