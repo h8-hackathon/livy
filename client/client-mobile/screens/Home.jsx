@@ -132,7 +132,7 @@ const VideoCard = (item) => {
             ellipsizeMode='tail'
             numberOfLines={2}
           >
-           {item.title}
+            {item.title}
           </Text>
         </View>
       </ImageBackground>
@@ -541,15 +541,6 @@ export default function Home() {
               ))}
             </View>
           </ScrollView>
-        </View>
-        <View>
-          <Button
-            onPress={() => {
-              navigate.navigate('Todos')
-            }}
-          >
-            Todo
-          </Button>
         </View>
       </ScrollView>
     </>

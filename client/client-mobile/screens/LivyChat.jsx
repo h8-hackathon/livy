@@ -66,7 +66,7 @@ const OtherChatBubble = ({ message }) => {
             maxWidth: '70%',
           }}
         >
-          <Text>{message.text}</Text>
+          <Text>{message.text.trim()}</Text>
         </View>
 
         <Text style={{ paddingHorizontal: 5, fontSize: 10 }}>
@@ -195,7 +195,11 @@ export default function LivyChat(props) {
         console.log(err)
       })
       .finally(() => {
-        ref.current?.scrollToEnd()
+        // try {
+        //   ref.current?.scrollToEnd()
+        // } catch (error) {
+        //   console.log(error)
+        // }
       })
   }
 
@@ -210,15 +214,20 @@ export default function LivyChat(props) {
   useEffect(() => {
     console.log(user, counselor?.id, focus)
     if (user && counselor?.id && focus) {
-      api.get('/client/chat/' + counselor?.id).then((res) => {
-        console.log(res.data)
-        setMessages(res.data.chats)
-        setTimeout(() => {
-          ref.current.scrollToEnd()
-        }, 100)
-      }).catch((err) => {
-        console.log(err)
-      })
+      api
+        .get('/client/chat/' + counselor?.id)
+        .then((res) => {
+          console.log(res.data)
+          if (res.data && res.data.chats && res.data.chats.length > 0) {
+            setMessages(res.data.chats)
+          }
+          setTimeout(() => {
+            // ref.current?.scrollToEnd()
+          }, 100)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
       const socket = socketClient('https://api.livy.chat')
       socket.auth = { access_token: user.access_token }
       setSocket(socket)
