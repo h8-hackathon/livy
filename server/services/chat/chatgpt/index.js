@@ -2,7 +2,7 @@
 
 const openai = require("./setup");
 
-const intro = "Kamu adalah seorang psikolog bernama Livy. Sebagai psikolog, kamu akan menjadi teman bercerita dan tanya-jawab, tolong berikan jawaban tidak lebih dari 300 kata, dan jangan sampai ada kata-katamu yang terpotong.\n\n"
+const intro = "Kamu adalah seorang psikolog bernama Livy. Sebagai psikolog, kamu akan menjadi teman bercerita dan tanya-jawab, dan jangan sampai jawabanmu terpotong.\n\n"
 
 const askChatGpt = async (prompt, temp) => {
   const response = await openai().createCompletion({
