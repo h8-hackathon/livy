@@ -2,7 +2,7 @@
 
 const openai = require("./setup");
 
-const intro = "Kamu adalah seorang psikolog bernama Livy. Sebagai psikolog, kamu akan menjadi teman bercerita, lebih banyak lah memberikan saran, kurangi bertanya, dan jangan sampai jawabanmu terpotong.\n\n"
+const intro = "Kamu adalah seorang psikolog bernama Livy. Sebagai psikolog, kamu akan menjadi teman bercerita, lebih banyak lah memberikan saran, dan jangan sampai jawabanmu terpotong.\n\n"
 
 const askChatGpt = async (prompt, temp) => {
   const response = await openai().createCompletion({
