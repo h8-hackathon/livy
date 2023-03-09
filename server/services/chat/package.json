@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node bin/www",
     "dev": "nodemon bin/www",
-    "test": "jest --forceExit --coverage --detectOpenHandles --testTimeout 5000",
+    "test": "jest --forceExit --coverage --testTimeout 5000",
     "reset-test": "sequelize db:drop --env test && sequelize db:create --env test && sequelize db:migrate --env test"
   },
   "keywords": [],

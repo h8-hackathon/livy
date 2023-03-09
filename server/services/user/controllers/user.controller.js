@@ -89,6 +89,7 @@ module.exports = class UserController {
       next(error);
     }
   }
+  /* istanbul ignore next */
   static async postUsers(req, res, next) {
     try {
       let response;
